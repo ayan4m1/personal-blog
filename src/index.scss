@@ -1,0 +1,12 @@
+// Imported styles
+@import '~bootswatch/dist/journal/variables';
+@import '~bootstrap/scss/bootstrap';
+@import '~bootswatch/dist/journal/bootswatch';
+
+// Component styles
+@import './components/header';
+
+// Global styles
+blockquote {
+  word-break: break-word;
+}
