@@ -1,8 +1,9 @@
+import { format, parseISO } from 'date-fns';
 import { Link } from 'gatsby';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 
-export default function FeaturedPost({ image, path, title, excerpt }) {
+export default function FeaturedPost({ image, date, path, title, excerpt }) {
   return (
     <Row>
       <Col md={1}></Col>
@@ -12,6 +13,9 @@ export default function FeaturedPost({ image, path, title, excerpt }) {
           <Link to={path}>
             <h5>{title}</h5>
           </Link>
+          <p>
+            Published on {Boolean(date) && format(parseISO(date), 'yyyy-MM-dd')}
+          </p>
           <p>{excerpt}</p>
         </div>
       </Col>
@@ -22,6 +26,7 @@ export default function FeaturedPost({ image, path, title, excerpt }) {
 
 FeaturedPost.propTypes = {
   image: PropTypes.node,
+  date: PropTypes.string,
   path: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   excerpt: PropTypes.string
