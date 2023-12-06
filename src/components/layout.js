@@ -3,17 +3,15 @@ import { SSRProvider } from 'react-bootstrap';
 
 import Header from 'components/header';
 
-const Layout = ({ children }) => {
+export default function Layout({ children }) {
   return (
     <SSRProvider>
       <Header />
-      <main className="mt-3">{children}</main>
+      <main className="mt-3 mb-2">{children}</main>
     </SSRProvider>
   );
-};
+}
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired
 };
-
-export default Layout;

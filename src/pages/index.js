@@ -1,16 +1,29 @@
 import {
   faArrowCircleRight,
-  faArrowCircleLeft
+  faArrowCircleLeft,
+  faHeart
 } from '@fortawesome/free-solid-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { graphql } from 'gatsby';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import PropTypes from 'prop-types';
-import { Container, Row, Col, Carousel } from 'react-bootstrap';
+import {
+  Container,
+  Row,
+  Col,
+  Carousel,
+  Card,
+  Image,
+  Button,
+  ButtonGroup
+} from 'react-bootstrap';
 
 import SEO from 'components/seo';
 import Layout from 'components/layout';
 import FeaturedPost from 'components/featuredPost';
+
+import profilePic from 'images/profile.jpg';
 
 export default function IndexPage({ data }) {
   const {
@@ -28,9 +41,45 @@ export default function IndexPage({ data }) {
 
   return (
     <Layout>
-      <SEO title="Recent Articles" />
+      <SEO title="Home" />
       <Container>
-        <h4 className="display-4">Recent Articles</h4>
+        <Card body bg="info" className="text-light">
+          <Container fluid>
+            <Row>
+              <Col xs={2} className="d-flex justify-content-center">
+                <Image
+                  src={profilePic}
+                  alt="My face"
+                  style={{ maxHeight: 128 }}
+                  rounded
+                />
+              </Col>
+              <Col xs={6}>
+                <Card.Title as="h1">Andrew DeLisa</Card.Title>
+                <h2>Hacker, Maker, Developer</h2>
+              </Col>
+              <Col xs={4} className="d-flex flex-column h-100">
+                <ButtonGroup>
+                  <Button
+                    variant="success"
+                    as="a"
+                    href="https://github.com/ayan4m1"
+                  >
+                    <FontAwesomeIcon icon={faGithub} /> GitHub
+                  </Button>
+                  <Button
+                    variant="primary"
+                    as="a"
+                    href="https://ko-fi.com/ayan4m1"
+                  >
+                    <FontAwesomeIcon icon={faHeart} /> Donate
+                  </Button>
+                </ButtonGroup>
+              </Col>
+            </Row>
+          </Container>
+        </Card>
+        <h2>Recent Articles</h2>
         <Row className="justify-content-center">
           <Col md={10}>
             <Carousel
@@ -43,23 +92,20 @@ export default function IndexPage({ data }) {
                 <FontAwesomeIcon icon={faArrowCircleLeft} color="black" />
               }
             >
-              {articles.map(({ children: [article] }) => {
-                console.dir(article.parent);
-                return (
-                  <Carousel.Item key={article.frontmatter.title}>
-                    <FeaturedPost
-                      {...article.frontmatter}
-                      image={
-                        <GatsbyImage
-                          image={findImage(article.parent.relativeDirectory)}
-                          alt={article.frontmatter.title}
-                        />
-                      }
-                      excerpt={article.excerpt}
-                    />
-                  </Carousel.Item>
-                );
-              })}
+              {articles.map(({ children: [article] }) => (
+                <Carousel.Item key={article.frontmatter.title}>
+                  <FeaturedPost
+                    {...article.frontmatter}
+                    image={
+                      <GatsbyImage
+                        image={findImage(article.parent.relativeDirectory)}
+                        alt={article.frontmatter.title}
+                      />
+                    }
+                    excerpt={article.excerpt}
+                  />
+                </Carousel.Item>
+              ))}
             </Carousel>
           </Col>
         </Row>
@@ -85,8 +131,9 @@ export const query = graphql`
             frontmatter {
               path
               title
+              date
             }
-            excerpt(pruneLength: 400)
+            excerpt(pruneLength: 250)
             parent {
               ... on File {
                 relativeDirectory
@@ -98,7 +145,7 @@ export const query = graphql`
     }
 
     images: allFile(
-      filter: { absolutePath: { regex: "/.*images/articles/.*.png/" } }
+      filter: { absolutePath: { regex: "/.*images/articles/.*.(png|jpe?g)/" } }
     ) {
       nodes {
         relativePath
