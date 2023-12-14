@@ -14,7 +14,7 @@ export default function GridCard({
   url
 }) {
   return (
-    <Card className="mb-2">
+    <Card className="mb-2 border-1">
       <Card.Title className="bg-primary text-light p-2 rounded-top mb-0">
         <Container fluid>
           <Row>
