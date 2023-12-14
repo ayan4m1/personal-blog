@@ -85,12 +85,8 @@ export default function IndexPage({ data }) {
             <Carousel
               indicators={false}
               className="mt-5"
-              nextIcon={
-                <FontAwesomeIcon icon={faArrowCircleRight} color="black" />
-              }
-              prevIcon={
-                <FontAwesomeIcon icon={faArrowCircleLeft} color="black" />
-              }
+              nextIcon={<FontAwesomeIcon icon={faArrowCircleRight} size="2x" />}
+              prevIcon={<FontAwesomeIcon icon={faArrowCircleLeft} size="2x" />}
             >
               {articles.map(({ children: [article] }) => (
                 <Carousel.Item key={article.frontmatter.title}>
