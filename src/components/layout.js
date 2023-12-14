@@ -1,9 +1,12 @@
 import PropTypes from 'prop-types';
-
-import Header from 'components/header';
 import { Fragment } from 'react';
 
+import Header from 'components/header';
+import useDarkMode from 'hooks/useDarkMode';
+
 export default function Layout({ children }) {
+  useDarkMode();
+
   return (
     <Fragment>
       <Header />

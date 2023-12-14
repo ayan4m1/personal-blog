@@ -19,3 +19,20 @@ h3 {
 h4 {
   margin-top: 20px;
 }
+
+// Dark mode
+.light-mode {
+  background-color: $body-bg;
+  color: $dark;
+  transition: background-color 0.3s ease;
+}
+
+.dark-mode {
+  background-color: $gray-900;
+  color: $body-bg;
+
+  .card {
+    background-color: $gray-700;
+    color: $body-bg;
+  }
+}
