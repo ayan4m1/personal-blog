@@ -11,8 +11,7 @@ export default function GridCard({
   svgIcon,
   children,
   githubUrl,
-  url,
-  showUrl = false
+  url
 }) {
   return (
     <Card className="mb-2">
@@ -44,7 +43,6 @@ export default function GridCard({
                   className="me-2"
                   variant="info"
                 >
-                  {showUrl && url.replace(/https?:\/\//, '').replace(/\/$/, '')}{' '}
                   <FontAwesomeIcon icon={faExternalLinkSquare} />
                 </Button>
               )}
@@ -76,6 +74,5 @@ GridCard.propTypes = {
   svgIcon: PropTypes.object,
   children: PropTypes.node.isRequired,
   githubUrl: PropTypes.string,
-  url: PropTypes.string,
-  showUrl: PropTypes.bool
+  url: PropTypes.string
 };

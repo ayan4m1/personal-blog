@@ -70,7 +70,6 @@ export default function LovePage() {
                 icon={item.icon}
                 svgIcon={item.svgIcon}
                 url={item.url}
-                showUrl
               >
                 <p>{item.description}</p>
               </GridCard>
