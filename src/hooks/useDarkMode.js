@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 const mediaQuery = '(prefers-color-scheme: dark)';
 
 const prefersDarkMode = () =>
-  window.matchMedia ? window.matchMedia(mediaQuery).matches : false;
+  typeof window !== 'undefined' ? window.matchMedia(mediaQuery).matches : false;
 
 export default function useDarkMode() {
   const [state, setState] = useState(prefersDarkMode());
