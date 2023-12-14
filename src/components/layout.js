@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
-import { SSRProvider } from 'react-bootstrap';
 
 import Header from 'components/header';
+import { Fragment } from 'react';
 
 export default function Layout({ children }) {
   return (
-    <SSRProvider>
+    <Fragment>
       <Header />
       <main className="mt-3 mb-2">{children}</main>
-    </SSRProvider>
+    </Fragment>
   );
 }
 

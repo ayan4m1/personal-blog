@@ -9,6 +9,14 @@ export default function Header() {
           title
         }
       }
+
+      allArticleCategoriesJson {
+        nodes {
+          name
+          title
+          description
+        }
+      }
     }
   `);
 
@@ -24,13 +32,33 @@ export default function Header() {
         <Navbar.Collapse>
           <Nav className="ms-2">
             <NavDropdown title="Articles">
-              <Nav.Link as={Link} className="text-dark" to="/electronics">
-                Electronics
-              </Nav.Link>
+              {data.allArticleCategoriesJson.nodes.map((category) => (
+                <Nav.Link
+                  key={category.name}
+                  as={Link}
+                  className="text-dark"
+                  to={`/${category.name}`}
+                >
+                  {category.title}
+                </Nav.Link>
+              ))}
             </NavDropdown>
+            <Nav.Link as={Link} to="/projects">
+              Projects
+            </Nav.Link>
+            <Nav.Link as={Link} to="/love">
+              Things I Love
+            </Nav.Link>
           </Nav>
           <Nav className="ms-auto text-light">
-            <p className="mb-0">More Coming Soon &trade;</p>
+            <p
+              className="mb-0"
+              style={{
+                textShadow: '1px 1px 4px rgba(0,0,0,0.6)'
+              }}
+            >
+              More Coming Soon &trade;
+            </p>
           </Nav>
         </Navbar.Collapse>
       </Container>

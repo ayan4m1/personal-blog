@@ -52,20 +52,13 @@ const createArticlePages = async ({ actions, graphql, reporter }) => {
   reporter.info(`Created ${counter} markdown pages!`);
 };
 const createArticleListings = async ({ actions, graphql, reporter }) => {
-  const component = resolve('src/components/articleListing.js');
+  const component = resolve('src/components/articleCategory.js');
   const { createPage } = actions;
   const result = await graphql(`
     {
-      allDirectory(
-        filter: {
-          sourceInstanceName: { eq: "articles" }
-          relativePath: { ne: "" }
-        }
-      ) {
-        edges {
-          node {
-            relativePath
-          }
+      allArticleCategoriesJson {
+        nodes {
+          name
         }
       }
     }
@@ -78,19 +71,17 @@ const createArticleListings = async ({ actions, graphql, reporter }) => {
 
   let counter = 0;
 
-  result.data.allDirectory.edges.forEach(({ node }) => {
-    const { relativePath } = node;
-
-    console.dir(relativePath);
+  result.data.allArticleCategoriesJson.nodes.forEach((node) => {
+    const { name } = node;
 
     counter++;
     createPage({
       context: {
-        pathPrefix: `/${relativePath}/*`,
-        articleName: relativePath
+        pathPrefix: `/${name}/*`,
+        categoryName: name
       },
       component,
-      path: `/${relativePath}`
+      path: `/${name}`
     });
   });
 
