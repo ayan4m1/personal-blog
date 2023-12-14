@@ -33,8 +33,8 @@ export default function IndexPage({ data }) {
   const findImage = (articleName) =>
     articleName
       ? getImage(
-          images.find(
-            (image) => image.relativePath === `articles/${articleName}.png`
+          images.find((image) =>
+            image.relativePath.startsWith(`articles/${articleName}`)
           )?.childImageSharp?.gatsbyImageData
         )
       : {};
