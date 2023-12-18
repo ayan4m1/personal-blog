@@ -20,6 +20,16 @@ h4 {
   margin-top: 20px;
 }
 
+.carousel {
+  &-control-prev {
+    left: -20px;
+  }
+
+  &-control-next {
+    right: -20px;
+  }
+}
+
 // Dark mode
 .light-mode {
   background-color: $body-bg;
