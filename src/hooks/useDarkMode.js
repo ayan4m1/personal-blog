@@ -1,22 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
+import useMediaQuery from './useMediaQuery';
 
 const mediaQuery = '(prefers-color-scheme: dark)';
 
-const prefersDarkMode = () =>
-  typeof window !== 'undefined' ? window.matchMedia(mediaQuery).matches : false;
-
 export default function useDarkMode() {
-  const [state, setState] = useState(prefersDarkMode());
+  const [state, setState] = useState(useMediaQuery(mediaQuery));
   const toggle = useCallback(() => setState((prevVal) => !prevVal), []);
-
-  useEffect(() => {
-    const mediaQueryList = window.matchMedia(mediaQuery);
-    const listener = (event) => setState(!event.matches);
-
-    mediaQueryList.addEventListener('change', listener);
-
-    return () => mediaQueryList.removeEventListener('change', listener);
-  }, []);
 
   useEffect(() => {
     if (state) {
