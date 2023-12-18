@@ -47,7 +47,10 @@ const data = [
 export default function LovePage() {
   return (
     <Layout>
-      <SEO title="Things I Love" />
+      <SEO
+        title="Things I Love"
+        description="Software and tooling I support."
+      />
       <Container>
         <Row>
           <Col xs={12}>

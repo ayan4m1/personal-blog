@@ -54,9 +54,11 @@ export default function IndexPage({ data }) {
                   rounded
                 />
               </Col>
-              <Col xs={6}>
-                <Card.Title as="h1">Andrew DeLisa</Card.Title>
-                <h2>Hacker, Maker, Developer</h2>
+              <Col xs={6} className="d-flex flex-column">
+                <Card.Title as="h1" className="m-0">
+                  Andrew DeLisa
+                </Card.Title>
+                <h2 className="m-0 mt-auto">Hacker, Maker, Developer</h2>
               </Col>
               <Col xs={4} className="d-flex flex-column h-100">
                 <ButtonGroup>

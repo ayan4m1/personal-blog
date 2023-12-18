@@ -100,7 +100,7 @@ const data = [
 export default function ProjectsPage() {
   return (
     <Layout>
-      <SEO title="My Projects" />
+      <SEO title="My Projects" description="A list of my active projects." />
       <Container>
         <Row>
           <Col xs={12}>
@@ -124,7 +124,7 @@ export default function ProjectsPage() {
                   githubUrl={`https://github.com/ayan4m1/${project.name}`}
                   url={project.url}
                 >
-                  <p style={{ minHeight: 80 }}>{project.description}</p>
+                  <p style={{ minHeight: 50 }}>{project.description}</p>
                 </GridCard>
               </Col>
             );
