@@ -92,6 +92,7 @@ module.exports = {
     },
     'gatsby-plugin-eslint',
     'gatsby-plugin-image',
+    'gatsby-plugin-mdx',
     'gatsby-plugin-offline',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sass',

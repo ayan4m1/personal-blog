@@ -96,7 +96,7 @@ export default function IndexPage({ data }) {
                     {...article.frontmatter}
                     image={
                       <GatsbyImage
-                        image={findImage(article.parent.relativeDirectory)}
+                        image={findImage(article.parent?.relativeDirectory)}
                         alt={article.frontmatter.title}
                       />
                     }
@@ -125,6 +125,19 @@ export const query = graphql`
     ) {
       nodes {
         children {
+          ... on Mdx {
+            frontmatter {
+              path
+              title
+              date
+            }
+            excerpt(pruneLength: 250)
+            parent {
+              ... on File {
+                relativeDirectory
+              }
+            }
+          }
           ... on MarkdownRemark {
             frontmatter {
               path

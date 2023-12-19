@@ -8,13 +8,14 @@ import NotFoundPage from 'pages/404';
 import Layout from 'components/layout';
 
 export default function ArticleCategory({ data }) {
-  if (!data || !data.allMarkdownRemark) {
+  if (!data) {
     return <NotFoundPage />;
   }
 
   const {
     articleCategoriesJson,
-    allMarkdownRemark: { nodes }
+    allMarkdownRemark: { nodes },
+    allMdx: { nodes: mdxNodes }
   } = data;
 
   if (!articleCategoriesJson) {
@@ -22,6 +23,7 @@ export default function ArticleCategory({ data }) {
   }
 
   const { title, description } = articleCategoriesJson;
+  const allNodes = [...nodes, ...mdxNodes];
 
   return (
     <Layout>
@@ -31,8 +33,8 @@ export default function ArticleCategory({ data }) {
           <Col md="12">
             <h1>{title} Articles</h1>
             <h2>{description}</h2>
-            {nodes.length ? (
-              <Table>
+            {allNodes.length ? (
+              <Table className="mt-4">
                 <thead>
                   <tr>
                     <th>Title</th>
@@ -40,7 +42,7 @@ export default function ArticleCategory({ data }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {nodes.map((node) => (
+                  {allNodes.map((node) => (
                     <tr key={node.id}>
                       <td>
                         <Link to={node.frontmatter.path}>
@@ -69,6 +71,9 @@ ArticleCategory.propTypes = {
     articleCategoriesJson: PropTypes.object,
     allMarkdownRemark: PropTypes.shape({
       nodes: PropTypes.arrayOf(PropTypes.object)
+    }),
+    allMdx: PropTypes.shape({
+      nodes: PropTypes.arrayOf(PropTypes.object)
     })
   })
 };
@@ -81,6 +86,20 @@ export const pageQuery = graphql`
     }
 
     allMarkdownRemark(
+      filter: { frontmatter: { path: { glob: $pathPrefix } } }
+      sort: [{ frontmatter: { date: ASC } }]
+    ) {
+      nodes {
+        id
+        frontmatter {
+          date
+          path
+          title
+        }
+      }
+    }
+
+    allMdx(
       filter: { frontmatter: { path: { glob: $pathPrefix } } }
       sort: [{ frontmatter: { date: ASC } }]
     ) {

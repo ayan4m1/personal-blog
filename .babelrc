@@ -1,5 +1,12 @@
 {
-  "presets": [["@babel/preset-react", { "runtime": "automatic" }]],
+  "presets": [
+    [
+      "babel-preset-gatsby",
+      {
+        "reactRuntime": "automatic"
+      }
+    ]
+  ],
   "plugins": [
     [
       "prismjs",

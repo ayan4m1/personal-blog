@@ -2,18 +2,25 @@ const { resolve } = require('path');
 
 const createArticlePages = async ({ actions, graphql, reporter }) => {
   const component = resolve('src/components/article.js');
+  const mdxComponent = resolve('src/components/mdxArticle.js');
   const { createPage } = actions;
   const result = await graphql(`
     {
       allMarkdownRemark {
-        edges {
-          node {
-            frontmatter {
-              path
-            }
-            headings(depth: h1) {
-              value
-            }
+        nodes {
+          fileAbsolutePath
+          frontmatter {
+            path
+          }
+        }
+      }
+      allMdx {
+        nodes {
+          internal {
+            contentFilePath
+          }
+          frontmatter {
+            path
           }
         }
       }
@@ -27,17 +34,15 @@ const createArticlePages = async ({ actions, graphql, reporter }) => {
 
   let counter = 0;
 
-  result.data.allMarkdownRemark.edges.forEach(({ node }) => {
+  result.data.allMarkdownRemark.nodes.forEach((node) => {
     const {
-      frontmatter: { path },
-      headings
+      fileAbsolutePath,
+      frontmatter: { path }
     } = node;
 
     if (!path) {
       reporter.warn(
-        `Did not find a path in the frontmatter of ${
-          headings.length ? headings[0].value : 'unknown page'
-        }`
+        `Did not find a path in the frontmatter of ${fileAbsolutePath}`
       );
       return;
     }
@@ -45,6 +50,25 @@ const createArticlePages = async ({ actions, graphql, reporter }) => {
     counter++;
     createPage({
       component,
+      path
+    });
+  });
+  result.data.allMdx.nodes.forEach((node) => {
+    const {
+      frontmatter: { path },
+      internal: { contentFilePath }
+    } = node;
+
+    if (!path) {
+      reporter.warn(
+        `Did not find a path in the frontmatter of ${contentFilePath}`
+      );
+      return;
+    }
+
+    counter++;
+    createPage({
+      component: `${mdxComponent}?__contentFilePath=${contentFilePath}`,
       path
     });
   });

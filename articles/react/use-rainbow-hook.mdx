@@ -65,3 +65,26 @@ export default function Component() {
   return <p style={{ color }}>Hello World</p>;
 }
 ```
+
+## Demonstration
+
+import useRainbow from 'hooks/useRainbow';
+
+export function Test() {
+  const color = useRainbow();
+  return (
+    <div
+      style={{
+        backgroundColor: color,
+        height: 200,
+        width: 200,
+        textAlign: 'center',
+        paddingTop: 80
+      }}
+    >
+      Hello World
+    </div>
+  );
+}
+
+<Test />
