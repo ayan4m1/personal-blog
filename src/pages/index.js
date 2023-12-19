@@ -46,7 +46,7 @@ export default function IndexPage({ data }) {
         <Card body bg="info" className="text-light">
           <Container fluid>
             <Row>
-              <Col xs={2} className="d-flex justify-content-center">
+              <Col xs={6} md={2} className="d-flex justify-content-center">
                 <Image
                   src={profilePic}
                   alt="My face"
@@ -60,7 +60,11 @@ export default function IndexPage({ data }) {
                 </Card.Title>
                 <h2 className="m-0 mt-auto">Hacker, Maker, Developer</h2>
               </Col>
-              <Col xs={4} className="d-flex flex-column h-100">
+              <Col
+                xs={12}
+                md={4}
+                className="mt-4 my-md-0 d-flex flex-column h-100"
+              >
                 <ButtonGroup>
                   <Button
                     variant="success"
