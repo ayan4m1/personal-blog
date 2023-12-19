@@ -41,7 +41,8 @@ const remarkPlugins = [
     }
   },
   'gatsby-remark-autolink-headers',
-  'gatsby-remark-numbered-footnotes'
+  'gatsby-remark-numbered-footnotes',
+  'gatsby-remark-prismjs'
 ];
 
 module.exports = {

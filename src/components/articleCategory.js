@@ -67,7 +67,9 @@ export default function ArticleCategory({ data }) {
 ArticleCategory.propTypes = {
   data: PropTypes.shape({
     articleCategoriesJson: PropTypes.object,
-    allMarkdownRemark: PropTypes.arrayOf(PropTypes.object)
+    allMarkdownRemark: PropTypes.shape({
+      nodes: PropTypes.arrayOf(PropTypes.object)
+    })
   })
 };
 

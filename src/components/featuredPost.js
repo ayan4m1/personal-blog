@@ -13,10 +13,10 @@ export default function FeaturedPost({ image, date, path, title, excerpt }) {
           <Link to={path}>
             <h5>{title}</h5>
           </Link>
-          <p>
-            Published on {Boolean(date) && format(parseISO(date), 'yyyy-MM-dd')}
-          </p>
-          <p>{excerpt}</p>
+          {Boolean(date) && (
+            <p>Published on {format(parseISO(date), 'yyyy-MM-dd')}</p>
+          )}
+          {Boolean(excerpt) && <p>{excerpt}</p>}
         </div>
       </Col>
       <Col md={1}></Col>

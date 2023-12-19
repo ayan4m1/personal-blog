@@ -1,3 +1,14 @@
 {
-  "presets": [["@babel/preset-react", { "runtime": "automatic" }]]
+  "presets": [["@babel/preset-react", { "runtime": "automatic" }]],
+  "plugins": [
+    [
+      "prismjs",
+      {
+        "languages": ["js", "jsx"],
+        "plugins": ["line-numbers"],
+        "theme": "tomorrow",
+        "css": true
+      }
+    ]
+  ]
 }

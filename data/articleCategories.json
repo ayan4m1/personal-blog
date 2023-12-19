@@ -3,5 +3,10 @@
     "name": "electronics",
     "title": "Electronics",
     "description": "Writing about electronics design and integration."
+  },
+  {
+    "name": "react",
+    "title": "React",
+    "description": "Writing about React composition, architecture, and patterns."
   }
 ]

@@ -1,5 +1,7 @@
+import Prism from 'prismjs';
 import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import SEO from 'components/seo';
@@ -17,6 +19,11 @@ export default function Article({ data }) {
       frontmatter: { title, description }
     }
   } = data;
+
+  useEffect(() => {
+    Prism.manual = true;
+    Prism.highlightAll();
+  }, []);
 
   return (
     <Layout>
@@ -37,7 +44,13 @@ export default function Article({ data }) {
 
 Article.propTypes = {
   data: PropTypes.shape({
-    markdownRemark: PropTypes.arrayOf(PropTypes.object)
+    markdownRemark: PropTypes.shape({
+      html: PropTypes.string.isRequired,
+      frontmatter: PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string
+      })
+    })
   })
 };
 

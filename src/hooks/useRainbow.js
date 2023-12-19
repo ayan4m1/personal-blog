@@ -1,9 +1,15 @@
 import { interpolateHslLong } from 'd3-interpolate';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-const interpolator = interpolateHslLong('#ff0000', '#0000ff');
-
-export default function useRainbow(timeDilation = 2000) {
+export default function useRainbow(
+  startColor = '#ff0000',
+  endColor = '#0000ff',
+  timeDilation = 2000
+) {
+  const interpolator = useMemo(
+    () => interpolateHslLong(startColor, endColor),
+    [startColor, endColor]
+  );
   const requestId = useRef(null);
   const [color, setColor] = useState(null);
 
