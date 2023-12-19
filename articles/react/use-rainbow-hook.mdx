@@ -5,7 +5,15 @@ description: A simple custom hook for lerping through the color wheel.
 title: useRainbow Hook
 ---
 
-Let's put together a simple hook in React that performs "linear interpolation" through the color wheel using hooks intelligently. This will give us a "useRainbow" hook that we can use to animate the color of anything on your page.
+Let's put together a simple hook in React that performs linear interpolation through the color wheel, giving a rainbow effect.
+
+We'll end up with a "useRainbow" hook that we can use to animate the color of anything on the page.
+
+By leveraging the [requestAnimationFrame API](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame) we can make these updates in a performant manner.
+
+There's also some deceptive complexity to the seemingly simple task of "animating through all the colors" - you can either take the shortest path between those two colors or the longest path. In this case, we want to take the long path since we're trying to emulate a rainbow.
+
+To make things easy on ourselves, we will leverage the interpolator provided by the [d3-interpolate](https://d3js.org/d3-interpolate) package.
 
 ## The Hook
 
