@@ -1,48 +1,39 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useEffect } from 'react';
-import Prism from 'prismjs';
+import React from 'react';
 import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
 import { MDXProvider } from '@mdx-js/react';
-import { Container, Row, Col } from 'react-bootstrap';
 
-import Layout from 'components/layout';
-import SEO from 'components/seo';
+import NotFoundPage from 'pages/404';
+import ArticleContainer from './articleContainer';
 
 export default function MdxArticle({ data, children }) {
+  if (!data || !data.mdx) {
+    return <NotFoundPage />;
+  }
+
   const {
-    mdx: {
-      frontmatter: { title, description }
-    }
+    mdx: { frontmatter }
   } = data;
 
-  useEffect(() => {
-    Prism.manual = true;
-    Prism.highlightAll();
-  }, []);
-
   return (
-    <Layout>
-      <SEO title={title} description={description} />
-      <Container>
-        <Row>
-          {title && (
-            <Col md="12">
-              <h1>{title}</h1>
-            </Col>
-          )}
-          <Col xs={12}>
-            <MDXProvider>{children}</MDXProvider>
-          </Col>
-        </Row>
-      </Container>
-    </Layout>
+    <ArticleContainer {...frontmatter}>
+      <MDXProvider>{children}</MDXProvider>
+    </ArticleContainer>
   );
 }
 
 MdxArticle.propTypes = {
-  data: PropTypes.object,
-  children: PropTypes.node
+  data: PropTypes.shape({
+    mdx: PropTypes.shape({
+      frontmatter: PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string,
+        date: PropTypes.string
+      })
+    })
+  }),
+  children: PropTypes.node.isRequired
 };
 
 export const pageQuery = graphql`
@@ -51,6 +42,7 @@ export const pageQuery = graphql`
       frontmatter {
         title
         description
+        date
       }
     }
   }

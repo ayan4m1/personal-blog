@@ -1,12 +1,8 @@
-import Prism from 'prismjs';
 import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
 
-import SEO from 'components/seo';
 import NotFoundPage from 'pages/404';
-import Layout from 'components/layout';
+import ArticleContainer from 'components/articleContainer';
 
 export default function Article({ data }) {
   if (!data || !data.markdownRemark) {
@@ -14,31 +10,13 @@ export default function Article({ data }) {
   }
 
   const {
-    markdownRemark: {
-      html,
-      frontmatter: { title, description }
-    }
+    markdownRemark: { html, frontmatter }
   } = data;
 
-  useEffect(() => {
-    Prism.manual = true;
-    Prism.highlightAll();
-  }, []);
-
   return (
-    <Layout>
-      <SEO title={title} description={description} />
-      <Container>
-        <Row>
-          {title && (
-            <Col md="12">
-              <h1>{title}</h1>
-            </Col>
-          )}
-          <Col md="12" dangerouslySetInnerHTML={{ __html: html }} />
-        </Row>
-      </Container>
-    </Layout>
+    <ArticleContainer {...frontmatter}>
+      <span dangerouslySetInnerHTML={{ __html: html }} />
+    </ArticleContainer>
   );
 }
 
@@ -48,7 +26,8 @@ Article.propTypes = {
       html: PropTypes.string.isRequired,
       frontmatter: PropTypes.shape({
         title: PropTypes.string.isRequired,
-        description: PropTypes.string
+        description: PropTypes.string,
+        date: PropTypes.string
       })
     })
   })
@@ -61,6 +40,7 @@ export const pageQuery = graphql`
       frontmatter {
         title
         description
+        date
       }
     }
   }
