@@ -1,7 +1,8 @@
 import { interpolateHslLong } from 'd3-interpolate';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 
 export default function useRainbow(
+  run = true,
   startColor = '#ff0000',
   endColor = '#0000ff',
   timeDilation = 2000
@@ -12,18 +13,27 @@ export default function useRainbow(
   );
   const requestId = useRef(null);
   const [color, setColor] = useState(null);
+  const [running, setRunning] = useState(run);
+  const start = useCallback(() => setRunning(true), []);
+  const stop = useCallback(() => setRunning(false), []);
 
   const animate = (time) => {
     setColor(interpolator(Math.abs(Math.sin(time / timeDilation))));
 
-    requestId.current = requestAnimationFrame(animate);
+    if (running) {
+      requestId.current = requestAnimationFrame(animate);
+    }
   };
 
   useEffect(() => {
-    requestId.current = requestAnimationFrame(animate);
+    if (running) {
+      requestId.current = requestAnimationFrame(animate);
+    } else {
+      cancelAnimationFrame(requestId.current);
+    }
 
     return () => cancelAnimationFrame(requestId.current);
-  }, []);
+  }, [running]);
 
-  return color;
+  return { color, start, stop };
 }

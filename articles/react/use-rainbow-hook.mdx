@@ -79,7 +79,7 @@ export default function Component() {
 import useRainbow from 'hooks/useRainbow';
 
 export function Test() {
-  const color = useRainbow();
+  const { color } = useRainbow();
   return (
     <div
       style={{
@@ -96,3 +96,95 @@ export function Test() {
 }
 
 <Test />
+
+## Going Further
+
+Depending on your requirements, this hook may be complete. However, what if we also needed to pause/unpause the animation based on some user input?
+
+```jsx
+import { interpolateHslLong } from 'd3-interpolate';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
+
+export default function useRainbow(
+  run = true, // whether to start running or not
+  startColor = '#ff0000',
+  endColor = '#0000ff',
+  timeDilation = 2000
+) {
+  const interpolator = useMemo(
+    () => interpolateHslLong(startColor, endColor),
+    [startColor, endColor]
+  );
+  const requestId = useRef(null);
+  const [color, setColor] = useState(null);
+  // this boolean will be true when rendering, false otherwise
+  const [running, setRunning] = useState(run);
+  // these functions allow us to control the render loop
+  const start = useCallback(() => setRunning(true), []);
+  const stop = useCallback(() => setRunning(false), []);
+
+  const animate = (time) => {
+    setColor(interpolator(Math.abs(Math.sin(time / timeDilation))));
+
+    // stop the animation loop if running is false
+    if (running) {
+      requestId.current = requestAnimationFrame(animate);
+    }
+  };
+
+  useEffect(() => {
+    // either start or stop the loop based on `running`
+    if (running) {
+      requestId.current = requestAnimationFrame(animate);
+    } else {
+      cancelAnimationFrame(requestId.current);
+    }
+
+    return () => cancelAnimationFrame(requestId.current);
+  }, [running]);
+
+  // return an object with the original color, and new start/stop functions
+  return { color, start, stop };
+}
+```
+
+Now it's a simple matter to use the new start/stop functions:
+
+```jsx
+import useRainbow from 'hooks/useRainbow';
+
+export default function Component() {
+  const { color, start, stop } = useRainbow();
+
+  return (
+    <p onMouseEnter={start} onMouseLeave={stop} style={{ color }}>
+      Hello World
+    </p>
+  );
+}
+```
+
+## Demonstration 2
+
+Now, the animation only runs when the mouse is over the control.
+
+export function TestPause() {
+  const { color, start, stop } = useRainbow();
+  return (
+    <div
+      onMouseEnter={start}
+      onMouseLeave={stop}
+      style={{
+        backgroundColor: color,
+        height: 200,
+        width: 200,
+        textAlign: 'center',
+        paddingTop: 80
+      }}
+    >
+      Hello World
+    </div>
+  );
+}
+
+<TestPause />
