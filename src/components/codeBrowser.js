@@ -8,23 +8,27 @@ const getExtension = (filename) =>
 
 export default function CodeBrowser({ key, documents }) {
   const docRef = useRef(null);
-  const [activeDocument, setActiveDocument] = useState(documents[0].id);
+  const [activeDocument, setActiveDocument] = useState(documents[0].filename);
 
   useEffect(() => {
-    docRef.current = document.getElementById(activeDocument);
-    Prism.highlightElement(docRef.current);
+    const activeDoc = documents.find((doc) => doc.filename === activeDocument);
+
+    if (activeDoc) {
+      docRef.current = document.getElementById(`doc-${activeDoc.filename}`);
+      Prism.highlightElement(docRef.current);
+    }
   }, [activeDocument]);
 
   return (
     <Tabs
       id={key}
       activeKey={activeDocument}
-      onSelect={(doc) => setActiveDocument(doc)}
+      onSelect={(filename) => setActiveDocument(filename)}
     >
       {documents.map((doc) => (
-        <Tab eventKey={doc.id} key={doc.id} title={doc.filename}>
+        <Tab eventKey={doc.filename} key={doc.filename} title={doc.filename}>
           <pre
-            id={doc.id}
+            id={`doc-${doc.filename}`}
             className={`language-${getExtension(doc.filename)} mt-0`}
           >
             {doc.content}
