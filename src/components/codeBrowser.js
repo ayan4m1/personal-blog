@@ -8,7 +8,7 @@ import TreeNode from 'components/treeNode';
 const getExtension = (filename) =>
   filename.substring(filename.lastIndexOf('.') + 1);
 
-export default function CodeBrowser({ key, documents }) {
+export default function CodeBrowser({ id, documents }) {
   const docRef = useRef(null);
   const [activeDocument, setActiveDocument] = useState(null);
 
@@ -23,7 +23,7 @@ export default function CodeBrowser({ key, documents }) {
 
   return (
     <Tab.Container
-      id={key}
+      id={id}
       activeKey={activeDocument}
       onSelect={(filename) => setActiveDocument(filename)}
     >
@@ -66,6 +66,6 @@ export default function CodeBrowser({ key, documents }) {
 }
 
 CodeBrowser.propTypes = {
-  key: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   documents: PropTypes.arrayOf(PropTypes.object).isRequired
 };
