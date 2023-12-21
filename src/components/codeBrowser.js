@@ -1,14 +1,16 @@
 import Prism from 'prismjs';
 import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from 'react';
-import { Tab, Tabs } from 'react-bootstrap';
+import { Row, Tab, Col, Card } from 'react-bootstrap';
+
+import TreeNode from 'components/treeNode';
 
 const getExtension = (filename) =>
   filename.substring(filename.lastIndexOf('.') + 1);
 
 export default function CodeBrowser({ key, documents }) {
   const docRef = useRef(null);
-  const [activeDocument, setActiveDocument] = useState(documents[0].filename);
+  const [activeDocument, setActiveDocument] = useState(null);
 
   useEffect(() => {
     const activeDoc = documents.find((doc) => doc.filename === activeDocument);
@@ -20,22 +22,46 @@ export default function CodeBrowser({ key, documents }) {
   }, [activeDocument]);
 
   return (
-    <Tabs
+    <Tab.Container
       id={key}
       activeKey={activeDocument}
       onSelect={(filename) => setActiveDocument(filename)}
     >
-      {documents.map((doc) => (
-        <Tab eventKey={doc.filename} key={doc.filename} title={doc.filename}>
-          <pre
-            id={`doc-${doc.filename}`}
-            className={`language-${getExtension(doc.filename)} mt-0`}
-          >
-            {doc.content}
-          </pre>
-        </Tab>
-      ))}
-    </Tabs>
+      <Row className="g-2">
+        <Col xs={3}>
+          <Card body>
+            <TreeNode title="./">
+              {documents.map((doc) => (
+                <TreeNode
+                  active={doc.filename === activeDocument}
+                  level={1}
+                  key={doc.filename}
+                  title={doc.filename}
+                />
+              ))}
+            </TreeNode>
+          </Card>
+        </Col>
+        <Col xs={9}>
+          <Tab.Content>
+            {documents.map((doc) => (
+              <Tab.Pane
+                eventKey={doc.filename}
+                key={doc.filename}
+                title={doc.filename}
+              >
+                <pre
+                  id={`doc-${doc.filename}`}
+                  className={`language-${getExtension(doc.filename)} mt-0`}
+                >
+                  {doc.content}
+                </pre>
+              </Tab.Pane>
+            ))}
+          </Tab.Content>
+        </Col>
+      </Row>
+    </Tab.Container>
   );
 }
 
