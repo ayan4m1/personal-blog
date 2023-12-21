@@ -154,7 +154,8 @@ Now it's a simple matter to use the new start/stop functions:
 import useRainbow from 'hooks/useRainbow';
 
 export default function Component() {
-  const { color, start, stop } = useRainbow();
+  // false means "do not start immediately"
+  const { color, start, stop } = useRainbow(false);
 
   return (
     <p onMouseEnter={start} onMouseLeave={stop} style={{ color }}>
@@ -169,7 +170,7 @@ export default function Component() {
 Now, the animation only runs when the mouse is over the control.
 
 export function TestPause() {
-  const { color, start, stop } = useRainbow();
+  const { color, start, stop } = useRainbow(false);
   return (
     <div
       onMouseEnter={start}
