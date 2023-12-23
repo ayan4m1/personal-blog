@@ -46,7 +46,7 @@ const remarkPlugins = [
 ];
 
 module.exports = {
-  trailingSlash: 'never',
+  trailingSlash: 'always',
   siteMetadata: {
     title: "Andrew's Space",
     author: 'ayan4m1',
