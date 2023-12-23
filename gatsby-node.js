@@ -69,7 +69,10 @@ const createArticlePages = async ({ actions, graphql, reporter }) => {
     counter++;
     createPage({
       component: `${mdxComponent}?__contentFilePath=${contentFilePath}`,
-      path
+      path,
+      context: {
+        pathGlob: `${path.substring(1)}/**/*`
+      }
     });
   });
 

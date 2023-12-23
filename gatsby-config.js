@@ -71,6 +71,13 @@ module.exports = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
+        name: 'snippets',
+        path: `${__dirname}/snippets`
+      }
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
         name: 'data',
         path: `${__dirname}/data`
       }
@@ -100,6 +107,12 @@ module.exports = {
     'gatsby-plugin-sitemap',
     'gatsby-transformer-json',
     'gatsby-transformer-sharp',
+    {
+      resolve: 'gatsby-transformer-source-code',
+      options: {
+        mimeTypes: ['application/javascript', 'text/jsx', 'text/x-scss']
+      }
+    },
     {
       resolve: 'gatsby-transformer-remark',
       options: {
