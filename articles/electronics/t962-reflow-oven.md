@@ -1,5 +1,5 @@
 ---
-path: /electronics/t962-reflow-oven-blues
+path: /electronics/t962-reflow-oven-blues/
 date: 2023-12-05
 description: An ill-fated attempt at fixing a crappy Chinese PCB oven.
 title: T-962 Blues
