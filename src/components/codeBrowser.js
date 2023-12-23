@@ -2,7 +2,7 @@ import Prism from 'prismjs';
 import { uniq } from 'lodash-es';
 import PropTypes from 'prop-types';
 import { useState, useEffect, useMemo } from 'react';
-import { Row, Tab, Col, Card } from 'react-bootstrap';
+import { Row, Tab, Col, Card, Container } from 'react-bootstrap';
 
 import DirectoryTree from 'components/directoryTree';
 import useSnippets from 'hooks/useSnippets';
@@ -95,6 +95,7 @@ export default function CodeBrowser({ id }) {
       <Row className="g-2">
         <Col xs={3}>
           <Card body>
+            <Card.Title>Files</Card.Title>
             <DirectoryTree activeDocument={activeDocument} node={snippetTree} />
           </Card>
         </Col>
@@ -105,12 +106,28 @@ export default function CodeBrowser({ id }) {
                 eventKey={doc.path.replace(`${id}/`, '')}
                 key={doc.path}
               >
-                <pre
-                  id={`doc-${doc.path.replace(`${id}/`, '')}`}
-                  className={`language-${getExtension(doc.path)} mt-0 rounded`}
-                >
-                  {doc.code.content}
-                </pre>
+                <Container fluid>
+                  <Row className="g-0">
+                    <Col xs={12} className="bg-primary rounded-top">
+                      <h5 className="my-3 ms-3">
+                        {doc.path.replace(`${id}/`, '')}
+                      </h5>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={12}>
+                      <pre
+                        id={`doc-${doc.path.replace(`${id}/`, '')}`}
+                        className={`language-${getExtension(
+                          doc.path
+                        )} mt-0 rounded-bottom`}
+                        style={{ maxHeight: 650, overflowY: 'auto' }}
+                      >
+                        {doc.code.content}
+                      </pre>
+                    </Col>
+                  </Row>
+                </Container>
               </Tab.Pane>
             ))}
           </Tab.Content>
