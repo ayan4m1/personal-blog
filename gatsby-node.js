@@ -71,7 +71,7 @@ const createArticlePages = async ({ actions, graphql, reporter }) => {
       component: `${mdxComponent}?__contentFilePath=${contentFilePath}`,
       path,
       context: {
-        pathGlob: `${path.substring(1)}/**/*`
+        pathGlob: `${path.substring(1)}**/*`
       }
     });
   });

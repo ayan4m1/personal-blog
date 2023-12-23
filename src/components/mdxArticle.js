@@ -25,7 +25,7 @@ export default function MdxArticle({ data, children }) {
         <SnippetProvider
           snippets={snippets.map((snippet) => ({
             ...snippet,
-            path: snippet.path.replace(`${frontmatter.path.substring(1)}/`, '')
+            path: snippet.path.replace(`${frontmatter.path.substring(1)}`, '')
           }))}
         >
           {children}
