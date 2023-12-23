@@ -1,15 +1,15 @@
 {
-  "name": "diy-compendium",
+  "name": "personal-blog",
   "private": true,
-  "description": "A knowledge base with DIY e-liquid mixing information.",
+  "description": "My personal blog.",
   "version": "0.1.0",
   "author": "ayan4m1 <andrew@bulletlogic.com>",
-  "homepage": "https://diyejuice.org",
+  "homepage": "https://andrewdelisa.com",
   "license": "MIT",
   "main": "n/a",
   "repository": {
     "type": "git",
-    "url": "git@github.com:diy-ejuice/diy-compendium.git"
+    "url": "git@github.com:ayan4m1/personal-blog.git"
   },
   "scripts": {
     "build": "gatsby build",
