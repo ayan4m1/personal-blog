@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { useState, useEffect, useMemo } from 'react';
 import { Row, Tab, Col, Card, Container } from 'react-bootstrap';
 
-import DirectoryTree from 'components/directoryTree';
-import useSnippets from 'hooks/useSnippets';
+import DirectoryTree from './directoryTree.jsx';
+import useSnippets from '../hooks/useSnippets';
 
 const getDirName = (path) => path.substring(0, path.lastIndexOf('/'));
 

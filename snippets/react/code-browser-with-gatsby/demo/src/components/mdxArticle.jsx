@@ -4,16 +4,11 @@ import { graphql } from 'gatsby';
 import PropTypes from 'prop-types';
 import { MDXProvider } from '@mdx-js/react';
 
-import NotFoundPage from 'pages/404';
-import ArticleContainer from './articleContainer';
-import CodeBrowser from './codeBrowser';
-import SnippetProvider from './snippetProvider';
+import ArticleContainer from './articleContainer.jsx';
+import CodeBrowser from './codeBrowser.jsx';
+import SnippetProvider from './snippetProvider.jsx';
 
 export default function MdxArticle({ data, children }) {
-  if (!data || !data.mdx) {
-    return <NotFoundPage />;
-  }
-
   const {
     mdx: { frontmatter },
     allFile: { nodes: snippets }
