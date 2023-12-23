@@ -5,11 +5,9 @@ description: How to use Gatsby to provide an elegant code browser interface.
 title: Code Browser with Gatsby
 ---
 
-At first, I was content with the ability to insert code snippets into these articles. [gatsby-remark-prismjs]() makes that process pretty straightforward.
+At first, I was content with the ability to insert code snippets into these articles. [gatsby-remark-prismjs](https://www.gatsbyjs.com/plugins/gatsby-remark-prismjs/) makes that process pretty straightforward.
 
-But what if an example is more complex than that? Web developers typically turn to tools like [CodeSandbox]() for this purpose. However, the downside there is that the example code needs to be versioned using e.g. CodeSandbox and cannot be stored alongside our source code.
-
-Some Gatsby developers came up with a solution to this in the form of [gatsby-plugin-code-sandbox?](), which provides a facility for storing the example code locally and then rendering it using one of a few different "snippet browser" providers like CodeSandbox. I'd prefer my site remain as statically rendered as possible, so this approach is unsuitable for me.
+But what if an example is more complex than that? Web developers typically turn to tools like [CodeSandbox](https://codesandbox.io) for this purpose. However, the downside there is that the example code needs to be versioned using e.g. CodeSandbox and cannot be stored alongside our source code.
 
 We'll be taking a fairly deep dive into Gatsby to solve this problem. The general workflow with Gatsby is to use source plugins to add nodes to the object store, then run transformers over them to do useful things (e.g. generating thumbnails or parsing JSON), then finally to query the results in your page components.
 
@@ -19,7 +17,7 @@ There is already a `gatsby-source-filesystem` to handle the common case of _sour
 
 Enter `gatsby-transformer-plaintext`, which does exactly what you might think: transforms sourced files with a MIME type of `text/plain` by adding the file's contents into the Gatsby object store.
 
-Unfortunately, this plugin _only_ works for text files and is not configurable. So I [forked it]() into [gatsby-transformer-source-code](). The new plugin allows you to specify the MIME types you want to process, then puts the file contents in a `SourceCode` node attached to each `File` node in the Gatsby store.
+Unfortunately, this plugin _only_ works for text files and is not configurable. So I [forked it](https://github.com/ayan4m1/gatsby-transformer-source-code) into [gatsby-transformer-source-code](https://www.npmjs.com/package/gatsby-transformer-source-code). The new plugin allows you to specify the MIME types you want to process, then puts the file contents in a `SourceCode` node attached to each `File` node in the Gatsby store.
 
 Now we can configure Gatsby like this:
 
