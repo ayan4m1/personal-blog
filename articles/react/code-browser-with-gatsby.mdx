@@ -1,0 +1,298 @@
+---
+path: /react/code-browser-with-gatsby
+date: 2023-12-20
+description: How to use Gatsby to provide an elegant code browser interface.
+title: Code Browser with Gatsby
+---
+
+At first, I was content with the ability to insert code snippets into these articles. [gatsby-remark-prismjs]() makes that process pretty straightforward.
+
+But what if an example is more complex than that? Web developers typically turn to tools like [CodeSandbox]() for this purpose. However, the downside there is that the example code needs to be versioned using e.g. CodeSandbox and cannot be stored alongside our source code.
+
+Some Gatsby developers came up with a solution to this in the form of [gatsby-plugin-code-sandbox?](), which provides a facility for storing the example code locally and then rendering it using one of a few different "snippet browser" providers like CodeSandbox. I'd prefer my site remain as statically rendered as possible, so this approach is unsuitable for me.
+
+We'll be taking a fairly deep dive into Gatsby to solve this problem. The general workflow with Gatsby is to use source plugins to add nodes to the object store, then run transformers over them to do useful things (e.g. generating thumbnails or parsing JSON), then finally to query the results in your page components.
+
+## First Step: Sourcing and Transforming
+
+There is already a `gatsby-source-filesystem` to handle the common case of _sourcing_ arbitrary files, but unless they are transformed we cannot access the file contents directly using this plugin alone.
+
+Enter `gatsby-transformer-plaintext`, which does exactly what you might think: transforms sourced files with a MIME type of `text/plain` by adding the file's contents into the Gatsby object store.
+
+Unfortunately, this plugin _only_ works for text files and is not configurable. So I [forked it]() into [gatsby-transformer-source-code](). The new plugin allows you to specify the MIME types you want to process, then puts the file contents in a `SourceCode` node attached to each `File` node in the Gatsby store.
+
+Now we can configure Gatsby like this:
+
+```js
+module.exports = {
+  plugins: [
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'snippets',
+        path: `${__dirname}/src/snippets`
+      }
+    },
+    {
+      resolve: 'gatsby-transformer-source-code',
+      options: {
+        mimeTypes: ['application/javascript', 'text/jsx', 'text/x-scss']
+      }
+    }
+  ]
+};
+```
+
+This lays the foundation for what we will be building. Now the source code files (and their contents) are in Gatsby's object store, waiting for us to query them.
+
+## Second Step: Provide Data When Creating Pages
+
+Because of Gatsby's design, we cannot use the `useStaticQuery` hook to fetch our code snippet data - it does not support passing/referencing variables. We need to fetch the content dynamically based on URL, so we have to provide some metadata to the page renderer which will then be fed back into a GraphQL query to provide the data at the page component level.
+
+This blog generates a page for an article, each of which is contained in an MDX file. Here is a summarized version of that code from `gatsby-node.js`:
+
+```js
+exports.createPages = async ({ actions, graphql, reporter }) => {
+  const mdxComponent = resolve('src/components/mdxArticle.js');
+  const { createPage } = actions;
+  const result = await graphql(`
+    query {
+      allMdx {
+        nodes {
+          internal {
+            contentFilePath
+          }
+          frontmatter {
+            path
+          }
+        }
+      }
+    }
+  `);
+  result.data.allMdx.nodes.forEach((node) => {
+    const {
+      frontmatter: { path },
+      internal: { contentFilePath }
+    } = node;
+
+    if (!path) {
+      reporter.warn(
+        `Did not find a path in the frontmatter of ${contentFilePath}`
+      );
+      return;
+    }
+
+    createPage({
+      // this "URL" is for gatsby-plugin-mdx
+      component: `${mdxComponent}?__contentFilePath=${contentFilePath}`,
+      path,
+      context: {
+        // this variable will be accessible in the pageQuery
+        pathGlob: `${path.substring(1)}/**/*`
+      }
+    });
+  });
+};
+```
+
+This queries the MDX nodes provided by `gatsby-plugin-mdx` and creates a page for each, critically passing `pathGlob` along as a page context variable. Without this, we would not be able to filter for "snippets that relate to the page in question."
+
+## Third Step: Querying The Data
+
+Now, in the `src/components/mdxArticle.js` file, we will use the following page query:
+
+```graphql
+query ($pathGlob: String!) {
+  allFile(
+    filter: {
+      sourceInstanceName: { eq: "snippets" }
+      relativeDirectory: { glob: $pathGlob }
+    }
+  ) {
+    nodes {
+      path: relativePath
+      code: childSourceCode {
+        ... on SourceCode {
+          content
+        }
+      }
+    }
+  }
+}
+```
+
+Each article will now load any snippets that live under a path matching the article URL. For example, if an article has the URL `/react/some-article-name`, then `./src/snippets/react/some-article-name` will be searched for code.
+
+Now we have the data at the page level. However, this is an MDX page - the actual markdown content is passed as the `children` prop to the page component. Because of this, we will have to leverage a React context to span the gap.
+
+## Fourth Step: Integrating With MDX
+
+```jsx
+import CodeBrowser from 'src/components/codeBrowser';
+
+export default function MdxArticle({ data, children }) {
+  const {
+    mdx: { frontmatter },
+    allFile: { nodes: snippets }
+  } = data;
+
+  return (
+    <ArticleContainer {...frontmatter}>
+      <MDXProvider components={{ CodeBrowser }}>
+        <SnippetProvider
+          snippets={snippets.map((snippet) => ({
+            ...snippet,
+            path: snippet.path.replace(`${frontmatter.path.substring(1)}/`, '')
+          }))}
+        >
+          {children}
+        </SnippetProvider>
+      </MDXProvider>
+    </ArticleContainer>
+  );
+}
+```
+
+We use the `MDXProvider` that `gatsby-plugin-mdx` offers to add in a custom component called `<CodeBrowser />`. Then we pass the snippet data we received from GraphQL to the `SnippetProvider`, which simply copies them into an otherwise empty context.
+
+```jsx
+import Prism from 'prismjs';
+import { uniq } from 'lodash-es';
+import PropTypes from 'prop-types';
+import { useState, useEffect, useMemo } from 'react';
+import { Row, Tab, Col, Card } from 'react-bootstrap';
+
+import DirectoryTree from 'components/directoryTree';
+import useSnippets from 'hooks/useSnippets';
+
+const getDirName = (path) => path.substring(0, path.lastIndexOf('/'));
+
+const getExtension = (path) => path.substring(path.lastIndexOf('.') + 1);
+
+export default function CodeBrowser({ id }) {
+  const { snippets } = useSnippets();
+  const [activeDocument, setActiveDocument] = useState(null);
+
+  useEffect(() => {
+    const activeDoc = snippets.find(
+      (doc) => doc.path.replace(`${id}/`, '') === activeDocument
+    );
+
+    if (activeDoc) {
+      Prism.highlightElement(
+        document.getElementById(`doc-${activeDoc.path.replace(`${id}/`, '')}`)
+      );
+    }
+  }, [activeDocument]);
+
+  const snippetTree = useMemo(() => {
+    const result = {
+      path: '.',
+      files: [],
+      children: []
+    };
+    const strippedSnippets = snippets.map((doc) => ({
+      ...doc,
+      path: doc.path.replace(`${id}/`, '')
+    }));
+    const directories = uniq(
+      strippedSnippets.map((doc) => getDirName(doc.path))
+    );
+
+    for (const dir of directories) {
+      const segments = dir.split('/');
+
+      if (!segments.join('')) {
+        continue;
+      }
+
+      for (let i = 0; i < segments.length; i++) {
+        let node = result;
+        const path = segments.slice(0, i + 1);
+
+        for (const segment of path) {
+          const nextNode = node.children.find((dir) => dir.path === segment);
+
+          if (nextNode) {
+            node = nextNode;
+          } else {
+            node.children.push({
+              path: segment,
+              files: [],
+              children: []
+            });
+          }
+        }
+      }
+    }
+
+    for (const doc of strippedSnippets) {
+      let node = result;
+      const segments = getDirName(doc.path).split('/');
+
+      for (const segment of segments) {
+        const nextNode = node.children.find((dir) => dir.path === segment);
+
+        if (nextNode) {
+          node = nextNode;
+        }
+      }
+
+      node.files.push(doc);
+    }
+
+    return result;
+  }, [snippets]);
+
+  return (
+    <Tab.Container
+      id={id}
+      activeKey={activeDocument}
+      onSelect={(path) => setActiveDocument(path)}
+    >
+      <Row className="g-2">
+        <Col xs={3}>
+          <Card body>
+            <DirectoryTree activeDocument={activeDocument} node={snippetTree} />
+          </Card>
+        </Col>
+        <Col xs={9}>
+          <Tab.Content>
+            {snippets.map((doc) => (
+              <Tab.Pane
+                eventKey={doc.path.replace(`${id}/`, '')}
+                key={doc.path}
+              >
+                <pre
+                  id={`doc-${doc.path.replace(`${id}/`, '')}`}
+                  className={`language-${getExtension(doc.path)} mt-0`}
+                >
+                  {doc.code.content}
+                </pre>
+              </Tab.Pane>
+            ))}
+          </Tab.Content>
+        </Col>
+      </Row>
+    </Tab.Container>
+  );
+}
+
+CodeBrowser.propTypes = {
+  id: PropTypes.string.isRequired
+};
+```
+
+This component renders a directory/file structure on the left with the selected source code on the right.
+
+In our MDX file, we can now simply use
+
+```jsx
+<CodeBrowser id="example-one" />
+```
+
+To embed the file browser/viewer component.
+
+As an example, here is the code from this article:
+
+<CodeBrowser id="demo" />

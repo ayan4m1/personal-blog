@@ -11,7 +11,7 @@
     [
       "prismjs",
       {
-        "languages": ["js", "jsx"],
+        "languages": ["js", "jsx", "scss", "graphql"],
         "plugins": ["line-numbers"],
         "theme": "tomorrow",
         "css": true

@@ -99,7 +99,12 @@ module.exports = {
     },
     'gatsby-plugin-eslint',
     'gatsby-plugin-image',
-    'gatsby-plugin-mdx',
+    {
+      resolve: 'gatsby-plugin-mdx',
+      options: {
+        gatsbyRemarkPlugins: remarkPlugins
+      }
+    },
     'gatsby-plugin-offline',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sass',
@@ -110,7 +115,12 @@ module.exports = {
     {
       resolve: 'gatsby-transformer-source-code',
       options: {
-        mimeTypes: ['application/javascript', 'text/jsx', 'text/x-scss']
+        mimeTypes: [
+          'application/javascript',
+          'text/jsx',
+          'text/x-scss',
+          'text/mdx'
+        ]
       }
     },
     {
