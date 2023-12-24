@@ -90,7 +90,7 @@ export const pageQuery = graphql`
 
     allMarkdownRemark(
       filter: { frontmatter: { path: { glob: $pathPrefix } } }
-      sort: [{ frontmatter: { date: ASC } }]
+      sort: [{ frontmatter: { date: DESC } }]
     ) {
       nodes {
         id
