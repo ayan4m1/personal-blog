@@ -30,21 +30,24 @@ export default function ArticleCategory({ data }) {
       <SEO title={title} description={description} />
       <Container>
         <Row>
-          <Col md="12">
+          <Col xs={12}>
             <h1>{title} Articles</h1>
             <h2>{description}</h2>
             {allNodes.length ? (
-              <Table className="mt-4">
+              <Table
+                className="mt-4 p-2 rounded"
+                style={{ overflow: 'hidden' }}
+              >
                 <thead>
                   <tr>
-                    <th>Title</th>
-                    <th>Posted On</th>
+                    <th className="py-md-4 ps-4">Title</th>
+                    <th className="py-md-4">Published</th>
                   </tr>
                 </thead>
                 <tbody>
                   {allNodes.map((node) => (
                     <tr key={node.id}>
-                      <td>
+                      <td className="ps-4">
                         <Link to={node.frontmatter.path}>
                           {node.frontmatter.title}
                         </Link>
