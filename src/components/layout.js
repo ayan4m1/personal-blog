@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import { Fragment } from 'react';
 import Snowfall from 'react-snowfall';
+import { getDate, getMonth } from 'date-fns';
 
 import Header from 'components/header';
 import useDarkMode from 'hooks/useDarkMode';
-import { getDate, getMonth } from 'date-fns';
-import usePrefersReducedMotion from 'src/hooks/usePrefersReducedMotion';
+import usePrefersReducedMotion from 'hooks/usePrefersReducedMotion';
 
 export default function Layout({ children }) {
   useDarkMode();
