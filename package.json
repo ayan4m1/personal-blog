@@ -69,7 +69,8 @@
     "react-snowfall": "^1.2.1",
     "sass": "^1.69.5",
     "sharp": "^0.33.0",
-    "sudoku-gen": "^1.0.2"
+    "sudoku-gen": "^1.0.2",
+    "use-local-storage-state": "^19.1.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",

@@ -1,73 +1,44 @@
 import PropTypes from 'prop-types';
 import { chunk } from 'lodash-es';
-import { Alert, Card, Container, Row } from 'react-bootstrap';
+import { getSudoku } from 'sudoku-gen';
+import useLocalStorageState from 'use-local-storage-state';
+import {
+  Alert,
+  Card,
+  Container,
+  Row,
+  Col,
+  ButtonGroup,
+  Button
+} from 'react-bootstrap';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faRecycle,
+  faFloppyDisk,
+  faFolderOpen,
+  faTrash
+} from '@fortawesome/free-solid-svg-icons';
 
 import SudokuCell from 'components/sudokuCell';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { checkSolution, getInvalids } from 'utils/sudoku';
 
-export default function SudokuBoard({ puzzle, solution }) {
+export default function SudokuBoard() {
   const [solved, setSolved] = useState(false);
   const [activeCell, setActiveCell] = useState([-1, -1]);
+  const [puzzle, setPuzzle] = useState(getSudoku('easy'));
+  const [savedState, setSavedState] = useLocalStorageState('savedState', {
+    defaultValue: null
+  });
   const rows = useMemo(
     () =>
-      chunk(puzzle.split(''), 9).map((row) =>
+      chunk(puzzle.puzzle.split(''), 9).map((row) =>
         row.map((value) => (value === '-' ? null : parseInt(value, 10)))
       ),
     [puzzle]
   );
   const [values, setValues] = useState(Array(9).fill(Array(9).fill(-1)));
-  const invalids = useMemo(
-    () =>
-      values.map((row, rowIdx) =>
-        row.map((value, colIdx) => {
-          if (value === -1) {
-            return true;
-          }
-
-          const targetRow = rows[rowIdx];
-
-          if (
-            ((targetRow &&
-              targetRow.indexOf(value) === colIdx &&
-              targetRow.lastIndexOf(value) === colIdx) ||
-              (targetRow.indexOf(value) === -1 &&
-                targetRow.lastIndexOf(value) === -1) ||
-              row.indexOf(value) !== colIdx ||
-              row.lastIndexOf(value) !== colIdx) &&
-            rows.every((searchRow) => searchRow[colIdx] !== value)
-          ) {
-            const cellRow = Math.floor(rowIdx / 3);
-            const cellCol = Math.floor(colIdx / 3);
-
-            for (
-              let searchRowIdx = cellRow * 3;
-              searchRowIdx < (cellRow + 1) * 3;
-              searchRowIdx++
-            ) {
-              for (
-                let searchColIdx = cellCol * 3;
-                searchColIdx < (cellCol + 1) * 3;
-                searchColIdx++
-              ) {
-                if (
-                  searchRowIdx !== rowIdx &&
-                  searchColIdx !== colIdx &&
-                  (rows[searchRowIdx][searchColIdx] === value ||
-                    values[searchRowIdx][searchColIdx] === value)
-                ) {
-                  return false;
-                }
-              }
-            }
-
-            return true;
-          } else {
-            return false;
-          }
-        })
-      ),
-    [rows, values]
-  );
+  const invalids = useMemo(() => getInvalids(values, rows), [values, rows]);
   const handleClick = useCallback(
     (row, column) =>
       setActiveCell(([prevRow, prevCol]) => {
@@ -79,48 +50,64 @@ export default function SudokuBoard({ puzzle, solution }) {
       }),
     []
   );
-  const handleChange = useCallback((row, column, value) => {
-    setValues((prevVal) => {
-      const newVal = [...prevVal];
-      const newRow = [...newVal[row]];
+  const handleChange = useCallback(
+    (row, column, value) =>
+      setValues((prevVal) => {
+        const newVal = [...prevVal];
+        const newRow = [...newVal[row]];
 
-      newRow[column] = value;
-      newVal.splice(row, 1, newRow);
+        newRow[column] = value;
+        newVal.splice(row, 1, newRow);
 
-      return newVal;
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!rows.length) {
+        return newVal;
+      }),
+    []
+  );
+  const handleNew = useCallback(() => setPuzzle(getSudoku('easy')), []);
+  const handleSave = useCallback(
+    () =>
+      setSavedState({
+        puzzle,
+        values
+      }),
+    [puzzle, values]
+  );
+  const handleLoad = useCallback(() => {
+    if (!savedState) {
       return;
     }
 
-    const currentBoard = rows
-      .map((boardRow, rowIdx) =>
-        boardRow
-          .map((value, colIdx) => {
-            if (value !== null) {
-              return value.toString();
-            }
+    setPuzzle(savedState.puzzle);
+    setValues(savedState.values);
+  }, [savedState]);
+  const handleClear = useCallback(() => setSavedState(null), []);
 
-            const liveValue = values[rowIdx][colIdx];
-
-            return liveValue === -1 ? '-' : liveValue;
-          })
-          .join('')
-      )
-      .join('');
-
-    if (currentBoard === solution) {
-      setSolved(true);
-    }
-  }, [rows, values]);
+  useEffect(() => {
+    setSolved(checkSolution(rows, values, puzzle.solution));
+  }, [rows, values, puzzle]);
 
   return (
     <Card body>
-      {solved && <Alert variant="success">You did it!</Alert>}
+      {solved && <Alert variant="success">You solved it!</Alert>}
       <Container fluid>
+        <Row className="mb-2">
+          <Col className="d-flex justify-content-center g-0">
+            <ButtonGroup className="w-100">
+              <Button onClick={handleNew}>
+                <FontAwesomeIcon icon={faRecycle} /> New
+              </Button>
+              <Button onClick={handleSave}>
+                <FontAwesomeIcon icon={faFloppyDisk} /> Save
+              </Button>
+              <Button onClick={handleClear} disabled={!savedState}>
+                <FontAwesomeIcon icon={faTrash} /> Clear
+              </Button>
+              <Button onClick={handleLoad} disabled={!savedState}>
+                <FontAwesomeIcon icon={faFolderOpen} /> Load
+              </Button>
+            </ButtonGroup>
+          </Col>
+        </Row>
         {rows.map((row, rowIdx) => (
           <Row key={rowIdx}>
             {row.map((value, colIdx) => (
