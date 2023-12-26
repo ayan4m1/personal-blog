@@ -7,7 +7,7 @@ export default function SudokuCell({
   row,
   column,
   value,
-  bg = '#ffffff',
+  bg,
   unknown = false,
   active = false,
   valid = true,
@@ -54,11 +54,7 @@ export default function SudokuCell({
 
   return (
     <Col
-      onClick={() => {
-        if (onClick) {
-          onClick(row, column);
-        }
-      }}
+      onClick={() => onClick(row, column)}
       className={classNames(
         'sudoku-cell',
         'border-dark',
@@ -68,7 +64,7 @@ export default function SudokuCell({
         row > 0 && row % 3 === 2 && 'border-bottom',
         !valid && 'bg-danger'
       )}
-      style={{ backgroundColor: bg }}
+      style={bg && { backgroundColor: bg }}
     >
       {unknown && active ? (
         <Form.Control

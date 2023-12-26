@@ -1,3 +1,5 @@
+export const difficulties = ['Easy', 'Medium', 'Hard', 'Expert'];
+
 export function checkSolution(puzzle, values, solution) {
   if (!puzzle.length) {
     return false;

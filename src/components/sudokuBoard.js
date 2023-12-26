@@ -10,9 +10,11 @@ import {
   Row,
   Col,
   ButtonGroup,
-  Button
+  Button,
+  Dropdown,
+  DropdownButton
 } from 'react-bootstrap';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faRecycle,
@@ -22,7 +24,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import SudokuCell from 'components/sudokuCell';
-import { checkSolution, getInvalids } from 'utils/sudoku';
+import { checkSolution, getInvalids, difficulties } from 'utils/sudoku';
 import useRainbow from 'hooks/useRainbow';
 
 export default function SudokuBoard() {
@@ -65,7 +67,10 @@ export default function SudokuBoard() {
       }),
     []
   );
-  const handleNew = useCallback(() => setPuzzle(getSudoku('easy')), []);
+  const handleNew = useCallback(
+    (difficulty) => setPuzzle(getSudoku(difficulty)),
+    []
+  );
   const handleSave = useCallback(
     () =>
       setSavedState({
@@ -107,9 +112,23 @@ export default function SudokuBoard() {
         <Row className="mb-2">
           <Col className="d-flex justify-content-center g-0">
             <ButtonGroup className="w-100">
-              <Button onClick={handleNew}>
-                <FontAwesomeIcon icon={faRecycle} /> New
-              </Button>
+              <DropdownButton
+                as={ButtonGroup}
+                title={
+                  <Fragment>
+                    <FontAwesomeIcon icon={faRecycle} /> New
+                  </Fragment>
+                }
+              >
+                {difficulties.map((difficulty) => (
+                  <Dropdown.Item
+                    key={difficulty}
+                    onClick={() => handleNew(difficulty.toLowerCase())}
+                  >
+                    {difficulty}
+                  </Dropdown.Item>
+                ))}
+              </DropdownButton>
               <Button onClick={handleSave}>
                 <FontAwesomeIcon icon={faFloppyDisk} /> Save
               </Button>
@@ -134,9 +153,10 @@ export default function SudokuBoard() {
         {cells.map((row, rowIdx) => (
           <Row key={rowIdx} className="d-flex justify-content-center">
             {row.map((value, colIdx) => {
-              const cellColor = hsl(solved ? animationColor : '#ffffff');
+              let cellColor = null;
 
               if (solved) {
+                cellColor = hsl(animationColor);
                 cellColor.h += (rowIdx * 9 + colIdx) * 5;
               }
 
@@ -151,7 +171,7 @@ export default function SudokuBoard() {
                   valid={invalids[rowIdx][colIdx]}
                   onClick={handleClick}
                   onChange={handleChange}
-                  bg={cellColor.formatHex()}
+                  bg={cellColor?.formatHex?.()}
                 />
               );
             })}
