@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 
 export default function useRainbow(
   run = true,
+  loop = true,
   startColor = '#ff0000',
   endColor = '#0000ff',
   timeDilation = 2000
@@ -18,7 +19,11 @@ export default function useRainbow(
   const stop = useCallback(() => setRunning(false), []);
 
   const animate = (time) => {
-    setColor(interpolator(Math.abs(Math.sin(time / timeDilation))));
+    setColor(
+      interpolator(
+        loop ? Math.abs(Math.sin(time / timeDilation)) : time / timeDilation
+      )
+    );
 
     if (running) {
       requestId.current = requestAnimationFrame(animate);

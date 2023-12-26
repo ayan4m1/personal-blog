@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { hsl } from 'd3-color';
 import { chunk } from 'lodash-es';
 import { getSudoku } from 'sudoku-gen';
 import useLocalStorageState from 'use-local-storage-state';
@@ -22,6 +23,7 @@ import {
 
 import SudokuCell from 'components/sudokuCell';
 import { checkSolution, getInvalids } from 'utils/sudoku';
+import useRainbow from 'hooks/useRainbow';
 
 export default function SudokuBoard() {
   const [solved, setSolved] = useState(false);
@@ -81,9 +83,17 @@ export default function SudokuBoard() {
     setValues(savedState.values);
   }, [savedState]);
   const handleClear = useCallback(() => setSavedState(null), []);
+  const { color: animationColor, start, stop } = useRainbow(false, false);
 
   useEffect(() => {
-    setSolved(checkSolution(cells, values, puzzle.solution));
+    const solved = checkSolution(cells, values, puzzle.solution);
+
+    if (solved) {
+      setSolved(solved);
+      start();
+    } else {
+      stop();
+    }
   }, [cells, values, puzzle]);
 
   return (
@@ -123,19 +133,28 @@ export default function SudokuBoard() {
         </Row>
         {cells.map((row, rowIdx) => (
           <Row key={rowIdx} className="d-flex justify-content-center">
-            {row.map((value, colIdx) => (
-              <SudokuCell
-                row={rowIdx}
-                column={colIdx}
-                key={colIdx}
-                value={!value ? values[rowIdx][colIdx] : value}
-                unknown={!value}
-                active={activeCell[0] === rowIdx && activeCell[1] === colIdx}
-                valid={invalids[rowIdx][colIdx]}
-                onClick={handleClick}
-                onChange={handleChange}
-              />
-            ))}
+            {row.map((value, colIdx) => {
+              const cellColor = hsl(solved ? animationColor : '#ffffff');
+
+              if (solved) {
+                cellColor.h += (rowIdx * 9 + colIdx) * 5;
+              }
+
+              return (
+                <SudokuCell
+                  row={rowIdx}
+                  column={colIdx}
+                  key={colIdx}
+                  value={!value ? values[rowIdx][colIdx] : value}
+                  unknown={!value}
+                  active={activeCell[0] === rowIdx && activeCell[1] === colIdx}
+                  valid={invalids[rowIdx][colIdx]}
+                  onClick={handleClick}
+                  onChange={handleChange}
+                  bg={cellColor.formatHex()}
+                />
+              );
+            })}
           </Row>
         ))}
       </Container>

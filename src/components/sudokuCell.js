@@ -7,6 +7,7 @@ export default function SudokuCell({
   row,
   column,
   value,
+  bg = '#ffffff',
   unknown = false,
   active = false,
   valid = true,
@@ -65,8 +66,9 @@ export default function SudokuCell({
         'text-dark',
         column > 0 && column % 3 === 2 && 'border-end',
         row > 0 && row % 3 === 2 && 'border-bottom',
-        valid ? 'bg-white' : 'bg-danger'
+        !valid && 'bg-danger'
       )}
+      style={{ backgroundColor: bg }}
     >
       {unknown && active ? (
         <Form.Control
@@ -88,6 +90,7 @@ SudokuCell.propTypes = {
   row: PropTypes.number.isRequired,
   column: PropTypes.number.isRequired,
   value: PropTypes.number,
+  bg: PropTypes.string,
   unknown: PropTypes.bool,
   active: PropTypes.bool,
   valid: PropTypes.bool,
