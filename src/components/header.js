@@ -1,7 +1,24 @@
+import { useSpring, animated } from '@react-spring/web';
 import { Link, useStaticQuery, graphql } from 'gatsby';
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
+import usePrefersReducedMotion from 'hooks/usePrefersReducedMotion';
+
+const bobbleSpring = {
+  from: { y: 4 },
+  to: [{ y: -4 }, { y: 4 }],
+  config: {
+    mass: 0.1,
+    tension: 20,
+    friction: 0.1
+  },
+  loop: true,
+  reset: false
+};
+
 export default function Header() {
+  const [springs] = useSpring(() => bobbleSpring);
+  const disableMotion = usePrefersReducedMotion();
   const data = useStaticQuery(graphql`
     query {
       site {
@@ -49,16 +66,27 @@ export default function Header() {
             <Nav.Link as={Link} to="/love">
               Things I Love
             </Nav.Link>
+            <Nav.Link as={Link} to="/sudoku">
+              Sudoku
+            </Nav.Link>
           </Nav>
           <Nav className="ms-auto text-light">
-            <p
-              className="mb-0"
-              style={{
-                textShadow: '1px 1px 4px rgba(0,0,0,0.6)'
-              }}
-            >
-              More Coming Soon &trade;
-            </p>
+            {disableMotion ? (
+              <p style={{ textShadow: '1px 1px 4px rgba(0,0,0,0.6)' }}>
+                More Coming Soon &trade;
+              </p>
+            ) : (
+              <animated.p
+                className="mb-0"
+                style={{
+                  position: 'relative',
+                  textShadow: '1px 1px 4px rgba(0,0,0,0.6)',
+                  ...springs
+                }}
+              >
+                More Coming Soon &trade;
+              </animated.p>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
