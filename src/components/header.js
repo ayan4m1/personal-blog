@@ -3,6 +3,12 @@ import { Link, useStaticQuery, graphql } from 'gatsby';
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
 import usePrefersReducedMotion from 'hooks/usePrefersReducedMotion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faFileArchive,
+  faHeart,
+  faTable
+} from '@fortawesome/free-solid-svg-icons';
 
 const bobbleSpring = {
   from: { y: 4 },
@@ -61,13 +67,13 @@ export default function Header() {
               ))}
             </NavDropdown>
             <Nav.Link as={Link} to="/projects">
-              Projects
+              <FontAwesomeIcon icon={faFileArchive} /> Projects
             </Nav.Link>
             <Nav.Link as={Link} to="/love">
-              Things I Love
+              <FontAwesomeIcon icon={faHeart} /> Things I Love
             </Nav.Link>
             <Nav.Link as={Link} to="/sudoku">
-              Sudoku
+              <FontAwesomeIcon icon={faTable} /> Sudoku
             </Nav.Link>
           </Nav>
           <Nav className="ms-auto text-light">
