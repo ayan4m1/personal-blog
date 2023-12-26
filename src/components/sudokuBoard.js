@@ -30,7 +30,7 @@ export default function SudokuBoard() {
   const [savedState, setSavedState] = useLocalStorageState('savedState', {
     defaultValue: null
   });
-  const rows = useMemo(
+  const cells = useMemo(
     () =>
       chunk(puzzle.puzzle.split(''), 9).map((row) =>
         row.map((value) => (value === '-' ? null : parseInt(value, 10)))
@@ -38,7 +38,7 @@ export default function SudokuBoard() {
     [puzzle]
   );
   const [values, setValues] = useState(Array(9).fill(Array(9).fill(-1)));
-  const invalids = useMemo(() => getInvalids(values, rows), [values, rows]);
+  const invalids = useMemo(() => getInvalids(values, cells), [values, cells]);
   const handleClick = useCallback(
     (row, column) =>
       setActiveCell(([prevRow, prevCol]) => {
@@ -83,13 +83,17 @@ export default function SudokuBoard() {
   const handleClear = useCallback(() => setSavedState(null), []);
 
   useEffect(() => {
-    setSolved(checkSolution(rows, values, puzzle.solution));
-  }, [rows, values, puzzle]);
+    setSolved(checkSolution(cells, values, puzzle.solution));
+  }, [cells, values, puzzle]);
 
   return (
     <Card body>
-      {solved && <Alert variant="success">You solved it!</Alert>}
       <Container fluid>
+        <Row>
+          <Col xs={12} className="mb-2">
+            <h1>Sudoku</h1>
+          </Col>
+        </Row>
         <Row className="mb-2">
           <Col className="d-flex justify-content-center g-0">
             <ButtonGroup className="w-100">
@@ -108,8 +112,17 @@ export default function SudokuBoard() {
             </ButtonGroup>
           </Col>
         </Row>
-        {rows.map((row, rowIdx) => (
-          <Row key={rowIdx}>
+        <Row>
+          <Col className="g-0">
+            {solved && (
+              <Alert className="mb-2" variant="success">
+                You solved it!
+              </Alert>
+            )}
+          </Col>
+        </Row>
+        {cells.map((row, rowIdx) => (
+          <Row key={rowIdx} className="d-flex justify-content-center">
             {row.map((value, colIdx) => (
               <SudokuCell
                 row={rowIdx}

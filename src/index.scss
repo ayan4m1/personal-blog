@@ -3,6 +3,9 @@
 @import '~bootstrap/scss/bootstrap';
 @import '~bootswatch/dist/journal/bootswatch';
 
+// Component styles
+@import 'components/sudokuCell';
+
 // Global styles
 blockquote {
   word-break: break-word;

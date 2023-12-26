@@ -29,12 +29,14 @@ export default function SudokuCell({
   );
   const handleKeyDown = useCallback(
     ({ key }) => {
-      if (!active || !['Enter', 'Tab'].includes(key)) {
-        return;
+      if (active && ['Enter', 'Tab'].includes(key)) {
+        event.preventDefault();
+        onClick(-1, -1);
+      } else if (active && ['Backspace', 'Delete'].includes(key)) {
+        event.preventDefault();
+        onChange(row, column, -1);
+        onClick(-1, -1);
       }
-
-      event.preventDefault();
-      onClick(-1, -1);
     },
     [active, onClick]
   );
@@ -57,18 +59,14 @@ export default function SudokuCell({
         }
       }}
       className={classNames(
-        'd-flex',
-        'justify-content-center',
-        'align-items-center',
-        'text-dark',
-        'p-0',
-        'border-2',
+        'sudoku-cell',
         'border-dark',
+        'border-2',
+        'text-dark',
         column > 0 && column % 3 === 2 && 'border-end',
         row > 0 && row % 3 === 2 && 'border-bottom',
         valid ? 'bg-white' : 'bg-danger'
       )}
-      style={{ height: 48, maxWidth: 48, minWidth: 48 }}
     >
       {unknown && active ? (
         <Form.Control

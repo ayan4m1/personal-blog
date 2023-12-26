@@ -10,11 +10,6 @@ export default function SudokuPage() {
       <SEO title="Sudoku" />
       <Container>
         <Row>
-          <Col xs={12}>
-            <h1>Sudoku</h1>
-          </Col>
-        </Row>
-        <Row>
           <Col className="d-flex justify-content-center">
             <SudokuBoard />
           </Col>

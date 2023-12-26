@@ -1,0 +1,38 @@
+$cell-xs: 32px;
+$cell-sm: $cell-xs * 1.25;
+$cell-md: $cell-xs * 1.5;
+$cell-lg: $cell-xs * 1.75;
+
+.sudoku-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  height: $cell-xs;
+  min-width: $cell-xs;
+  max-width: $cell-xs;
+}
+
+@include media-breakpoint-up(sm) {
+  .sudoku-cell {
+    height: $cell-sm;
+    min-width: $cell-sm;
+    max-width: $cell-sm;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .sudoku-cell {
+    height: $cell-md;
+    min-width: $cell-md;
+    max-width: $cell-md;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .sudoku-cell {
+    height: $cell-lg;
+    min-width: $cell-lg;
+    max-width: $cell-lg;
+  }
+}
