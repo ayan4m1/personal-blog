@@ -3,7 +3,7 @@ require('dotenv/config');
 const manifestOptions = {
   name: "Andrew's Space",
   /* eslint-disable camelcase */
-  short_name: 'andrewdelisa',
+  short_name: "Andrew's Space",
   start_url: '/',
   background_color: '#4582ec',
   theme_color: '#4582ec',
