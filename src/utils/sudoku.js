@@ -1,4 +1,34 @@
+import {
+  differenceInHours,
+  differenceInMinutes,
+  differenceInSeconds,
+  subHours,
+  subMinutes
+} from 'date-fns';
+
 export const difficulties = ['Easy', 'Medium', 'Hard', 'Expert'];
+
+function padTime(input) {
+  return input.toString().padStart(2, '0');
+}
+
+export function getInvalidArray() {
+  return Array(9).fill(Array(9).fill(-1));
+}
+
+export function formatTime(start, current) {
+  const hours = differenceInHours(start, current);
+
+  start = subHours(start, hours);
+
+  const minutes = differenceInMinutes(start, current);
+
+  start = subMinutes(start, minutes);
+
+  const seconds = differenceInSeconds(start, current);
+
+  return `${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`;
+}
 
 export function checkSolution(puzzle, values, solution) {
   if (!puzzle.length) {

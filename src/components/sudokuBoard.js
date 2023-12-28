@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { hsl } from 'd3-color';
 import { chunk } from 'lodash-es';
 import { getSudoku } from 'sudoku-gen';
+import { differenceInSeconds } from 'date-fns';
 import useLocalStorageState from 'use-local-storage-state';
 import {
   Alert,
@@ -14,21 +15,41 @@ import {
   Dropdown,
   DropdownButton
 } from 'react-bootstrap';
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faRecycle,
   faFloppyDisk,
   faFolderOpen,
-  faTrash
+  faTrash,
+  faPause,
+  faPlay
 } from '@fortawesome/free-solid-svg-icons';
 
 import SudokuCell from 'components/sudokuCell';
-import { checkSolution, getInvalids, difficulties } from 'utils/sudoku';
+import {
+  formatTime,
+  checkSolution,
+  getInvalids,
+  getInvalidArray,
+  difficulties
+} from 'utils/sudoku';
 import useRainbow from 'hooks/useRainbow';
 
-export default function SudokuBoard() {
+export default function SudokuBoard({ mode }) {
+  const intervalRef = useRef(null);
+  const startTime = useMemo(() => Date.now(), []);
+  const [currentTime, setCurrentTime] = useState(Date.now());
+  const [paused, setPaused] = useState(false);
   const [solved, setSolved] = useState(false);
+  const [solveRate, setSolveRate] = useState(null);
   const [activeCell, setActiveCell] = useState([-1, -1]);
   const [puzzle, setPuzzle] = useState(getSudoku('easy'));
   const [savedState, setSavedState] = useLocalStorageState('savedState', {
@@ -41,7 +62,7 @@ export default function SudokuBoard() {
       ),
     [puzzle]
   );
-  const [values, setValues] = useState(Array(9).fill(Array(9).fill(-1)));
+  const [values, setValues] = useState(getInvalidArray());
   const invalids = useMemo(() => getInvalids(values, cells), [values, cells]);
   const handleClick = useCallback(
     (row, column) =>
@@ -67,17 +88,19 @@ export default function SudokuBoard() {
       }),
     []
   );
-  const handleNew = useCallback(
-    (difficulty) => setPuzzle(getSudoku(difficulty)),
-    []
-  );
+  const handleNew = useCallback((difficulty) => {
+    setCurrentTime(Date.now());
+    setPuzzle(getSudoku(difficulty));
+    setValues(getInvalidArray());
+  }, []);
   const handleSave = useCallback(
     () =>
       setSavedState({
         puzzle,
-        values
+        values,
+        elapsedTime: differenceInSeconds(currentTime, startTime)
       }),
-    [puzzle, values]
+    [puzzle, values, currentTime, startTime]
   );
   const handleLoad = useCallback(() => {
     if (!savedState) {
@@ -86,8 +109,14 @@ export default function SudokuBoard() {
 
     setPuzzle(savedState.puzzle);
     setValues(savedState.values);
+    setCurrentTime(startTime + savedState.elapsedTime * 1000);
   }, [savedState]);
   const handleClear = useCallback(() => setSavedState(null), []);
+  const handlePause = useCallback(() => setPaused((prevVal) => !prevVal), []);
+  const handleDocumentVisibilityChange = useCallback(
+    () => setPaused(document.hidden),
+    []
+  );
   const { color: animationColor, start, stop } = useRainbow(false, false);
 
   useEffect(() => {
@@ -95,19 +124,67 @@ export default function SudokuBoard() {
 
     if (solved) {
       setSolved(solved);
+      setSolveRate(
+        differenceInSeconds(currentTime, startTime) /
+          cells.reduce(
+            (result, row) =>
+              result +
+              row.reduce(
+                (rowResult, cell) => rowResult + (cell === null ? 1 : 0),
+                0
+              ),
+            0
+          )
+      );
       start();
     } else {
       stop();
     }
   }, [cells, values, puzzle]);
 
+  useEffect(() => {
+    if (!paused) {
+      intervalRef.current = setInterval(
+        () => setCurrentTime((prevVal) => prevVal + 1000),
+        1000
+      );
+
+      return () => clearInterval(intervalRef.current);
+    } else if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  }, [paused]);
+
+  useEffect(() => {
+    // if we remove visibilitychange on unmount we lose it, so only set it up once
+    document.addEventListener(
+      'visibilitychange',
+      handleDocumentVisibilityChange
+    );
+  });
+
   return (
     <Card body>
       <Container fluid>
         <Row>
-          <Col xs={12} className="mb-2">
+          <Col xs={mode === 'timed' ? 8 : 12}>
             <h1>Sudoku</h1>
           </Col>
+          {mode === 'timed' && (
+            <Col className="d-flex justify-content-center align-items-center">
+              <span className="font-monospace">
+                {formatTime(currentTime, startTime)}
+              </span>
+              <Button
+                variant="info"
+                size="sm"
+                className="ms-2"
+                onClick={handlePause}
+              >
+                <FontAwesomeIcon icon={paused ? faPlay : faPause} fixedWidth />
+              </Button>
+            </Col>
+          )}
         </Row>
         <Row className="mb-2">
           <Col className="d-flex justify-content-center g-0">
@@ -141,15 +218,16 @@ export default function SudokuBoard() {
             </ButtonGroup>
           </Col>
         </Row>
-        <Row>
-          <Col className="g-0">
-            {solved && (
+        {solved && (
+          <Row className="mb-2">
+            <Col className="g-0">
               <Alert className="mb-2" variant="success">
-                You solved it!
+                You solved it, averaging {solveRate.toFixed(1)} seconds per
+                cell!
               </Alert>
-            )}
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+        )}
         {cells.map((row, rowIdx) => (
           <Row key={rowIdx} className="d-flex justify-content-center">
             {row.map((value, colIdx) => {
@@ -162,9 +240,9 @@ export default function SudokuBoard() {
 
               return (
                 <SudokuCell
+                  key={colIdx}
                   row={rowIdx}
                   column={colIdx}
-                  key={colIdx}
                   value={!value ? values[rowIdx][colIdx] : value}
                   unknown={!value}
                   active={activeCell[0] === rowIdx && activeCell[1] === colIdx}
@@ -183,6 +261,5 @@ export default function SudokuBoard() {
 }
 
 SudokuBoard.propTypes = {
-  puzzle: PropTypes.string.isRequired,
-  solution: PropTypes.string.isRequired
+  mode: PropTypes.oneOf(['timed', 'free']).isRequired
 };

@@ -24,7 +24,7 @@ export default function SudokuCell({
       }
 
       onChange(row, column, newVal);
-      onClick(-1, -1);
+      handleBlur();
     },
     [onClick, onChange]
   );
@@ -32,11 +32,11 @@ export default function SudokuCell({
     ({ key }) => {
       if (active && ['Enter', 'Tab'].includes(key)) {
         event.preventDefault();
-        onClick(-1, -1);
+        handleBlur();
       } else if (active && ['Backspace', 'Delete'].includes(key)) {
         event.preventDefault();
         onChange(row, column, -1);
-        onClick(-1, -1);
+        handleBlur();
       }
     },
     [active, onClick]
