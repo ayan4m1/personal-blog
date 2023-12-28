@@ -1,7 +1,7 @@
 const { resolve } = require('path');
 
 const createArticlePages = async ({ actions, graphql, reporter }) => {
-  const component = resolve('src/components/article.js');
+  const component = resolve('src/components/markdownArticle.js');
   const mdxComponent = resolve('src/components/mdxArticle.js');
   const { createPage } = actions;
   const result = await graphql(`
@@ -76,7 +76,7 @@ const createArticlePages = async ({ actions, graphql, reporter }) => {
     });
   });
 
-  reporter.info(`Created ${counter} markdown pages!`);
+  reporter.info(`Created ${counter} markdown/MDX pages!`);
 };
 const createArticleListings = async ({ actions, graphql, reporter }) => {
   const component = resolve('src/components/articleCategory.js');

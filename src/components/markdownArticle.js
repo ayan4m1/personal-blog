@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import NotFoundPage from 'pages/404';
 import ArticleContainer from 'components/articleContainer';
 
-export default function Article({ data }) {
+export default function MarkdownArticle({ data }) {
   if (!data || !data.markdownRemark) {
     return <NotFoundPage />;
   }
@@ -20,7 +20,7 @@ export default function Article({ data }) {
   );
 }
 
-Article.propTypes = {
+MarkdownArticle.propTypes = {
   data: PropTypes.shape({
     markdownRemark: PropTypes.shape({
       html: PropTypes.string.isRequired,
