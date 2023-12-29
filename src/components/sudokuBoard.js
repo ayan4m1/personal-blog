@@ -75,19 +75,18 @@ export default function SudokuBoard({ mode }) {
       }),
     []
   );
-  const handleChange = useCallback(
-    (row, column, value) =>
-      setValues((prevVal) => {
-        const newVal = [...prevVal];
-        const newRow = [...newVal[row]];
+  const handleChange = useCallback((row, column, value) => {
+    setValues((prevVal) => {
+      const newVal = [...prevVal];
+      const newRow = [...newVal[row]];
 
-        newRow[column] = value;
-        newVal.splice(row, 1, newRow);
+      newRow[column] = value;
+      newVal.splice(row, 1, newRow);
 
-        return newVal;
-      }),
-    []
-  );
+      return newVal;
+    });
+    setPaused(false);
+  }, []);
   const handleNew = useCallback((difficulty) => {
     setCurrentTime(Date.now());
     setPuzzle(getSudoku(difficulty));
@@ -167,11 +166,14 @@ export default function SudokuBoard({ mode }) {
     <Card body>
       <Container fluid>
         <Row>
-          <Col xs={mode === 'timed' ? 8 : 12}>
+          <Col xs={8}>
             <h1>Sudoku</h1>
           </Col>
           {mode === 'timed' && (
-            <Col className="d-flex justify-content-center align-items-center">
+            <Col
+              xs={4}
+              className="d-flex justify-content-center align-items-center"
+            >
               <span className="font-monospace">
                 {formatTime(currentTime, startTime)}
               </span>
