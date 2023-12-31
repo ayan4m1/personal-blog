@@ -6,9 +6,13 @@ import usePrefersReducedMotion from 'hooks/usePrefersReducedMotion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFileArchive,
+  faGamepad,
   faHeart,
+  faNewspaper,
+  faRectangleList,
   faTable
 } from '@fortawesome/free-solid-svg-icons';
+import { Fragment } from 'react';
 
 const bobbleSpring = {
   from: { y: 4 },
@@ -54,7 +58,13 @@ export default function Header() {
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav className="ms-2">
-            <NavDropdown title="Articles">
+            <NavDropdown
+              title={
+                <Fragment>
+                  <FontAwesomeIcon icon={faNewspaper} /> Articles
+                </Fragment>
+              }
+            >
               {data.allArticleCategoriesJson.nodes.map((category) => (
                 <Nav.Link
                   key={category.name}
@@ -72,9 +82,20 @@ export default function Header() {
             <Nav.Link as={Link} to="/love">
               <FontAwesomeIcon icon={faHeart} /> Things I Love
             </Nav.Link>
-            <Nav.Link as={Link} to="/sudoku">
-              <FontAwesomeIcon icon={faTable} /> Sudoku
-            </Nav.Link>
+            <NavDropdown
+              title={
+                <Fragment>
+                  <FontAwesomeIcon icon={faGamepad} /> Games
+                </Fragment>
+              }
+            >
+              <Nav.Link as={Link} to="/sudoku" className="text-dark">
+                <FontAwesomeIcon icon={faTable} /> Sudoku
+              </Nav.Link>
+              <Nav.Link as={Link} to="/mahjong" className="text-dark">
+                <FontAwesomeIcon icon={faRectangleList} /> Mahjong
+              </Nav.Link>
+            </NavDropdown>
           </Nav>
           <Nav className="ms-auto text-light">
             {disableMotion ? (
