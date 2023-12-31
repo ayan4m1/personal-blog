@@ -8,8 +8,6 @@ export default function MahjongTile({ tile, x, y, imageUrl, active, onClick }) {
       onClick={() => onClick(tile)}
       className="mahjong-tile"
       style={{
-        border: active ? '2px solid red' : 'none',
-        margin: active ? 0 : 2,
         zIndex: 999 + tile.layer,
         top: y,
         left: x
@@ -19,8 +17,28 @@ export default function MahjongTile({ tile, x, y, imageUrl, active, onClick }) {
         draggable={false}
         src={imageUrl}
         alt={getTileFriendlyName(tile)}
-        style={{ height: 64 }}
+        style={{ height: 64, position: 'absolute' }}
       />
+      {active && (
+        <svg
+          width={53}
+          height={64}
+          viewBox="0 0 53 64"
+          style={{ zIndex: 10000 }}
+        >
+          <rect
+            x={0}
+            y={0}
+            height={64}
+            width={53}
+            fill="#ff0000"
+            fillOpacity={0.4}
+            stroke="#ff0000"
+            strokeWidth={2}
+            rx={8}
+          />
+        </svg>
+      )}
     </button>
   );
 }

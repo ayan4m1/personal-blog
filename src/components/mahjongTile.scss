@@ -1,7 +1,8 @@
 .mahjong-tile {
+  display: flex;
   position: absolute;
   background: none;
   user-select: none;
-  border-radius: 8px;
+  border: none;
   padding: 0;
 }
