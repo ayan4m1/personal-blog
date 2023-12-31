@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 
+import { getTileFriendlyName } from 'utils/mahjong';
+
 export default function MahjongTile({ tile, x, y, imageUrl, active, onClick }) {
   return (
     <button
@@ -13,7 +15,12 @@ export default function MahjongTile({ tile, x, y, imageUrl, active, onClick }) {
         left: x - tile.layer * -5
       }}
     >
-      <img draggable={false} src={imageUrl} alt="test" style={{ height: 64 }} />
+      <img
+        draggable={false}
+        src={imageUrl}
+        alt={getTileFriendlyName(tile)}
+        style={{ height: 64 }}
+      />
     </button>
   );
 }

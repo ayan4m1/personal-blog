@@ -42,6 +42,9 @@ export const layouts = {
 export function getTileImagePath(tile) {
   return `mahjong/${tile.type.toLowerCase()}_${tile.value}.svg`;
 }
+export function getTileFriendlyName(tile) {
+  return `${tile.value} ${tile.type}`;
+}
 export function getTiles() {
   const result = [];
 
