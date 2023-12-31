@@ -1,21 +1,13 @@
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
-import { useCallback, useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import Layout from 'components/layout';
 import SEO from 'components/seo';
-import MahjongTile from 'components/mahjongTile';
-import { getTileImagePath, generateTurtle } from 'utils/mahjong';
+import MahjongBoard from 'components/mahjongBoard';
 
 export default function MahjongPage({ data }) {
   const { images } = data;
-  const [turtle] = useState(generateTurtle());
-  const [activeTile, setActiveTile] = useState(null);
-  const handleTileClick = useCallback(
-    (id) => setActiveTile((prevVal) => (prevVal === id ? null : id)),
-    [setActiveTile]
-  );
 
   return (
     <Layout>
@@ -28,20 +20,7 @@ export default function MahjongPage({ data }) {
         </Row>
         <Row>
           <Col>
-            {turtle.map((tile) => (
-              <MahjongTile
-                key={tile.index}
-                tile={tile}
-                x={tile.x}
-                y={tile.y}
-                layer={tile.layer}
-                active={activeTile === tile.index}
-                image={images.nodes.find((node) =>
-                  node.relativePath.endsWith(getTileImagePath(tile))
-                )}
-                onClick={handleTileClick}
-              />
-            ))}
+            <MahjongBoard images={images} />
           </Col>
         </Row>
       </Container>

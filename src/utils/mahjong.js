@@ -27,6 +27,18 @@ export const tileCopies = {
   [tileTypes.season]: 1,
   [tileTypes.flower]: 1
 };
+export const layouts = {
+  turtle: [
+    [12, 8, 10, 12, 12, 10, 8, 12],
+    [0, 6, 6, 6, 6, 6, 6, 0],
+    [0, 0, 4, 4, 4, 4, 0, 0],
+    [0, 0, 0, 2, 2, 0, 0, 0],
+    { layer: 1, x: -7, y: 3.5 },
+    { layer: 1, x: 6, y: 3.5 },
+    { layer: 1, x: 7, y: 3.5 },
+    { layer: 5, x: -0.5, y: 3.5 }
+  ]
+};
 export function getTileImagePath(tile) {
   return `mahjong/${tile.type.toLowerCase()}_${tile.value}.svg`;
 }
@@ -47,21 +59,103 @@ export function getTiles() {
 
   return result;
 }
-export function generateTurtle() {
+export function generateLayout(name) {
   const result = [];
   const tiles = shuffle(getTiles());
+  const layout = layouts[name];
 
-  let i = 0;
-  let remaining = tiles.length;
-  for (const tile of tiles) {
-    result.push({
-      ...tile,
-      layer: remaining < 40 ? 0 : 1,
-      x: (i % 15) + (remaining < 40 ? 0.5 : 0),
-      y: Math.floor(i / 15)
-    });
-    i++;
+  let layer = 1;
+  for (const row of layout) {
+    if (Array.isArray(row)) {
+      let unitY = 0;
+      for (const count of row) {
+        let unitX = -count / 2;
+        for (let i = 0; i < count; i++) {
+          const tile = tiles.shift();
+
+          result.push({
+            ...tile,
+            layer,
+            x: unitX,
+            y: unitY
+          });
+          unitX++;
+        }
+        unitY++;
+      }
+    } else {
+      const tile = tiles.shift();
+      const { layer, x, y } = row;
+      result.push({
+        ...tile,
+        layer,
+        x,
+        y
+      });
+    }
+    layer++;
   }
 
   return result;
+}
+export function isOpen(tile, layout) {
+  const prevTile = layout.find(
+    (t) => t.x === tile.x - 1 && t.y === tile.y && t.layer === tile.layer
+  );
+  const nextTile = layout.find(
+    (t) => t.x === tile.x + 1 && t.y === tile.y && t.layer === tile.layer
+  );
+  const aboveTile = layout.find(
+    (t) => t.x === tile.x && t.y === tile.y && t.layer === tile.layer + 1
+  );
+
+  const minX = layout.reduce((prevMin, t) => Math.min(prevMin, t.x), 100);
+  const maxX = layout.reduce((prevMax, t) => Math.max(prevMax, t.x), -100);
+
+  // todo: handle cases where tiles are not evenly aligned (off by 0.5 units)
+  // todo: handle cases where tiles are on top but offset (up to 1.5 units)
+  return (
+    ((tile.x >= minX && !prevTile) || (tile.x <= maxX && !nextTile)) &&
+    !aboveTile
+  );
+}
+export function isMatch(aTile, bTile) {
+  if (aTile.type !== bTile.type) {
+    return false;
+  }
+
+  switch (aTile.type) {
+    case tileTypes.circle:
+    case tileTypes.character:
+    case tileTypes.bamboo:
+    case tileTypes.wind:
+    case tileTypes.dragon:
+      if (aTile.value !== bTile.value) {
+        return false;
+      }
+      break;
+  }
+
+  return true;
+}
+export function getAvailableMatches(layout) {
+  let matches = 0;
+
+  for (const tile of layout) {
+    for (const otherTile of layout) {
+      if (tile.index === otherTile.index) {
+        continue;
+      }
+
+      if (
+        isOpen(tile, layout) &&
+        isOpen(otherTile, layout) &&
+        isMatch(tile, otherTile)
+      ) {
+        matches++;
+      }
+    }
+  }
+
+  return matches / 2;
 }

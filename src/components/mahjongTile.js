@@ -1,39 +1,28 @@
 import PropTypes from 'prop-types';
 
-export default function MahjongTile({
-  tile,
-  x,
-  y,
-  layer = 1,
-  image,
-  active,
-  onClick
-}) {
+export default function MahjongTile({ tile, x, y, imageUrl, active, onClick }) {
   return (
     <button
-      onClick={() => onClick(tile.index)}
+      onClick={() => onClick(tile)}
+      className="mahjong-tile"
       style={{
-        position: 'fixed',
-        background: 'none',
-        border: active ? '1px solid red' : 'none',
-        padding: 0,
-        margin: 0,
-        zIndex: 999 + layer,
-        top: y * 64,
-        left: x * 48
+        border: active ? '2px solid red' : 'none',
+        margin: active ? 0 : 2,
+        zIndex: 999 + tile.layer,
+        top: y - tile.layer * -5,
+        left: x - tile.layer * -5
       }}
     >
-      <img src={image?.publicURL} alt="test" style={{ height: 64 }} />
+      <img draggable={false} src={imageUrl} alt="test" style={{ height: 64 }} />
     </button>
   );
 }
 
 MahjongTile.propTypes = {
   tile: PropTypes.object.isRequired,
-  image: PropTypes.node.isRequired,
+  imageUrl: PropTypes.string.isRequired,
   active: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
   x: PropTypes.number,
-  y: PropTypes.number,
-  layer: PropTypes.number
+  y: PropTypes.number
 };
