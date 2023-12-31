@@ -28,7 +28,10 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faExclamationTriangle,
-  faRecycle
+  faFloppyDisk,
+  faFolderOpen,
+  faRecycle,
+  faTrash
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function MahjongBoard({ images }) {
@@ -112,25 +115,20 @@ export default function MahjongBoard({ images }) {
             </Col>
           </Row>
         )}
-        <Row className="d-flex align-items-center mb-4">
-          <Col xs={6}>
-            <ButtonGroup className="me-4">
-              <Button onClick={() => setLayout(generateLayout('turtle'))}>
-                <FontAwesomeIcon icon={faRecycle} /> Reset
-              </Button>
-            </ButtonGroup>
-          </Col>
-          <Col xs={2}>
-            <h4 className="mt-0 mb-2">Matches Left</h4>
-            <p className="mb-0">
-              {matches}{' '}
-              {matches === 1 && (
-                <FontAwesomeIcon icon={faExclamationTriangle} color="orange" />
-              )}
-            </p>
-          </Col>
+        <Row>
           <Col xs={4}>
             <h4 className="mt-0 mb-2">Progress</h4>
+          </Col>
+
+          <Col xs={2}>
+            <h4 className="mt-0 mb-2">Matches Left</h4>
+          </Col>
+          <Col xs={6}>
+            <h4 className="mt-0 mb-2">Options</h4>
+          </Col>
+        </Row>
+        <Row className="d-flex align-items-center mb-4">
+          <Col xs={4}>
             <ProgressBar
               variant="success"
               now={completePct * 100}
@@ -138,26 +136,54 @@ export default function MahjongBoard({ images }) {
               style={{ height: 24 }}
             />
           </Col>
+          <Col xs={2}>
+            <p className="mb-0">
+              {matches}{' '}
+              {matches === 1 && (
+                <FontAwesomeIcon icon={faExclamationTriangle} color="orange" />
+              )}
+            </p>
+          </Col>
+          <Col xs={6}>
+            <ButtonGroup className="me-4">
+              <Button onClick={() => setLayout(generateLayout('turtle'))}>
+                <FontAwesomeIcon icon={faRecycle} /> New
+              </Button>
+              <Button disabled>
+                <FontAwesomeIcon icon={faFloppyDisk} /> Save
+              </Button>
+              <Button disabled>
+                <FontAwesomeIcon icon={faTrash} /> Clear
+              </Button>
+              <Button disabled>
+                <FontAwesomeIcon icon={faFolderOpen} /> Load
+              </Button>
+            </ButtonGroup>
+          </Col>
         </Row>
       </Container>
       <div ref={boardRef} style={{ height: '100vh' }}>
-        {layout.map((tile) => (
-          <MahjongTile
-            key={tile.index}
-            tile={tile}
-            x={
-              tile.x * 48 + (boardRect?.left ?? 0) + (boardRect?.width ?? 0) / 2
-            }
-            y={tile.y * 64 + (boardRect?.top ?? 0)}
-            active={activeTile === tile.index}
-            imageUrl={
-              images.nodes.find((node) =>
-                node.relativePath.endsWith(getTileImagePath(tile))
-              )?.publicURL
-            }
-            onClick={handleTileClick}
-          />
-        ))}
+        {boardRef.current &&
+          layout.map((tile) => (
+            <MahjongTile
+              key={tile.index}
+              tile={tile}
+              x={
+                tile.x * 48 -
+                tile.layer * -5 +
+                (boardRect?.left ?? 0) +
+                (boardRect?.width ?? 0) / 2
+              }
+              y={tile.y * 64 - tile.layer * -5 + (boardRect?.top ?? 0)}
+              active={activeTile === tile.index}
+              imageUrl={
+                images.nodes.find((node) =>
+                  node.relativePath.endsWith(getTileImagePath(tile))
+                )?.publicURL
+              }
+              onClick={handleTileClick}
+            />
+          ))}
       </div>
     </Fragment>
   );

@@ -11,8 +11,8 @@ export default function MahjongTile({ tile, x, y, imageUrl, active, onClick }) {
         border: active ? '2px solid red' : 'none',
         margin: active ? 0 : 2,
         zIndex: 999 + tile.layer,
-        top: y - tile.layer * -5,
-        left: x - tile.layer * -5
+        top: y,
+        left: x
       }}
     >
       <img

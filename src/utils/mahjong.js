@@ -145,23 +145,24 @@ export function isMatch(aTile, bTile) {
   return true;
 }
 export function getAvailableMatches(layout) {
-  let matches = 0;
-
-  for (const tile of layout) {
-    for (const otherTile of layout) {
-      if (tile.index === otherTile.index) {
-        continue;
-      }
-
-      if (
-        isOpen(tile, layout) &&
-        isOpen(otherTile, layout) &&
-        isMatch(tile, otherTile)
-      ) {
-        matches++;
-      }
-    }
-  }
-
-  return matches / 2;
+  return (
+    layout.reduce(
+      (matches, tile) =>
+        matches +
+        layout.reduce((innerMatches, otherTile) => {
+          if (tile.index === otherTile.index) {
+            return innerMatches;
+          } else if (
+            isOpen(tile, layout) &&
+            isOpen(otherTile, layout) &&
+            isMatch(tile, otherTile)
+          ) {
+            return innerMatches + 1;
+          } else {
+            return innerMatches;
+          }
+        }, 0),
+      0
+    ) / 2
+  );
 }
