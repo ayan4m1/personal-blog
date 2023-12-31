@@ -100,20 +100,23 @@ export function generateLayout(name) {
 }
 export function isOpen(tile, layout) {
   const prevTile = layout.find(
-    (t) => t.x === tile.x - 1 && t.y === tile.y && t.layer === tile.layer
+    (t) =>
+      t.x === tile.x - 1 && Math.abs(t.y - tile.y) < 1 && t.layer === tile.layer
   );
   const nextTile = layout.find(
-    (t) => t.x === tile.x + 1 && t.y === tile.y && t.layer === tile.layer
+    (t) =>
+      t.x === tile.x + 1 && Math.abs(t.y - tile.y) < 1 && t.layer === tile.layer
   );
   const aboveTile = layout.find(
-    (t) => t.x === tile.x && t.y === tile.y && t.layer === tile.layer + 1
+    (t) =>
+      Math.abs(t.x - tile.x) < 1 &&
+      Math.abs(t.y - tile.y) < 1 &&
+      t.layer === tile.layer + 1
   );
 
   const minX = layout.reduce((prevMin, t) => Math.min(prevMin, t.x), 100);
   const maxX = layout.reduce((prevMax, t) => Math.max(prevMax, t.x), -100);
 
-  // todo: handle cases where tiles are not evenly aligned (off by 0.5 units)
-  // todo: handle cases where tiles are on top but offset (up to 1.5 units)
   return (
     ((tile.x >= minX && !prevTile) || (tile.x <= maxX && !nextTile)) &&
     !aboveTile
