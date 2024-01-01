@@ -49,6 +49,7 @@ export default function MahjongBoard({ images }) {
   const boardRef = useRef(null);
   const [solved, setSolved] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [showHints, setShowHints] = useState(false);
   const [boardRect, setBoardRect] = useState(null);
   const [activeTile, setActiveTile] = useState(null);
   const [layout, setLayout] = useState(generateLayout('turtle'));
@@ -115,7 +116,7 @@ export default function MahjongBoard({ images }) {
   }, [layout]);
 
   useEffect(() => {
-    if (matches === 0) {
+    if (matches.length === 0) {
       setFailed(true);
       stopTimer();
     }
@@ -163,8 +164,8 @@ export default function MahjongBoard({ images }) {
           </Col>
           <Col xs={2}>
             <p className="mb-0">
-              {matches}{' '}
-              {matches === 1 && (
+              {matches.length}{' '}
+              {matches.length === 1 && (
                 <FontAwesomeIcon icon={faExclamationTriangle} color="orange" />
               )}
             </p>
@@ -190,7 +191,7 @@ export default function MahjongBoard({ images }) {
               <Button disabled>
                 <FontAwesomeIcon icon={faFolderOpen} /> Load
               </Button>
-              <Button disabled>
+              <Button onClick={() => setShowHints((prevVal) => !prevVal)}>
                 <FontAwesomeIcon icon={faHighlighter} /> Hint
               </Button>
             </ButtonGroup>
@@ -211,6 +212,14 @@ export default function MahjongBoard({ images }) {
               }
               y={tile.y * 64 - tile.layer * -5 + (boardRect?.top ?? 0)}
               active={activeTile === tile.index}
+              hint={
+                showHints &&
+                Boolean(
+                  matches.find(
+                    ([a, b]) => a.index === tile.index || b.index === tile.index
+                  )
+                )
+              }
               imageUrl={
                 images.nodes.find((node) =>
                   node.relativePath.endsWith(getTileImagePath(tile))

@@ -144,25 +144,31 @@ export function isMatch(aTile, bTile) {
 
   return true;
 }
+function dedupeMatches(matches) {
+  return matches.flatMap(([a, b]) => {
+    const target = matches.find(
+      ([searchA, searchB]) => searchA === b && searchB === a
+    );
+
+    return target ? [target] : [];
+  });
+}
 export function getAvailableMatches(layout) {
-  return (
-    layout.reduce(
-      (matches, tile) =>
-        matches +
-        layout.reduce((innerMatches, otherTile) => {
-          if (tile.index === otherTile.index) {
-            return innerMatches;
-          } else if (
-            isOpen(tile, layout) &&
-            isOpen(otherTile, layout) &&
-            isMatch(tile, otherTile)
-          ) {
-            return innerMatches + 1;
-          } else {
-            return innerMatches;
-          }
-        }, 0),
-      0
-    ) / 2
+  return dedupeMatches(
+    layout.flatMap((tile) => {
+      const match = layout.find(
+        (searchTile) =>
+          searchTile.index !== tile.index &&
+          isOpen(searchTile, layout) &&
+          isOpen(tile, layout) &&
+          isMatch(searchTile, tile)
+      );
+
+      if (match) {
+        return [[tile, match]];
+      } else {
+        return [];
+      }
+    })
   );
 }
