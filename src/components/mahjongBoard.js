@@ -115,7 +115,10 @@ export default function MahjongBoard({ images }) {
   }, [layout]);
 
   useEffect(() => {
-    setFailed(matches === 0);
+    if (matches === 0) {
+      setFailed(true);
+      stopTimer();
+    }
   }, [matches]);
 
   return (
