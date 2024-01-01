@@ -27,7 +27,7 @@ export default function MahjongTile({
         alt={getTileFriendlyName(tile)}
         style={{ height: 64, position: 'absolute' }}
       />
-      {active && (
+      {(active || hint) && (
         <svg
           width={53}
           height={64}
@@ -39,29 +39,9 @@ export default function MahjongTile({
             y={0}
             height={64}
             width={53}
-            fill="#ff0000"
+            fill={active ? '#ff0000' : '#00ff00'}
             fillOpacity={0.4}
-            stroke="#ff0000"
-            strokeWidth={2}
-            rx={8}
-          />
-        </svg>
-      )}
-      {hint && (
-        <svg
-          width={53}
-          height={64}
-          viewBox="0 0 53 64"
-          style={{ zIndex: 10000 }}
-        >
-          <rect
-            x={0}
-            y={0}
-            height={64}
-            width={53}
-            fill="#00ff00"
-            fillOpacity={0.4}
-            stroke="#00ff00"
+            stroke={active ? '#ff0000' : '#00ff00'}
             strokeWidth={2}
             rx={8}
           />
