@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import { hsl } from 'd3-color';
 import { chunk } from 'lodash-es';
 import { getSudoku } from 'sudoku-gen';
-import { differenceInSeconds } from 'date-fns';
 import useLocalStorageState from 'use-local-storage-state';
 import {
   Alert,
@@ -15,39 +14,35 @@ import {
   Dropdown,
   DropdownButton
 } from 'react-bootstrap';
-import {
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faRecycle,
   faFloppyDisk,
   faFolderOpen,
-  faTrash,
-  faPause,
-  faPlay
+  faTrash
 } from '@fortawesome/free-solid-svg-icons';
 
 import SudokuCell from 'components/sudokuCell';
+import TimeViewer from 'components/timeViewer';
+import useRainbow from 'hooks/useRainbow';
+import useTimer from 'hooks/useTimer';
 import {
-  formatTime,
   checkSolution,
   getInvalids,
   getInvalidArray,
   difficulties
 } from 'utils/sudoku';
-import useRainbow from 'hooks/useRainbow';
 
 export default function SudokuBoard({ mode }) {
-  const intervalRef = useRef(null);
-  const startTime = useMemo(() => Date.now(), []);
-  const [currentTime, setCurrentTime] = useState(Date.now());
-  const [paused, setPaused] = useState(false);
+  const {
+    elapsedTime,
+    running,
+    startTimer,
+    resetTimer,
+    incrementTimer,
+    toggleTimer
+  } = useTimer();
   const [solved, setSolved] = useState(false);
   const [solveRate, setSolveRate] = useState(null);
   const [activeCell, setActiveCell] = useState([-1, -1]);
@@ -85,10 +80,10 @@ export default function SudokuBoard({ mode }) {
 
       return newVal;
     });
-    setPaused(false);
+    startTimer();
   }, []);
   const handleNew = useCallback((difficulty) => {
-    setCurrentTime(Date.now());
+    resetTimer();
     setPuzzle(getSudoku(difficulty));
     setValues(getInvalidArray());
   }, []);
@@ -97,9 +92,9 @@ export default function SudokuBoard({ mode }) {
       setSavedState({
         puzzle,
         values,
-        elapsedTime: differenceInSeconds(currentTime, startTime)
+        elapsedTime
       }),
-    [puzzle, values, currentTime, startTime]
+    [puzzle, values, elapsedTime]
   );
   const handleLoad = useCallback(() => {
     if (!savedState) {
@@ -108,14 +103,9 @@ export default function SudokuBoard({ mode }) {
 
     setPuzzle(savedState.puzzle);
     setValues(savedState.values);
-    setCurrentTime(startTime + savedState.elapsedTime * 1000);
+    incrementTimer(savedState.elapsedTime * 1000);
   }, [savedState]);
   const handleClear = useCallback(() => setSavedState(null), []);
-  const handlePause = useCallback(() => setPaused((prevVal) => !prevVal), []);
-  const handleDocumentVisibilityChange = useCallback(
-    () => setPaused(document.hidden),
-    []
-  );
   const { color: animationColor, start, stop } = useRainbow(false, false);
 
   useEffect(() => {
@@ -124,7 +114,7 @@ export default function SudokuBoard({ mode }) {
     if (solved) {
       setSolved(solved);
       setSolveRate(
-        differenceInSeconds(currentTime, startTime) /
+        elapsedTime /
           cells.reduce(
             (result, row) =>
               result +
@@ -141,27 +131,6 @@ export default function SudokuBoard({ mode }) {
     }
   }, [cells, values, puzzle]);
 
-  useEffect(() => {
-    if (!paused) {
-      intervalRef.current = setInterval(
-        () => setCurrentTime((prevVal) => prevVal + 1000),
-        1000
-      );
-
-      return () => clearInterval(intervalRef.current);
-    } else if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-  }, [paused]);
-
-  useEffect(() => {
-    // if we remove visibilitychange on unmount we lose it, so only set it up once
-    document.addEventListener(
-      'visibilitychange',
-      handleDocumentVisibilityChange
-    );
-  });
-
   return (
     <Card body>
       <Container fluid>
@@ -170,21 +139,12 @@ export default function SudokuBoard({ mode }) {
             <h1>Sudoku</h1>
           </Col>
           {mode === 'timed' && (
-            <Col
-              xs={4}
-              className="d-flex justify-content-center align-items-center"
-            >
-              <span className="font-monospace">
-                {formatTime(currentTime, startTime)}
-              </span>
-              <Button
-                variant="info"
-                size="sm"
-                className="ms-2"
-                onClick={handlePause}
-              >
-                <FontAwesomeIcon icon={paused ? faPlay : faPause} fixedWidth />
-              </Button>
+            <Col xs={4} className="d-flex align-items-center">
+              <TimeViewer
+                elapsedTime={elapsedTime}
+                running={running}
+                onToggle={toggleTimer}
+              />
             </Col>
           )}
         </Row>

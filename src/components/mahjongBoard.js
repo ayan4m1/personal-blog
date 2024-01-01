@@ -16,8 +16,18 @@ import {
   ButtonGroup,
   Button
 } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faExclamationTriangle,
+  faFloppyDisk,
+  faFolderOpen,
+  faHighlighter,
+  faRecycle,
+  faTrash
+} from '@fortawesome/free-solid-svg-icons';
 
 import MahjongTile from 'components/mahjongTile';
+import TimeViewer from 'components/timeViewer';
 import {
   generateLayout,
   getTileImagePath,
@@ -25,16 +35,17 @@ import {
   isOpen,
   isMatch
 } from 'utils/mahjong';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faExclamationTriangle,
-  faFloppyDisk,
-  faFolderOpen,
-  faRecycle,
-  faTrash
-} from '@fortawesome/free-solid-svg-icons';
+import useTimer from 'hooks/useTimer';
 
 export default function MahjongBoard({ images }) {
+  const {
+    elapsedTime,
+    running,
+    startTimer,
+    stopTimer,
+    toggleTimer,
+    resetTimer
+  } = useTimer();
   const boardRef = useRef(null);
   const [solved, setSolved] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -70,7 +81,7 @@ export default function MahjongBoard({ images }) {
     [setLayout]
   );
   const handleTileClick = useCallback(
-    (tile) =>
+    (tile) => {
       setActiveTile((prevVal) => {
         if (prevVal === tile.index) {
           return null;
@@ -80,9 +91,15 @@ export default function MahjongBoard({ images }) {
         } else if (isOpen(tile, layout)) {
           return tile.index;
         }
-      }),
-    [setActiveTile, handleMatch, layout]
+      });
+      startTimer();
+    },
+    [setActiveTile, handleMatch, layout, startTimer]
   );
+  const handleNew = useCallback(() => {
+    setLayout(generateLayout('turtle'));
+    resetTimer();
+  }, [setLayout, resetTimer]);
 
   useEffect(() => {
     if (boardRef.current) {
@@ -91,7 +108,10 @@ export default function MahjongBoard({ images }) {
   }, [boardRef, solved, failed]);
 
   useEffect(() => {
-    setSolved(!layout.length);
+    if (!layout.length) {
+      setSolved(true);
+      stopTimer();
+    }
   }, [layout]);
 
   useEffect(() => {
@@ -119,11 +139,13 @@ export default function MahjongBoard({ images }) {
           <Col xs={4}>
             <h4 className="mt-0 mb-2">Progress</h4>
           </Col>
-
           <Col xs={2}>
             <h4 className="mt-0 mb-2">Matches Left</h4>
           </Col>
-          <Col xs={6}>
+          <Col xs={2}>
+            <h4 className="mt-0 mb-2">Time</h4>
+          </Col>
+          <Col xs={4}>
             <h4 className="mt-0 mb-2">Options</h4>
           </Col>
         </Row>
@@ -144,9 +166,16 @@ export default function MahjongBoard({ images }) {
               )}
             </p>
           </Col>
-          <Col xs={6}>
+          <Col xs={2}>
+            <TimeViewer
+              elapsedTime={elapsedTime}
+              running={running}
+              onToggle={toggleTimer}
+            />
+          </Col>
+          <Col xs={4}>
             <ButtonGroup className="me-4">
-              <Button onClick={() => setLayout(generateLayout('turtle'))}>
+              <Button onClick={handleNew}>
                 <FontAwesomeIcon icon={faRecycle} /> New
               </Button>
               <Button disabled>
@@ -157,6 +186,9 @@ export default function MahjongBoard({ images }) {
               </Button>
               <Button disabled>
                 <FontAwesomeIcon icon={faFolderOpen} /> Load
+              </Button>
+              <Button disabled>
+                <FontAwesomeIcon icon={faHighlighter} /> Hint
               </Button>
             </ButtonGroup>
           </Col>
