@@ -22,7 +22,11 @@ module.exports = {
   },
   rules: {
     'react/jsx-uses-react': 0,
-    'react/react-in-jsx-scope': 0
+    'react/react-in-jsx-scope': 0,
+    'react/no-unknown-property': [
+      'error',
+      { ignore: ['args', 'position', 'rotation'] }
+    ]
   },
   settings: {
     react: {
