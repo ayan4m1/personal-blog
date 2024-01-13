@@ -1,76 +1,87 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
-import { useBox } from '@react-three/p2';
+import { Vector3 } from 'three';
+import { useBox } from '@react-three/cannon';
 import { useFrame } from '@react-three/fiber';
-import { useKeyboardControls } from '@react-three/drei';
+import { useGLTF, useKeyboardControls } from '@react-three/drei';
+import { useEffect, useState } from 'react';
 
-const dryMass = 6845;
-const wetMass = 15103;
-const dims = [3, 3];
-const initialPosition = [0, 10];
+import FireCone from './fireCone';
+
+export const dryMass = 6845;
+export const wetMass = 15103;
+export const initialPosition = [0, 87600, 0];
 
 export default function LanderVehicle({
-  onDistanceUpdate,
-  onVelocityUpdate,
+  onAltitudeUpdate,
   onMassUpdate,
-  onLanded
+  onVelocityUpdate
 }) {
-  const [position, setPosition] = useState([]);
-  const [, setMass] = useState(wetMass);
+  const [thrusting, setThrusting] = useState(false);
+  const [landerMass, setLanderMass] = useState(wetMass);
+  const [landerPosition, setLanderPosition] = useState([0, 0, 0]);
+  const [landerVelocity, setLanderVelocity] = useState([0, 0, 0]);
+  const [landerRef, api] = useBox(() => ({
+    mass: wetMass,
+    args: [9.07, 7.4, 9.07],
+    position: initialPosition
+  }));
+  const model = useGLTF('/assets/lander.gltf');
   const [thrustPressed, leftPressed, rightPressed] = useKeyboardControls(
     (state) => [state.thrust, state.left, state.right]
   );
-  const [ref, api] = useBox(() => ({
-    mass: wetMass,
-    args: dims,
-    position: initialPosition,
-    onCollide: (e) => onLanded(e.contact.impactVelocity)
-  }));
 
   useFrame((state) => {
     const interval = state.clock.getDelta();
 
+    setThrusting(thrustPressed);
     if (thrustPressed) {
-      api.applyLocalForce([0, 45000], [0, -1.5]);
-      setMass((prevVal) => {
-        const newMass = Math.max(dryMass, prevVal - 23 * interval);
+      api.applyLocalForce([0, 45000, 0], [0, 0, 0]);
 
-        api.mass.set(newMass);
-        return newMass;
-      });
+      const newMass = landerMass - 23 * interval;
+
+      api.mass.set(newMass);
+      setLanderMass(newMass);
     }
 
     if (leftPressed) {
-      // api.angularVelocity.set(10);
+      api.applyTorque([500000, 0, 0]);
     } else if (rightPressed) {
-      // api.angularVelocity.set(-10);
+      api.applyTorque([-500000, 0, 0]);
     }
 
-    state.camera.position.set(...position, 20);
-
-    onDistanceUpdate(position[1] + 3);
+    state.camera.position.set(
+      landerPosition[0] + 10,
+      landerPosition[1] + 5,
+      landerPosition[2] - 10
+    );
+    state.camera.lookAt(new Vector3(...landerPosition));
+    state.camera.updateProjectionMatrix();
   });
 
-  useEffect(() => api.position.subscribe(setPosition), []);
+  useEffect(() => api.velocity.subscribe(setLanderVelocity), []);
+  useEffect(() => api.position.subscribe(setLanderPosition), []);
+  useEffect(() => api.mass.subscribe(setLanderMass), []);
 
-  useEffect(
-    () => api.velocity.subscribe((velocity) => onVelocityUpdate(velocity)),
-    []
-  );
-
-  useEffect(() => api.mass.subscribe((mass) => onMassUpdate(mass)), []);
+  useEffect(() => {
+    onAltitudeUpdate(landerPosition[1] - 87400);
+  }, [landerPosition]);
+  useEffect(() => {
+    onVelocityUpdate(landerVelocity);
+  }, [landerVelocity]);
+  useEffect(() => {
+    onMassUpdate(landerMass);
+  }, [landerMass]);
 
   return (
-    <mesh ref={ref}>
-      <boxGeometry args={[...dims, 1]} />
-      <meshPhysicalMaterial color="hotpink" />
-    </mesh>
+    <group ref={landerRef}>
+      <primitive object={model.scene} />
+      {thrusting && <FireCone />}
+    </group>
   );
 }
 
 LanderVehicle.propTypes = {
-  onDistanceUpdate: PropTypes.func.isRequired,
-  onVelocityUpdate: PropTypes.func.isRequired,
+  onAltitudeUpdate: PropTypes.func.isRequired,
   onMassUpdate: PropTypes.func.isRequired,
-  onLanded: PropTypes.func.isRequired
+  onVelocityUpdate: PropTypes.func.isRequired
 };

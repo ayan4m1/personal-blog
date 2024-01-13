@@ -1,27 +1,5 @@
 {
-  "name": "personal-blog",
-  "private": true,
-  "description": "My personal blog.",
-  "version": "0.1.0",
   "author": "ayan4m1 <andrew@bulletlogic.com>",
-  "homepage": "https://andrewdelisa.com",
-  "license": "MIT",
-  "main": "n/a",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:ayan4m1/personal-blog.git"
-  },
-  "scripts": {
-    "build": "node split.mjs && gatsby build",
-    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
-    "start": "gatsby develop",
-    "serve": "gatsby serve",
-    "lint": "npm run lint:js && npm run lint:scss && npm run lint:markdown",
-    "lint:js": "eslint ./src/",
-    "lint:scss": "stylelint ./src/**/*.scss",
-    "lint:markdown": "markdownlint ./articles/**/*.md",
-    "prepare": "husky"
-  },
   "dependencies": {
     "@babel/core": "^7.25.2",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
@@ -31,16 +9,17 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@mdx-js/react": "^2.3.0",
     "@react-spring/web": "^9.7.4",
+    "@react-three/cannon": "^6.6.0",
+    "@react-three/drei": "^9.93.0",
+    "@react-three/fiber": "^8.15.13",
+    "babel-plugin-glsl": "^1.0.0",
+    "babel-plugin-prismjs": "^2.1.0",
     "bootstrap": "^5.3.3",
     "bootswatch": "^5.3.3",
     "classnames": "^2.5.1",
     "color-diff": "^1.4.0",
     "color-namer": "^1.4.0",
     "convert-units": "^3.0.0-beta.6",
-    "@react-three/drei": "^9.93.0",
-    "@react-three/fiber": "^8.15.13",
-    "@react-three/p2": "^0.0.6",
-    "babel-plugin-prismjs": "^2.1.0",
     "d3-color": "^3.1.0",
     "d3-interpolate": "^3.0.1",
     "d3-scale-chromatic": "^3.1.0",
@@ -70,6 +49,7 @@
     "gatsby-transformer-sharp": "^5.13.1",
     "gatsby-transformer-source-code": "^0.1.2",
     "get-rgba-palette": "^2.0.1",
+    "glsl-noise": "^0.0.0",
     "graphql": "^16.9.0",
     "lodash-es": "^4.17.21",
     "papaparse": "^5.4.1",
@@ -91,12 +71,12 @@
     "use-local-storage-state": "^19.4.0",
     "yup": "^1.4.0"
   },
+  "description": "My personal blog.",
   "devDependencies": {
     "@babel/eslint-parser": "^7.25.1",
     "@babel/preset-env": "^7.25.4",
     "@babel/preset-react": "^7.24.7",
-    "@typescript-eslint/parser": "^5.62.0",
-    "babel-plugin-prismjs": "^2.1.0",
+    "babel-plugin-macros": "^3.1.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-node": "^0.3.9",
@@ -114,5 +94,26 @@
     "prettier": "^3.3.3",
     "stylelint": "^16.9.0",
     "stylelint-config-recommended": "^14.0.1"
-  }
+  },
+  "homepage": "https://andrewdelisa.com",
+  "license": "MIT",
+  "main": "n/a",
+  "name": "personal-blog",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ayan4m1/personal-blog.git"
+  },
+  "scripts": {
+    "build": "node split.mjs && gatsby build",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "lint": "npm run lint:js && npm run lint:scss && npm run lint:markdown",
+    "lint:js": "eslint ./src/",
+    "lint:markdown": "markdownlint ./articles/**/*.md",
+    "lint:scss": "stylelint ./src/**/*.scss",
+    "prepare": "husky",
+    "serve": "gatsby serve",
+    "start": "gatsby develop"
+  },
+  "version": "0.1.0"
 }
