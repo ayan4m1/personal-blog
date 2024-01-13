@@ -3,6 +3,12 @@ import { useState, useEffect } from 'react';
 const queryMatches = (query) =>
   typeof window !== 'undefined' ? window.matchMedia(query).matches : false;
 
+const bindListener = (object, event, handler) => {
+  object.addEventListener(event, handler);
+
+  return () => object.removeEventListener(event, handler);
+};
+
 export default function useMediaQuery(query) {
   const [matches, setMatches] = useState(queryMatches(query));
 
@@ -11,12 +17,9 @@ export default function useMediaQuery(query) {
       return;
     }
 
-    const mediaQueryList = window.matchMedia(query);
     const listener = (event) => setMatches(event.matches);
 
-    mediaQueryList.addEventListener('change', listener);
-
-    return () => mediaQueryList.removeEventListener('change', listener);
+    return bindListener(window.matchMedia(query), 'change', listener);
   }, [query]);
 
   return matches;

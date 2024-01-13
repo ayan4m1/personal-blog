@@ -1,34 +1,22 @@
-import { useSpring, animated } from '@react-spring/web';
-import { Link, useStaticQuery, graphql } from 'gatsby';
-import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
-
-import usePrefersReducedMotion from 'hooks/usePrefersReducedMotion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFileArchive,
   faGamepad,
   faHeart,
+  faMoon,
   faNewspaper,
   faRectangleList,
+  faSun,
   faTable
 } from '@fortawesome/free-solid-svg-icons';
 import { Fragment } from 'react';
+import { Link, useStaticQuery, graphql } from 'gatsby';
+import { Container, Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
 
-const bobbleSpring = {
-  from: { y: 4 },
-  to: [{ y: -4 }, { y: 4 }],
-  config: {
-    mass: 0.1,
-    tension: 20,
-    friction: 0.1
-  },
-  loop: true,
-  reset: false
-};
+import { useThemeContext } from 'hooks/useThemeContext';
 
 export default function Header() {
-  const [springs] = useSpring(() => bobbleSpring);
-  const disableMotion = usePrefersReducedMotion();
+  const { darkMode, toggleDarkMode } = useThemeContext();
   const data = useStaticQuery(graphql`
     query {
       site {
@@ -97,23 +85,13 @@ export default function Header() {
               </Nav.Link>
             </NavDropdown>
           </Nav>
-          <Nav className="ms-auto text-light">
-            {disableMotion ? (
-              <p style={{ textShadow: '1px 1px 4px rgba(0,0,0,0.6)' }}>
-                More Coming Soon &trade;
-              </p>
-            ) : (
-              <animated.p
-                className="mb-0"
-                style={{
-                  position: 'relative',
-                  textShadow: '1px 1px 4px rgba(0,0,0,0.6)',
-                  ...springs
-                }}
-              >
-                More Coming Soon &trade;
-              </animated.p>
-            )}
+          <Nav
+            className="ms-lg-auto text-light d-flex align-items-center justify-content-end"
+            style={{ flexDirection: 'row' }}
+          >
+            <Button variant="info" onClick={toggleDarkMode}>
+              <FontAwesomeIcon icon={darkMode ? faMoon : faSun} fixedWidth />
+            </Button>
           </Nav>
         </Navbar.Collapse>
       </Container>
