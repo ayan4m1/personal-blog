@@ -37,8 +37,8 @@ export default function MahjongTile({
           <rect
             x={0}
             y={0}
-            height={64}
             width={53}
+            height={64}
             fill={active ? '#ff0000' : '#00ff00'}
             fillOpacity={0.4}
             stroke={active ? '#ff0000' : '#00ff00'}

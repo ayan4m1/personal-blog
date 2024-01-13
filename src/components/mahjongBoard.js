@@ -36,6 +36,7 @@ import {
   isMatch
 } from 'utils/mahjong';
 import useTimer from 'hooks/useTimer';
+import useBoundingBoxRef from 'hooks/useBoundingBoxRef';
 
 export default function MahjongBoard({ images }) {
   const {
@@ -50,8 +51,8 @@ export default function MahjongBoard({ images }) {
   const [solved, setSolved] = useState(false);
   const [failed, setFailed] = useState(false);
   const [showHints, setShowHints] = useState(false);
-  const [boardRect, setBoardRect] = useState(null);
   const [activeTile, setActiveTile] = useState(null);
+  const boardRect = useBoundingBoxRef(boardRef, [solved, failed]);
   const [layout, setLayout] = useState(generateLayout('turtle'));
   const matches = useMemo(() => getAvailableMatches(layout), [layout]);
   const completePct = useMemo(() => 1 - layout.length / 144, [layout]);
@@ -101,12 +102,6 @@ export default function MahjongBoard({ images }) {
     setLayout(generateLayout('turtle'));
     resetTimer();
   }, [setLayout, resetTimer]);
-
-  useEffect(() => {
-    if (boardRef.current) {
-      setBoardRect(boardRef.current.getBoundingClientRect());
-    }
-  }, [boardRef, solved, failed]);
 
   useEffect(() => {
     if (!layout.length) {
