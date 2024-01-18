@@ -18,14 +18,18 @@ import {
   Button,
   ButtonGroup
 } from 'react-bootstrap';
+import * as runtime from 'react/jsx-runtime';
 
 import SEO from 'components/seo';
 import Layout from 'components/layout';
 import FeaturedPost from 'components/featuredPost';
 
 import profilePic from 'images/profile.jpg';
+import { useEffect, useState } from 'react';
+import { evaluate } from '@mdx-js/mdx';
 
 export default function IndexPage({ data }) {
+  const [ArticleComponent, setArticleComponent] = useState(null);
   const {
     articles: { nodes: articles },
     images: { nodes: images }
@@ -38,6 +42,18 @@ export default function IndexPage({ data }) {
           )?.childImageSharp?.gatsbyImageData
         )
       : {};
+
+  useEffect(() => {
+    async function bundle() {
+      setArticleComponent(
+        (await evaluate(articles[3].children[0].body, runtime)).default({
+          components: {}
+        })
+      );
+    }
+
+    bundle();
+  }, []);
 
   return (
     <Layout>
@@ -85,6 +101,10 @@ export default function IndexPage({ data }) {
             </Row>
           </Container>
         </Card>
+        <h2>Most Recent Article</h2>
+        <Row>
+          <Col xs={12}>{ArticleComponent && <ArticleComponent />}</Col>
+        </Row>
         <h2>Recent Articles</h2>
         <Row className="justify-content-center">
           <Col md={10}>
@@ -135,6 +155,7 @@ export const query = graphql`
               title
               date
             }
+            body
             excerpt(pruneLength: 250)
             parent {
               ... on File {
