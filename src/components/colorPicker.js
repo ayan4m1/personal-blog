@@ -194,6 +194,7 @@ export default function ColorPicker({ diameter = 400 }) {
       <Row className="mb-4">
         <Col xs={6} className="d-flex justify-content-center">
           <div
+            className="color-picker-pie"
             style={{
               height: diameter,
               width: radius,
@@ -202,6 +203,7 @@ export default function ColorPicker({ diameter = 400 }) {
             }}
           ></div>
           <div
+            className="color-picker-final"
             style={{
               height: diameter,
               width: radius,
