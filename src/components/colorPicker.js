@@ -19,7 +19,6 @@ import {
 } from 'react-bootstrap';
 import { SketchPicker } from 'react-color';
 import { color as createColor, rgb } from 'd3-color';
-import { navigate } from 'gatsby-link';
 import ColorNamer from 'color-namer';
 import { shuffle } from 'lodash-es';
 import { useWindowSize } from 'react-use';
@@ -84,7 +83,11 @@ const getLabColor = (hex) => {
 
 const getColorSimilarity = (a, b) => diff(getLabColor(a), getLabColor(b));
 
+const getRemainingPct = (colors) =>
+  Math.max(0, (1 - colors.reduce((prev, curr) => prev + curr.pct, 0)) * 100);
+
 export default function ColorPicker({ diameter = 400 }) {
+  const radius = Math.floor(diameter / 2);
   const { width, height } = useWindowSize();
   const [slices, setSlices] = useState([]);
   const [solving, setSolving] = useState(false);
@@ -94,13 +97,15 @@ export default function ColorPicker({ diameter = 400 }) {
   const [colorSimilarity, setColorSimilarity] = useState(0);
   const [selectedColor, setSelectedColor] = useState(randomColor());
   const [slicePercentage, setSlicePercentage] = useState(50);
-  const radius = Math.floor(diameter / 2);
-  const maxSlicePercentage = useMemo(
+
+  const maxSlicePercentage = useMemo(() => getRemainingPct(slices), [slices]);
+  const gradient = useMemo(
     () =>
-      Math.max(
-        0,
-        (1 - slices.reduce((prev, curr) => prev + curr.pct, 0)) * 100
-      ),
+      solving || !slices.length ? 'transparent' : createConicGradient(slices),
+    [slices]
+  );
+  const finalColor = useMemo(
+    () => (!slices.length ? 'transparent' : combineColors(slices)),
     [slices]
   );
 
@@ -121,30 +126,24 @@ export default function ColorPicker({ diameter = 400 }) {
     (e) => setSlicePercentage(Math.round(parseFloat(e.target.value))),
     []
   );
-  const handleClipboardCopy = useCallback(() => {
-    navigator.clipboard.writeText(
-      `${window.location.href.substring(
-        0,
-        window.location.href.indexOf('#')
-      )}?mode=solve#${btoa(JSON.stringify(slices))}`
-    );
-  }, [slices]);
+  const handleClipboardCopy = useCallback(
+    () =>
+      navigator.clipboard.writeText(
+        `${window.location.href.substring(
+          0,
+          window.location.href.indexOf('#')
+        )}?mode=solve#${btoa(JSON.stringify(slices))}`
+      ),
+    [slices]
+  );
   const handleReset = useCallback(() => {
     setSlices([]);
     setSlicePercentage(50);
-    setSelectedColor('#cccccc');
-    navigate('/coloree');
+    setSelectedColor(randomColor());
+    setColorChoices([]);
+    setColorPalette([]);
+    setColorSimilarity(0);
   }, []);
-
-  const gradient = useMemo(
-    () =>
-      solving || !slices.length ? 'transparent' : createConicGradient(slices),
-    [slices]
-  );
-  const finalColor = useMemo(
-    () => (!slices.length ? 'transparent' : combineColors(slices)),
-    [slices]
-  );
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.location.hash) {
@@ -198,22 +197,15 @@ export default function ColorPicker({ diameter = 400 }) {
             style={{
               height: diameter,
               width: radius,
-              border: '3px solid #ccc',
               borderRadius: `${radius}px`,
-              borderBottomRightRadius: 0,
-              borderTopRightRadius: 0,
-              background: gradient,
-              transform: 'scaleY(-1)'
+              background: gradient
             }}
           ></div>
           <div
             style={{
               height: diameter,
               width: radius,
-              border: '3px solid #ccc',
               borderRadius: `${radius}px`,
-              borderBottomLeftRadius: 0,
-              borderTopLeftRadius: 0,
               backgroundColor: finalColor
             }}
           ></div>

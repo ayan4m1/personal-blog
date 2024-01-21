@@ -1,0 +1,14 @@
+.color-picker {
+  &-pie {
+    border: '3px solid #ccc';
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    transform: scaleY(-1);
+  }
+
+  &-final {
+    border: '3px solid #ccc';
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
