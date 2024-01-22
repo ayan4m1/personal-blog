@@ -26,7 +26,7 @@ import {
   faTrash
 } from '@fortawesome/free-solid-svg-icons';
 
-import MahjongTile from 'components/mahjongTile';
+import MahjongTile from 'components/mahjong/tile';
 import TimeViewer from 'components/timeViewer';
 import {
   generateLayout,

@@ -4,7 +4,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import Layout from 'components/layout';
 import SEO from 'components/seo';
-import MahjongBoard from 'components/mahjongBoard';
+import MahjongBoard from 'components/mahjong/board';
 
 export default function MahjongPage({ data }) {
   const { images } = data;

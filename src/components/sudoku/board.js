@@ -23,7 +23,7 @@ import {
   faTrash
 } from '@fortawesome/free-solid-svg-icons';
 
-import SudokuCell from 'components/sudokuCell';
+import SudokuCell from 'components/sudoku/cell';
 import TimeViewer from 'components/timeViewer';
 import useRainbow from 'hooks/useRainbow';
 import useTimer from 'hooks/useTimer';

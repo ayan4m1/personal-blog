@@ -2,7 +2,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 
 import Layout from 'components/layout';
 import SEO from 'components/seo';
-import ColorPicker from 'components/colorPicker';
+import ColoreeGame from 'components/coloree/game';
 
 export default function ColoreePage() {
   return (
@@ -16,7 +16,7 @@ export default function ColoreePage() {
         </Row>
         <Row>
           <Col>
-            <ColorPicker />
+            <ColoreeGame />
           </Col>
         </Row>
       </Container>

@@ -3,7 +3,7 @@ import { Container, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
 
 import Layout from 'components/layout';
 import SEO from 'components/seo';
-import SudokuBoard from 'components/sudokuBoard';
+import SudokuBoard from 'components/sudoku/board';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
 
