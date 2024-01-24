@@ -83,7 +83,11 @@ export default function ColoreeGame() {
       {solved && <Confetti width={width} height={height} />}
       <Row className="mb-4">
         <Col xs={6} className="d-flex justify-content-center">
-          <ColorPicker colors={colors} displayColor={finalColor} />
+          <ColorPicker
+            colors={colors}
+            displayColor={finalColor}
+            solving={solving}
+          />
         </Col>
         <Col xs={6}>
           {getRemainingPct(colors) > 0 ? (

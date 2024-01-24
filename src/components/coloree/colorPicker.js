@@ -4,7 +4,7 @@ import { Fragment, useRef, useEffect } from 'react';
 const diameter = 400;
 const radius = diameter / 2;
 
-export default function ColorPicker({ colors, displayColor }) {
+export default function ColorPicker({ colors, displayColor, solving }) {
   const canvasRef = useRef();
 
   useEffect(() => {
@@ -23,20 +23,23 @@ export default function ColorPicker({ colors, displayColor }) {
 
       for (const { color, pct } of colors) {
         const angle = pct * Math.PI;
-        const path = new Path2D();
 
-        path.moveTo(width - 5, height / 2);
-        path.arc(
-          width - 5,
-          height / 2,
-          radius,
-          currentAngle,
-          currentAngle + angle
-        );
-        path.closePath();
+        if (!solving) {
+          const path = new Path2D();
 
-        ctx.fillStyle = color;
-        ctx.fill(path);
+          path.moveTo(width - 5, height / 2);
+          path.arc(
+            width - 5,
+            height / 2,
+            radius,
+            currentAngle,
+            currentAngle + angle
+          );
+          path.closePath();
+
+          ctx.fillStyle = color;
+          ctx.fill(path);
+        }
 
         currentAngle += angle;
 
@@ -85,5 +88,6 @@ export default function ColorPicker({ colors, displayColor }) {
 
 ColorPicker.propTypes = {
   colors: PropTypes.arrayOf(PropTypes.object).isRequired,
-  displayColor: PropTypes.string.isRequired
+  displayColor: PropTypes.string.isRequired,
+  solving: PropTypes.bool.isRequired
 };
