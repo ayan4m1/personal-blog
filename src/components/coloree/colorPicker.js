@@ -4,7 +4,12 @@ import { Fragment, useRef, useEffect } from 'react';
 const diameter = 400;
 const radius = diameter / 2;
 
-export default function ColorPicker({ colors, displayColor, solving }) {
+export default function ColorPicker({
+  colors,
+  colorChoices,
+  displayColor,
+  solving
+}) {
   const canvasRef = useRef();
 
   useEffect(() => {
@@ -21,25 +26,30 @@ export default function ColorPicker({ colors, displayColor, solving }) {
 
       let currentAngle = Math.PI / 2;
 
-      for (const { color, pct } of colors) {
+      const renderColors = solving
+        ? colors.map(({ pct }, index) => ({
+            color: colorChoices[index] ?? '#666',
+            pct
+          }))
+        : colors;
+
+      for (const { color, pct } of renderColors) {
         const angle = pct * Math.PI;
 
-        if (!solving) {
-          const path = new Path2D();
+        const path = new Path2D();
 
-          path.moveTo(width - 5, height / 2);
-          path.arc(
-            width - 5,
-            height / 2,
-            radius,
-            currentAngle,
-            currentAngle + angle
-          );
-          path.closePath();
+        path.moveTo(width - 5, height / 2);
+        path.arc(
+          width - 5,
+          height / 2,
+          radius,
+          currentAngle,
+          currentAngle + angle
+        );
+        path.closePath();
 
-          ctx.fillStyle = color;
-          ctx.fill(path);
-        }
+        ctx.fillStyle = color;
+        ctx.fill(path);
 
         currentAngle += angle;
 
@@ -58,7 +68,7 @@ export default function ColorPicker({ colors, displayColor, solving }) {
         ctx.resetTransform();
       }
     }
-  }, [colors]);
+  }, [colors, colorChoices, solving]);
 
   return (
     <Fragment>
@@ -88,6 +98,7 @@ export default function ColorPicker({ colors, displayColor, solving }) {
 
 ColorPicker.propTypes = {
   colors: PropTypes.arrayOf(PropTypes.object).isRequired,
+  colorChoices: PropTypes.arrayOf(PropTypes.string),
   displayColor: PropTypes.string.isRequired,
   solving: PropTypes.bool.isRequired
 };

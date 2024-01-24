@@ -85,6 +85,7 @@ export default function ColoreeGame() {
         <Col xs={6} className="d-flex justify-content-center">
           <ColorPicker
             colors={colors}
+            colorChoices={colorChoices}
             displayColor={finalColor}
             solving={solving}
           />
