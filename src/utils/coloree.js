@@ -13,8 +13,12 @@ export const createRandomColor = () =>
 export const createColorPalette = (colors) => {
   const palette = colors.map(({ color }) => color);
 
-  for (let i = palette.length - 1; i < 17; i++) {
-    palette.push(createRandomColor());
+  while (palette.length < 16) {
+    const newColor = createRandomColor();
+
+    if (!palette.some((color) => getColorSimilarity(color, newColor) < 30)) {
+      palette.push(createRandomColor());
+    }
   }
 
   return shuffle(palette);
