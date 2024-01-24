@@ -76,6 +76,5 @@ export default function ColorViewer({ colors, finalColor, onResetClick }) {
 ColorViewer.propTypes = {
   colors: PropTypes.arrayOf(PropTypes.object),
   finalColor: PropTypes.string,
-  onResetClick: PropTypes.func.isRequired,
-  onUrlCopyClick: PropTypes.func.isRequired
+  onResetClick: PropTypes.func.isRequired
 };

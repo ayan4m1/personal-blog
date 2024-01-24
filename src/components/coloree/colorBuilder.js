@@ -1,14 +1,15 @@
 import PropTypes from 'prop-types';
 import { SketchPicker } from 'react-color';
-import { useState, useCallback } from 'react';
-import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { useState, useCallback, useMemo } from 'react';
+import { faDice, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card, Form, InputGroup, Button } from 'react-bootstrap';
+import { Card, Form, InputGroup, Button, ButtonGroup } from 'react-bootstrap';
 
-import { randomColor } from 'utils/coloree';
+import { createRandomColor, getRemainingPct } from 'utils/coloree';
 
-export default function ColorBuilder({ maxSlicePercentage, onSliceAdd }) {
-  const [selectedColor, setSelectedColor] = useState(randomColor());
+export default function ColorBuilder({ colors, onSliceAdd }) {
+  const maxSlicePercentage = useMemo(() => getRemainingPct(colors), [colors]);
+  const [selectedColor, setSelectedColor] = useState(createRandomColor());
   const [slicePercentage, setSlicePercentage] = useState(
     Math.min(50, maxSlicePercentage)
   );
@@ -21,10 +22,18 @@ export default function ColorBuilder({ maxSlicePercentage, onSliceAdd }) {
     (e) => setSlicePercentage(Math.round(parseFloat(e.target.value))),
     []
   );
+  const handleSliceAdd = useCallback(
+    () => onSliceAdd(selectedColor, slicePercentage / 100),
+    [onSliceAdd, selectedColor, slicePercentage]
+  );
+  const handleSliceRandomize = useCallback(
+    () => setSelectedColor(createRandomColor()),
+    []
+  );
 
   return (
     <Card body>
-      <Card.Title>Color Builder</Card.Title>
+      <Card.Title>Puzzle Builder</Card.Title>
       <Form>
         <Form.Group className="mb-2">
           <Form.Label>Color</Form.Label>
@@ -53,12 +62,14 @@ export default function ColorBuilder({ maxSlicePercentage, onSliceAdd }) {
           </InputGroup>
         </Form.Group>
         <Form.Group className="text-center">
-          <Button
-            variant="success"
-            onClick={() => onSliceAdd(selectedColor, slicePercentage / 100)}
-          >
-            <FontAwesomeIcon icon={faPlusCircle} /> Add
-          </Button>
+          <ButtonGroup>
+            <Button variant="success" onClick={handleSliceAdd}>
+              <FontAwesomeIcon icon={faPlusCircle} /> Add Color
+            </Button>
+            <Button variant="info" onClick={handleSliceRandomize}>
+              <FontAwesomeIcon icon={faDice} /> Randomize Color
+            </Button>
+          </ButtonGroup>
         </Form.Group>
       </Form>
     </Card>
@@ -66,6 +77,6 @@ export default function ColorBuilder({ maxSlicePercentage, onSliceAdd }) {
 }
 
 ColorBuilder.propTypes = {
-  maxSlicePercentage: PropTypes.number,
+  colors: PropTypes.arrayOf(PropTypes.object).isRequired,
   onSliceAdd: PropTypes.func.isRequired
 };

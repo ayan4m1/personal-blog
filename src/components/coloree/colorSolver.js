@@ -1,21 +1,40 @@
 import PropTypes from 'prop-types';
+import { useMemo } from 'react';
 import { faUndo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 
+import {
+  getColorSimilarity,
+  combineColorChoices,
+  combineColors
+} from 'utils/coloree';
+
 export default function ColorSolver({
   colors,
   choices,
-  colorSimilarity,
   colorPalette,
   onResetClick,
   onColorChoiceAdd
 }) {
+  const colorSimilarity = useMemo(
+    () =>
+      choices.length
+        ? getColorSimilarity(
+            combineColors(combineColorChoices(colors, choices)),
+            combineColors(colors)
+          )
+        : 0,
+    [colors, choices]
+  );
+
   return (
     <Card body>
-      <Card.Title className="mb-3">Solve the puzzle!</Card.Title>
       <Container>
         <Row>
+          <Col xs={12}>
+            <h5 className="mb-3">Your Guess</h5>
+          </Col>
           {colors.map((_, index) => (
             <Col key={index} xs={2} className="d-flex justify-content-center">
               <div
@@ -43,6 +62,9 @@ export default function ColorSolver({
         </Row>
         <hr />
         <Row>
+          <Col xs={12}>
+            <h5 className="mb-3">Color Palette</h5>
+          </Col>
           {colorPalette.map((choice, index) => (
             <Col
               xs={2}
