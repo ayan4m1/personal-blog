@@ -3,7 +3,14 @@ import { SketchPicker } from 'react-color';
 import { useState, useCallback, useMemo } from 'react';
 import { faDice, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card, Form, InputGroup, Button, ButtonGroup } from 'react-bootstrap';
+import {
+  Card,
+  Form,
+  InputGroup,
+  Button,
+  ButtonGroup,
+  Alert
+} from 'react-bootstrap';
 
 import { createRandomColor, getRemainingPct } from 'utils/coloree';
 
@@ -34,6 +41,11 @@ export default function ColorBuilder({ colors, onSliceAdd }) {
   return (
     <Card body>
       <Card.Title>Puzzle Builder</Card.Title>
+      <Alert variant="info">
+        Use the color picker and percentage inputs below to add colors up to
+        100%. Then, share your puzzle with friends and see if you can stump
+        them!
+      </Alert>
       <Form>
         <Form.Group className="mb-2">
           <Form.Label>Color</Form.Label>
