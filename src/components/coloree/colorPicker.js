@@ -38,14 +38,8 @@ export default function ColorPicker({
 
         const path = new Path2D();
 
-        path.moveTo(width - 5, height / 2);
-        path.arc(
-          width - 5,
-          height / 2,
-          radius,
-          currentAngle,
-          currentAngle + angle
-        );
+        path.moveTo(width, height / 2);
+        path.arc(width, height / 2, radius, currentAngle, currentAngle + angle);
         path.closePath();
 
         ctx.fillStyle = color;
@@ -58,10 +52,10 @@ export default function ColorPicker({
 
       const border = new Path2D();
 
-      border.rect(0, 0, radius, 5);
+      border.rect(0, 0, radius + 10, 5);
 
       for (const borderAngle of borders) {
-        ctx.translate(width - 5, height / 2);
+        ctx.translate(width, height / 2);
         ctx.rotate(borderAngle);
         ctx.fillStyle = '#ccc';
         ctx.fill(border);
