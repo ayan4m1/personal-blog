@@ -10,6 +10,35 @@ export const createRandomColor = () =>
     1
   ).formatHex();
 
+export const createRandomPuzzle = (difficulty = 1) => {
+  const colorCount = Math.ceil(Math.random() * difficulty) + 2;
+  const colors = [];
+  const minPct = 0.05;
+  let remainingPct = 1;
+
+  while (colors.length < colorCount) {
+    const newColor = createRandomColor();
+
+    if (colors.some(({ color }) => getColorSimilarity(color, newColor) > 80)) {
+      continue;
+    }
+
+    const newPct =
+      colors.length + 1 === colorCount
+        ? remainingPct
+        : Math.max(
+            minPct,
+            parseFloat((remainingPct * (Math.random() / 2)).toFixed(2))
+          );
+
+    colors.push({ color: newColor, pct: newPct });
+
+    remainingPct -= newPct;
+  }
+
+  return colors;
+};
+
 export const createColorPalette = (colors) => {
   const palette = colors.map(({ color }) => color);
 
