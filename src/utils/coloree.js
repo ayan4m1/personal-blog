@@ -45,9 +45,11 @@ export const createColorPalette = (colors) => {
   while (palette.length < 16) {
     const newColor = createRandomColor();
 
-    if (!palette.some((color) => getColorSimilarity(color, newColor) < 30)) {
-      palette.push(createRandomColor());
+    if (palette.some((color) => getColorSimilarity(color, newColor) > 80)) {
+      continue;
     }
+
+    palette.push(newColor);
   }
 
   return shuffle(palette);
