@@ -39,7 +39,13 @@ export default function ColorPicker({
         const path = new Path2D();
 
         path.moveTo(width, height / 2);
-        path.arc(width, height / 2, radius, currentAngle, currentAngle + angle);
+        path.arc(
+          width,
+          height / 2,
+          radius + 10,
+          currentAngle,
+          currentAngle + angle
+        );
         path.closePath();
 
         ctx.fillStyle = color;
