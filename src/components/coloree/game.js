@@ -17,23 +17,20 @@ import {
 export default function ColoreeGame() {
   const { width, height } = useWindowSize();
   const [colors, setColors] = useState([]);
-  const [colorPalette, setColorPalette] = useState([]);
-  const [colorChoices, setColorChoices] = useState([]);
+  const [currentGuess, setCurrentGuess] = useState([]);
+  const [guessHistory, setGuessHistory] = useState([]);
   const [solved, setSolved] = useState(false);
   const [solving, setSolving] = useState(false);
 
+  const [colorPalette, setColorPalette] = useState([]);
   const finalColor = useMemo(
     () =>
-      !solving || colorChoices.length !== colors.length
+      !solving || currentGuess.length !== colors.length
         ? combineColors(colors)
-        : combineColors(combineColorChoices(colors, colorChoices)),
-    [solving, colorChoices, colors]
+        : combineColors(combineColorChoices(colors, currentGuess)),
+    [solving, currentGuess, colors]
   );
 
-  const handleColorChoiceAdd = useCallback(
-    (color) => setColorChoices((prevVal) => [...prevVal, color]),
-    []
-  );
   const handleColorAdd = useCallback(
     (color, pct) =>
       setColors((prevSlices) => {
@@ -45,7 +42,77 @@ export default function ColoreeGame() {
       }),
     []
   );
-  const handleChoicesReset = useCallback(() => setColorChoices([]), []);
+  const handleColorEliminate = useCallback(
+    (paletteIndex) =>
+      setColorPalette((prevVal) => {
+        const newArr = [...prevVal];
+        const newVal = newArr[paletteIndex];
+
+        newVal.eliminated = true;
+        newArr.splice(paletteIndex, 1, newVal);
+
+        return newArr;
+      }),
+    []
+  );
+  const handleGuessComplete = useCallback(
+    (guess) =>
+      setGuessHistory((prevVal) => {
+        if (colors.every(({ color }, index) => guess[index] === color)) {
+          setSolved(true);
+        }
+
+        return [
+          ...prevVal,
+          guess.map((color, index) => {
+            let type = 'unused';
+
+            const colorExists = colors.some(
+              ({ color: testColor }) => testColor === color
+            );
+            const colorCorrectPlace = colors[index].color === color;
+
+            if (colorExists && !colorCorrectPlace) {
+              type = 'wrongPlace';
+            } else if (colorCorrectPlace) {
+              type = 'correctPlace';
+            }
+
+            if (type === 'unused') {
+              handleColorEliminate(
+                colorPalette.findIndex(
+                  ({ color: testColor }) => testColor === color
+                )
+              );
+            }
+
+            return {
+              color,
+              type
+            };
+          })
+        ];
+      }),
+    [colors, colorPalette]
+  );
+  const handleGuessAdd = useCallback(
+    (color) =>
+      setCurrentGuess((prevVal) => {
+        if (prevVal.includes(color)) {
+          return prevVal;
+        }
+
+        const newVal = [...prevVal, color];
+
+        if (prevVal.length + 1 === colors.length) {
+          handleGuessComplete(newVal);
+          return [];
+        } else {
+          return newVal;
+        }
+      }),
+    [colors, handleGuessComplete]
+  );
   const handleBuilderReset = useCallback(() => setColors([]), []);
 
   useEffect(() => {
@@ -61,7 +128,6 @@ export default function ColoreeGame() {
 
         setColors(colorData);
         setSolving(true);
-        setColorPalette(createColorPalette(colorData));
       }
     } catch (error) {
       console.error(error);
@@ -69,28 +135,28 @@ export default function ColoreeGame() {
   }, []);
 
   useEffect(() => {
-    if (!solving || colorChoices.length !== colors.length) {
-      return;
-    }
-
-    setSolved(
-      colors.every(({ color }, index) => colorChoices[index] === color)
-    );
-  }, [colorChoices, colors, solving]);
+    setColorPalette(createColorPalette(colors));
+  }, [colors]);
 
   return (
     <Fragment>
       {solved && <Confetti width={width} height={height} />}
-      <Row className="mb-4">
-        <Col xs={6} className="d-flex justify-content-center">
+      <Row>
+        <Col xs={12} md={6} className="d-flex justify-content-center mb-2">
           <ColorPicker
-            colors={colors}
-            colorChoices={colorChoices}
-            displayColor={finalColor}
-            solving={solving}
+            diameter={Math.min(400, width / 2 - 24)}
+            pieColors={
+              solving
+                ? colors.map(({ pct }, index) => ({
+                    color: currentGuess[index] ?? '#666',
+                    pct
+                  }))
+                : colors
+            }
+            finalColor={finalColor}
           />
         </Col>
-        <Col xs={6}>
+        <Col xs={12} md={6} className="mb-2">
           {getRemainingPct(colors) > 0 ? (
             <ColorBuilder colors={colors} onSliceAdd={handleColorAdd} />
           ) : !solving ? (
@@ -102,10 +168,10 @@ export default function ColoreeGame() {
           ) : (
             <ColorSolver
               colors={colors}
-              choices={colorChoices}
               colorPalette={colorPalette}
-              onResetClick={handleChoicesReset}
-              onColorChoiceAdd={handleColorChoiceAdd}
+              currentGuess={currentGuess}
+              guessHistory={guessHistory}
+              onGuessAdd={handleGuessAdd}
             />
           )}
         </Col>

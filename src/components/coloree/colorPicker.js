@@ -1,15 +1,8 @@
 import PropTypes from 'prop-types';
 import { Fragment, useRef, useEffect } from 'react';
 
-const diameter = 400;
-const radius = diameter / 2;
-
-export default function ColorPicker({
-  colors,
-  colorChoices,
-  displayColor,
-  solving
-}) {
+export default function ColorPicker({ diameter, finalColor, pieColors }) {
+  const radius = diameter / 2;
   const canvasRef = useRef();
 
   useEffect(() => {
@@ -26,14 +19,7 @@ export default function ColorPicker({
 
       let currentAngle = Math.PI / 2;
 
-      const renderColors = solving
-        ? colors.map(({ pct }, index) => ({
-            color: colorChoices[index] ?? '#666',
-            pct
-          }))
-        : colors;
-
-      for (const { color, pct } of renderColors) {
+      for (const { color, pct } of pieColors) {
         const angle = pct * Math.PI;
 
         const path = new Path2D();
@@ -68,7 +54,7 @@ export default function ColorPicker({
         ctx.resetTransform();
       }
     }
-  }, [colors, colorChoices, solving]);
+  }, [pieColors]);
 
   return (
     <Fragment>
@@ -89,7 +75,7 @@ export default function ColorPicker({
           height: diameter,
           width: radius,
           borderRadius: `${radius}px`,
-          backgroundColor: displayColor
+          backgroundColor: finalColor
         }}
       />
     </Fragment>
@@ -97,8 +83,7 @@ export default function ColorPicker({
 }
 
 ColorPicker.propTypes = {
-  colors: PropTypes.arrayOf(PropTypes.object).isRequired,
-  colorChoices: PropTypes.arrayOf(PropTypes.string),
-  displayColor: PropTypes.string.isRequired,
-  solving: PropTypes.bool.isRequired
+  diameter: PropTypes.number.isRequired,
+  pieColors: PropTypes.arrayOf(PropTypes.object).isRequired,
+  finalColor: PropTypes.string.isRequired
 };

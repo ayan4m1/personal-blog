@@ -1,0 +1,54 @@
+$choice-xs: 24px;
+$choice-sm: $choice-xs * 1.25;
+$choice-md: $choice-xs * 1.5;
+$choice-lg: $choice-xs * 1.75;
+
+.color-solver {
+  &-choice {
+    height: $choice-xs;
+    width: $choice-xs;
+    border: 2px solid black;
+    border-radius: 4px;
+
+    &--unused {
+      box-shadow: 0px 0px 4px 4px rgb(56, 54, 58);
+    }
+
+    &--wrongPlace {
+      box-shadow: 0px 0px 4px 4px rgb(220, 200, 45);
+    }
+
+    &--correctPlace {
+      box-shadow: 0px 0px 4px 4px rgba(68, 212, 57, 1);
+    }
+
+    &--eliminated {
+      opacity: 0.5;
+      background-image: linear-gradient(45deg, #ccc 0%, #666 100%);
+    }
+  }
+
+  @include media-breakpoint-up(sm) {
+    &-choice {
+      height: $choice-sm;
+      min-width: $choice-sm;
+      max-width: $choice-sm;
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    &-choice {
+      height: $choice-md;
+      min-width: $choice-md;
+      max-width: $choice-md;
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    &-choice {
+      height: $choice-lg;
+      min-width: $choice-lg;
+      max-width: $choice-lg;
+    }
+  }
+}

@@ -40,16 +40,16 @@ export const createRandomPuzzle = (difficulty = 1) => {
 };
 
 export const createColorPalette = (colors) => {
-  const palette = colors.map(({ color }) => color);
+  const palette = [...colors];
 
   while (palette.length < 16) {
     const newColor = createRandomColor();
 
-    if (palette.some((color) => getColorSimilarity(color, newColor) > 80)) {
+    if (palette.some(({ color }) => getColorSimilarity(color, newColor) > 80)) {
       continue;
     }
 
-    palette.push(newColor);
+    palette.push({ color: newColor, eliminated: false });
   }
 
   return shuffle(palette);

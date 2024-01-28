@@ -1,8 +1,7 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { useMemo } from 'react';
-import { faUndo } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Container, Row, Col, Button, Card } from 'react-bootstrap';
+import { Container, Row, Col, Card, ProgressBar } from 'react-bootstrap';
 
 import {
   getColorSimilarity,
@@ -12,72 +11,101 @@ import {
 
 export default function ColorSolver({
   colors,
-  choices,
   colorPalette,
-  onResetClick,
-  onColorChoiceAdd
+  currentGuess,
+  guessHistory,
+  onGuessAdd
 }) {
-  const colorSimilarity = useMemo(
-    () =>
-      choices.length
-        ? getColorSimilarity(
-            combineColors(combineColorChoices(colors, choices)),
-            combineColors(colors)
-          )
-        : 0,
-    [colors, choices]
+  const remainingGuesses = useMemo(
+    () => 5 - guessHistory.length,
+    [guessHistory]
   );
 
   return (
     <Card body>
       <Container>
         <Row>
-          <Col xs={12}>
-            <h5 className="mb-3">Your Guess</h5>
+          <Col xs={8}>
+            <h5 className="mb-3">{remainingGuesses} Guesses Left</h5>
           </Col>
-          {colors.map((_, index) => (
-            <Col key={index} xs={2} className="d-flex justify-content-center">
-              <div
-                style={{
-                  height: 32,
-                  width: 32,
-                  backgroundColor: choices[index] ?? 'white',
-                  border: '2px solid black'
-                }}
-              />
-            </Col>
-          ))}
-          {choices.length === colors.length && (
-            <Col xs={2} className="d-flex align-items-center">
-              {colorSimilarity.toFixed(2)}%
-            </Col>
-          )}
-          {choices.length === colors.length && colorSimilarity < 100 && (
-            <Col xs={4}>
-              <Button variant="danger" onClick={onResetClick}>
-                <FontAwesomeIcon icon={faUndo} /> Reset
-              </Button>
-            </Col>
-          )}
+          <Col xs={4} className="d-flex align-items-center">
+            <ProgressBar
+              className="w-100"
+              variant="success"
+              min={0}
+              max={100}
+              now={(remainingGuesses / 5) * 100}
+            />
+          </Col>
         </Row>
+        {guessHistory.map((guess, guessIndex) => (
+          <Row key={guessIndex}>
+            {guess.map(({ color, type }, colorIndex) => (
+              <Col
+                xs={2}
+                key={colorIndex}
+                className="my-2 d-flex justify-content-center"
+              >
+                <div
+                  className={`color-solver-choice color-solver-choice--${type}`}
+                  style={{
+                    backgroundColor: color
+                  }}
+                />
+              </Col>
+            ))}
+            <Col xs={2} className="my-2 d-flex align-items-center">
+              {getColorSimilarity(
+                combineColors(
+                  combineColorChoices(
+                    colors,
+                    guess.map(({ color }) => color)
+                  )
+                ),
+                combineColors(colors)
+              ).toFixed(2)}
+              %
+            </Col>
+          </Row>
+        ))}
+        {remainingGuesses > 0 && (
+          <Row>
+            {colors.map((_, index) => (
+              <Col
+                key={index}
+                xs={2}
+                className="my-2 d-flex justify-content-center"
+              >
+                <div
+                  className="color-solver-choice"
+                  style={{
+                    backgroundColor: currentGuess[index] ?? 'white'
+                  }}
+                />
+              </Col>
+            ))}
+          </Row>
+        )}
         <hr />
         <Row>
           <Col xs={12}>
             <h5 className="mb-3">Color Palette</h5>
           </Col>
-          {colorPalette.map((choice, index) => (
+          {colorPalette.map(({ color, eliminated }, index) => (
             <Col
               xs={2}
               key={index}
               className="my-2 d-flex justify-content-center"
             >
               <button
-                onClick={() => onColorChoiceAdd(choice)}
+                disabled={remainingGuesses === 0 || eliminated}
+                onClick={() => onGuessAdd(color)}
+                className={classNames(
+                  'color-solver-choice',
+                  eliminated && 'color-solver-choice--eliminated'
+                )}
                 style={{
-                  height: 32,
-                  width: 32,
-                  backgroundColor: choice,
-                  border: '2px solid black'
+                  backgroundColor: color
                 }}
               />
             </Col>
@@ -89,10 +117,10 @@ export default function ColorSolver({
 }
 
 ColorSolver.propTypes = {
-  colors: PropTypes.arrayOf(PropTypes.object),
-  choices: PropTypes.arrayOf(PropTypes.string),
-  colorSimilarity: PropTypes.number,
-  colorPalette: PropTypes.arrayOf(PropTypes.string),
-  onResetClick: PropTypes.func.isRequired,
-  onColorChoiceAdd: PropTypes.func.isRequired
+  colors: PropTypes.arrayOf(PropTypes.object).isRequired,
+  colorPalette: PropTypes.arrayOf(PropTypes.object).isRequired,
+  currentGuess: PropTypes.arrayOf(PropTypes.string).isRequired,
+  guessHistory: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object))
+    .isRequired,
+  onGuessAdd: PropTypes.func.isRequired
 };
