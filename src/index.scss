@@ -4,27 +4,11 @@
 @import '~bootswatch/dist/journal/bootswatch';
 
 // Component styles
+@import 'components/articleContainer';
 @import 'components/coloree/colorPicker';
 @import 'components/coloree/colorSolver';
 @import 'components/sudoku/cell';
 @import 'components/mahjong/tile';
-
-// Global styles
-blockquote {
-  word-break: break-word;
-}
-
-h2 {
-  margin-top: 28px;
-}
-
-h3 {
-  margin-top: 24px;
-}
-
-h4 {
-  margin-top: 20px;
-}
 
 // Fix for carousel button alignment
 .carousel {

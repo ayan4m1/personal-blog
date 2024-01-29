@@ -7,10 +7,13 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Layout from 'components/layout';
 import SEO from 'components/seo';
 
+const formatDate = (date) => format(parseISO(date), 'MMMM dd, yyyy');
+
 export default function ArticleContainer({
   title,
   description,
   date,
+  editDate,
   children
 }) {
   useEffect(() => {
@@ -21,13 +24,12 @@ export default function ArticleContainer({
   return (
     <Layout>
       <SEO title={title} description={description} />
-      <Container>
+      <Container className="article-container">
         <Row>
           <Col md="12" className="mb-2">
             <h1>{title}</h1>
-            {Boolean(date) && (
-              <h4>Published on {format(parseISO(date), 'yyyy-MM-dd')}</h4>
-            )}
+            {Boolean(date) && <h4>Published on {formatDate(date)}</h4>}
+            {Boolean(editDate) && <h4>Edited on {formatDate(editDate)}</h4>}
           </Col>
           <hr />
           <Col xs={12}>{children}</Col>
@@ -41,5 +43,6 @@ ArticleContainer.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
   date: PropTypes.string,
+  editDate: PropTypes.string,
   children: PropTypes.node.isRequired
 };
