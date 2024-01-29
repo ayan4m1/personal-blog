@@ -13,6 +13,8 @@ import {
 
 import SolverChoice from 'components/coloree/solverChoice';
 
+const totalGuesses = 5;
+
 export default function ColorSolver({
   colors,
   colorPalette,
@@ -22,8 +24,12 @@ export default function ColorSolver({
   onGuessRemove
 }) {
   const remainingGuesses = useMemo(
-    () => 5 - guessHistory.length,
+    () => totalGuesses - guessHistory.length,
     [guessHistory]
+  );
+  const guessPercentage = useMemo(
+    () => (remainingGuesses / totalGuesses) * 100,
+    [remainingGuesses]
   );
 
   return (
@@ -36,10 +42,11 @@ export default function ColorSolver({
           <Col xs={4} className="d-flex align-items-center">
             <ProgressBar
               className="w-100"
-              variant="success"
+              variant={guessPercentage > 0 ? 'success' : 'danger'}
               min={0}
               max={100}
-              now={(remainingGuesses / 5) * 100}
+              now={guessPercentage > 0 ? guessPercentage : 100}
+              label={guessPercentage > 0 ? `${guessPercentage}%` : 'You Lost'}
             />
           </Col>
         </Row>
@@ -104,8 +111,7 @@ ColorSolver.propTypes = {
   colors: PropTypes.arrayOf(PropTypes.object).isRequired,
   colorPalette: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentGuess: PropTypes.arrayOf(PropTypes.string).isRequired,
-  guessHistory: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object))
-    .isRequired,
+  guessHistory: PropTypes.arrayOf(PropTypes.object).isRequired,
   onGuessAdd: PropTypes.func.isRequired,
   onGuessRemove: PropTypes.func.isRequired
 };

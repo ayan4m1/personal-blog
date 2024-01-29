@@ -104,3 +104,6 @@ export const getRemainingPct = (colors) =>
   Math.round(
     Math.max(0, (1 - colors.reduce((prev, curr) => prev + curr.pct, 0)) * 100)
   );
+
+export const getSolveUrl = (colors) =>
+  `${window.location.href}?mode=solve#${btoa(JSON.stringify(colors))}`;

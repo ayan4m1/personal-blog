@@ -54,7 +54,7 @@ export default function ColorPicker({ diameter, finalColor, pieColors }) {
         ctx.resetTransform();
       }
     }
-  }, [pieColors]);
+  }, [pieColors, canvasRef]);
 
   return (
     <Fragment>

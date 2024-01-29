@@ -9,10 +9,12 @@ import ColorViewer from 'components/coloree/colorViewer';
 import ColorBuilder from 'components/coloree/colorBuilder';
 import {
   getRemainingPct,
+  createRandomPuzzle,
   createColorPalette,
   combineColorChoices,
   combineColors,
-  getColorSimilarity
+  getColorSimilarity,
+  getSolveUrl
 } from 'utils/coloree';
 
 export default function ColoreeGame() {
@@ -22,14 +24,15 @@ export default function ColoreeGame() {
   const [guessHistory, setGuessHistory] = useState([]);
   const [colorPalette, setColorPalette] = useState([]);
   const [solved, setSolved] = useState(false);
+  const [failed, setFailed] = useState(false);
   const [solving, setSolving] = useState(false);
 
   const finalColor = useMemo(
     () =>
-      !solving || currentGuess.length !== colors.length
+      failed || !solving || currentGuess.length !== colors.length
         ? combineColors(colors)
         : combineColors(combineColorChoices(colors, currentGuess)),
-    [solving, currentGuess, colors]
+    [failed, solving, currentGuess, colors]
   );
 
   const handleColorAdd = useCallback(
@@ -61,6 +64,8 @@ export default function ColoreeGame() {
       setGuessHistory((prevVal) => {
         if (colors.every(({ color }, index) => guess[index] === color)) {
           setSolved(true);
+        } else if (prevVal.length === 4) {
+          setFailed(true);
         }
 
         const finalColor = combineColors(combineColorChoices(colors, guess));
@@ -128,6 +133,13 @@ export default function ColoreeGame() {
     [colors, handleGuessComplete]
   );
   const handleBuilderReset = useCallback(() => setColors([]), []);
+  const handleSoloPlayClick = useCallback(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.location.href = getSolveUrl(createRandomPuzzle());
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !window.location.hash) {
@@ -149,6 +161,10 @@ export default function ColoreeGame() {
   }, []);
 
   useEffect(() => {
+    if (!colors.length) {
+      return;
+    }
+
     setColorPalette(createColorPalette(colors));
   }, [colors]);
 
@@ -160,7 +176,7 @@ export default function ColoreeGame() {
           <ColorPicker
             diameter={Math.min(400, width / 2 - 24)}
             pieColors={
-              solving
+              solving && !failed
                 ? colors.map(({ pct }, index) => ({
                     color: currentGuess[index] ?? '#666',
                     pct
@@ -172,7 +188,11 @@ export default function ColoreeGame() {
         </Col>
         <Col xs={12} md={6} className="mb-2">
           {getRemainingPct(colors) > 0 ? (
-            <ColorBuilder colors={colors} onSliceAdd={handleColorAdd} />
+            <ColorBuilder
+              colors={colors}
+              onSliceAdd={handleColorAdd}
+              onSoloPlayClick={handleSoloPlayClick}
+            />
           ) : !solving ? (
             <ColorViewer
               colors={colors}

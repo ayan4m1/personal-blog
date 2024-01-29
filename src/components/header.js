@@ -5,6 +5,7 @@ import {
   faHeart,
   faMoon,
   faNewspaper,
+  faPaintBrush,
   faRectangleList,
   faSun,
   faTable
@@ -82,6 +83,9 @@ export default function Header() {
               </Nav.Link>
               <Nav.Link as={Link} to="/mahjong" className="text-dark">
                 <FontAwesomeIcon icon={faRectangleList} /> Mahjong
+              </Nav.Link>
+              <Nav.Link as={Link} to="/coloree" className="text-dark">
+                <FontAwesomeIcon icon={faPaintBrush} /> Coloree
               </Nav.Link>
             </NavDropdown>
           </Nav>

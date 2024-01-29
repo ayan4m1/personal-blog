@@ -13,12 +13,11 @@ import ColorNamer from 'color-namer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLink, faUndo } from '@fortawesome/free-solid-svg-icons';
 
+import { getSolveUrl } from 'utils/coloree';
+
 export default function ColorViewer({ colors, finalColor, onResetClick }) {
   const handleUrlCopyClick = useCallback(
-    () =>
-      navigator.clipboard.writeText(
-        `${window.location.href}?mode=solve#${btoa(JSON.stringify(colors))}`
-      ),
+    () => navigator.clipboard.writeText(getSolveUrl(colors)),
     [colors]
   );
 
