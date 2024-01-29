@@ -5,10 +5,13 @@ $choice-lg: $choice-xs * 1.75;
 
 .color-solver {
   &-choice {
+    display: flex;
     height: $choice-xs;
     width: $choice-xs;
     border: 2px solid black;
     border-radius: 4px;
+    align-items: center;
+    justify-content: center;
 
     &--unused {
       box-shadow: 0px 0px 4px 4px rgb(74, 32, 32);

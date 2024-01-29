@@ -11,7 +11,8 @@ import {
   getRemainingPct,
   createColorPalette,
   combineColorChoices,
-  combineColors
+  combineColors,
+  getColorSimilarity
 } from 'utils/coloree';
 
 export default function ColoreeGame() {
@@ -62,38 +63,51 @@ export default function ColoreeGame() {
           setSolved(true);
         }
 
+        const finalColor = combineColors(combineColorChoices(colors, guess));
+
         return [
           ...prevVal,
-          guess.map((color, index) => {
-            let type = 'unused';
+          {
+            finalColor,
+            colorSimilarity: getColorSimilarity(
+              finalColor,
+              combineColors(colors)
+            ),
+            guess: guess.map((color, index) => {
+              let type = 'unused';
 
-            const colorExists = colors.some(
-              ({ color: testColor }) => testColor === color
-            );
-            const colorCorrectPlace = colors[index].color === color;
-
-            if (colorExists && !colorCorrectPlace) {
-              type = 'wrongPlace';
-            } else if (colorCorrectPlace) {
-              type = 'correctPlace';
-            }
-
-            if (type === 'unused') {
-              handleColorEliminate(
-                colorPalette.findIndex(
-                  ({ color: testColor }) => testColor === color
-                )
+              const colorExists = colors.some(
+                ({ color: testColor }) => testColor === color
               );
-            }
+              const colorCorrectPlace = colors[index].color === color;
 
-            return {
-              color,
-              type
-            };
-          })
+              if (colorExists && !colorCorrectPlace) {
+                type = 'wrongPlace';
+              } else if (colorCorrectPlace) {
+                type = 'correctPlace';
+              }
+
+              if (type === 'unused') {
+                handleColorEliminate(
+                  colorPalette.findIndex(
+                    ({ color: testColor }) => testColor === color
+                  )
+                );
+              }
+
+              return {
+                color,
+                type
+              };
+            })
+          }
         ];
       }),
     [colors, colorPalette]
+  );
+  const handleGuessRemove = useCallback(
+    () => setCurrentGuess((prevVal) => prevVal.slice(0, prevVal.length - 1)),
+    []
   );
   const handleGuessAdd = useCallback(
     (color) =>
@@ -172,6 +186,7 @@ export default function ColoreeGame() {
               currentGuess={currentGuess}
               guessHistory={guessHistory}
               onGuessAdd={handleGuessAdd}
+              onGuessRemove={handleGuessRemove}
             />
           )}
         </Col>
