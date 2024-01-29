@@ -19,10 +19,10 @@ export default function ColoreeGame() {
   const [colors, setColors] = useState([]);
   const [currentGuess, setCurrentGuess] = useState([]);
   const [guessHistory, setGuessHistory] = useState([]);
+  const [colorPalette, setColorPalette] = useState([]);
   const [solved, setSolved] = useState(false);
   const [solving, setSolving] = useState(false);
 
-  const [colorPalette, setColorPalette] = useState([]);
   const finalColor = useMemo(
     () =>
       !solving || currentGuess.length !== colors.length

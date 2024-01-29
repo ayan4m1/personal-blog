@@ -54,17 +54,31 @@ export default function ColorSolver({
                 />
               </Col>
             ))}
-            <Col xs={2} className="my-2 d-flex align-items-center">
-              {getColorSimilarity(
-                combineColors(
-                  combineColorChoices(
-                    colors,
-                    guess.map(({ color }) => color)
+            <Col xs={4} className="my-2 d-flex justify-content-center">
+              <div
+                className="d-flex color-solver-choice align-items-center justify-content-center"
+                style={{
+                  maxWidth: 96,
+                  width: 96,
+                  backgroundColor: combineColors(
+                    combineColorChoices(
+                      colors,
+                      guess.map(({ color }) => color)
+                    )
                   )
-                ),
-                combineColors(colors)
-              ).toFixed(2)}
-              %
+                }}
+              >
+                {getColorSimilarity(
+                  combineColors(
+                    combineColorChoices(
+                      colors,
+                      guess.map(({ color }) => color)
+                    )
+                  ),
+                  combineColors(colors)
+                ).toFixed(1)}
+                %
+              </div>
             </Col>
           </Row>
         ))}
