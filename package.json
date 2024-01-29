@@ -64,6 +64,7 @@
     "gatsby-transformer-remark": "^6.13.1",
     "gatsby-transformer-sharp": "^5.13.1",
     "gatsby-transformer-source-code": "^0.1.1",
+    "get-rgba-palette": "^2.0.1",
     "graphql": "^16.8.1",
     "lodash-es": "^4.17.21",
     "papaparse": "^5.4.1",
