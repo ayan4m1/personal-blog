@@ -63,12 +63,20 @@ export default function ColorBuilder({ colors, onSliceAdd, onSoloPlayClick }) {
     <Fragment>
       <Card body className="mb-3">
         <Card.Title>Solo Play</Card.Title>
-        <Button className="mt-2" variant="success" onClick={onSoloPlayClick}>
-          <FontAwesomeIcon icon={faWandMagicSparkles} /> Start Game
-        </Button>
+        <Alert variant="info" className="my-2">
+          Play a game on your own with a randomly generated puzzle!
+        </Alert>
+        <div className="text-end">
+          <Button className="mt-2" variant="success" onClick={onSoloPlayClick}>
+            <FontAwesomeIcon icon={faWandMagicSparkles} /> Start Game
+          </Button>
+        </div>
       </Card>
       <Card body className="mb-3">
         <Card.Title>Generate a Puzzle</Card.Title>
+        <Alert variant="info" className="my-2">
+          Create a randomly generated puzzle to share with your friends!
+        </Alert>
         <Form>
           <Form.Group>
             <Form.Label>Difficulty (1 - 6)</Form.Label>
@@ -94,7 +102,7 @@ export default function ColorBuilder({ colors, onSliceAdd, onSoloPlayClick }) {
       </Card>
       <Card body className="mb-3">
         <Card.Title>Create a Puzzle</Card.Title>
-        <Alert variant="info">
+        <Alert variant="info" className="my-2">
           Use the color picker and percentage inputs below to add colors up to
           100%. Then, share your puzzle with friends and see if you can stump
           them!
