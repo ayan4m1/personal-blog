@@ -29,10 +29,20 @@ export default function ColoreeGame() {
 
   const finalColor = useMemo(
     () =>
-      failed || !solving || currentGuess.length !== colors.length
+      solved || failed || !solving || currentGuess.length !== colors.length
         ? combineColors(colors)
         : combineColors(combineColorChoices(colors, currentGuess)),
-    [failed, solving, currentGuess, colors]
+    [solved, failed, solving, currentGuess, colors]
+  );
+  const pieColors = useMemo(
+    () =>
+      solved || failed || !solving
+        ? colors
+        : colors.map(({ pct }, index) => ({
+            color: currentGuess[index] ?? '#666',
+            pct
+          })),
+    [colors, solved, failed, solving]
   );
 
   const handleColorAdd = useCallback(
@@ -132,6 +142,13 @@ export default function ColoreeGame() {
       }),
     [colors, handleGuessComplete]
   );
+  const handleGameReset = useCallback(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.location.replace('/coloree');
+  }, []);
   const handleBuilderReset = useCallback(() => setColors([]), []);
   const handleSoloPlayClick = useCallback(() => {
     if (typeof window === 'undefined') {
@@ -175,14 +192,7 @@ export default function ColoreeGame() {
         <Col xs={12} md={6} className="d-flex justify-content-center mb-2">
           <ColorPicker
             diameter={Math.min(400, width / 2 - 24)}
-            pieColors={
-              solving && !failed
-                ? colors.map(({ pct }, index) => ({
-                    color: currentGuess[index] ?? '#666',
-                    pct
-                  }))
-                : colors
-            }
+            pieColors={pieColors}
             finalColor={finalColor}
           />
         </Col>
@@ -205,8 +215,11 @@ export default function ColoreeGame() {
               colorPalette={colorPalette}
               currentGuess={currentGuess}
               guessHistory={guessHistory}
+              solved={solved}
+              failed={failed}
               onGuessAdd={handleGuessAdd}
               onGuessRemove={handleGuessRemove}
+              onGameReset={handleGameReset}
             />
           )}
         </Col>

@@ -20,8 +20,11 @@ export default function ColorSolver({
   colorPalette,
   currentGuess,
   guessHistory,
+  solved,
+  failed,
   onGuessAdd,
-  onGuessRemove
+  onGuessRemove,
+  onGameReset
 }) {
   const remainingGuesses = useMemo(
     () => totalGuesses - guessHistory.length,
@@ -42,11 +45,17 @@ export default function ColorSolver({
           <Col xs={4} className="d-flex align-items-center">
             <ProgressBar
               className="w-100"
-              variant={guessPercentage > 0 ? 'success' : 'danger'}
+              variant={solved ? 'success' : failed ? 'danger' : 'info'}
               min={0}
               max={100}
               now={guessPercentage > 0 ? guessPercentage : 100}
-              label={guessPercentage > 0 ? `${guessPercentage}%` : 'You Lost'}
+              label={
+                solved
+                  ? 'You Win!'
+                  : failed
+                    ? 'You Lost!'
+                    : `${guessPercentage}%`
+              }
             />
           </Col>
         </Row>
@@ -86,6 +95,15 @@ export default function ColorSolver({
             )}
           </Row>
         )}
+        {solved && (
+          <Row>
+            <Col xs={12} className="d-flex justify-content-end">
+              <Button variant="success">
+                <FontAwesomeIcon icon={faUndo} onClick={onGameReset} /> New Game
+              </Button>
+            </Col>
+          </Row>
+        )}
         <hr />
         <Row>
           <Col xs={12}>
@@ -112,6 +130,9 @@ ColorSolver.propTypes = {
   colorPalette: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentGuess: PropTypes.arrayOf(PropTypes.string).isRequired,
   guessHistory: PropTypes.arrayOf(PropTypes.object).isRequired,
+  solved: PropTypes.bool.isRequired,
+  failed: PropTypes.bool.isRequired,
   onGuessAdd: PropTypes.func.isRequired,
-  onGuessRemove: PropTypes.func.isRequired
+  onGuessRemove: PropTypes.func.isRequired,
+  onGameReset: PropTypes.func.isRequired
 };
