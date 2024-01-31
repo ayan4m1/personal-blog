@@ -42,7 +42,7 @@ export default function ColoreeGame() {
             color: currentGuess[index] ?? '#666',
             pct
           })),
-    [colors, solved, failed, solving]
+    [solved, failed, solving, currentGuess, colors]
   );
 
   const handleColorAdd = useCallback(
@@ -118,7 +118,7 @@ export default function ColoreeGame() {
           }
         ];
       }),
-    [colors, colorPalette]
+    [colors, colorPalette, handleColorEliminate]
   );
   const handleGuessRemove = useCallback(
     () => setCurrentGuess((prevVal) => prevVal.slice(0, prevVal.length - 1)),

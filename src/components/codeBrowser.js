@@ -25,7 +25,7 @@ export default function CodeBrowser({ id }) {
         document.getElementById(`doc-${activeDoc.path.replace(`${id}/`, '')}`)
       );
     }
-  }, [activeDocument]);
+  }, [activeDocument, id, snippets]);
 
   const snippetTree = useMemo(() => {
     const result = {
@@ -84,7 +84,7 @@ export default function CodeBrowser({ id }) {
     }
 
     return result;
-  }, [snippets]);
+  }, [snippets, id]);
 
   return (
     <Tab.Container

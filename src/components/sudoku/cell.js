@@ -26,7 +26,7 @@ export default function SudokuCell({
       onChange(row, column, newVal);
       handleBlur();
     },
-    [onClick, onChange]
+    [onChange, column, row, handleBlur]
   );
   const handleKeyDown = useCallback(
     ({ key }) => {
@@ -39,7 +39,7 @@ export default function SudokuCell({
         handleBlur();
       }
     },
-    [active, onClick]
+    [active, onChange, column, row, handleBlur]
   );
   const handleBlur = useCallback(() => onClick(-1, -1), [onClick]);
 

@@ -7,6 +7,7 @@ export default function useBoundingBoxRef(ref, dependencies = []) {
     if (ref.current) {
       setRect(ref.current.getBoundingClientRect());
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref, ...dependencies]);
 
   return rect;

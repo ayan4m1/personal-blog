@@ -70,23 +70,29 @@ export default function SudokuBoard({ mode }) {
       }),
     []
   );
-  const handleChange = useCallback((row, column, value) => {
-    setValues((prevVal) => {
-      const newVal = [...prevVal];
-      const newRow = [...newVal[row]];
+  const handleChange = useCallback(
+    (row, column, value) => {
+      setValues((prevVal) => {
+        const newVal = [...prevVal];
+        const newRow = [...newVal[row]];
 
-      newRow[column] = value;
-      newVal.splice(row, 1, newRow);
+        newRow[column] = value;
+        newVal.splice(row, 1, newRow);
 
-      return newVal;
-    });
-    startTimer();
-  }, []);
-  const handleNew = useCallback((difficulty) => {
-    resetTimer();
-    setPuzzle(getSudoku(difficulty));
-    setValues(getInvalidArray());
-  }, []);
+        return newVal;
+      });
+      startTimer();
+    },
+    [startTimer]
+  );
+  const handleNew = useCallback(
+    (difficulty) => {
+      resetTimer();
+      setPuzzle(getSudoku(difficulty));
+      setValues(getInvalidArray());
+    },
+    [resetTimer]
+  );
   const handleSave = useCallback(
     () =>
       setSavedState({
@@ -94,7 +100,7 @@ export default function SudokuBoard({ mode }) {
         values,
         elapsedTime
       }),
-    [puzzle, values, elapsedTime]
+    [puzzle, values, elapsedTime, setSavedState]
   );
   const handleLoad = useCallback(() => {
     if (!savedState) {
@@ -104,8 +110,8 @@ export default function SudokuBoard({ mode }) {
     setPuzzle(savedState.puzzle);
     setValues(savedState.values);
     incrementTimer(savedState.elapsedTime * 1000);
-  }, [savedState]);
-  const handleClear = useCallback(() => setSavedState(null), []);
+  }, [savedState, incrementTimer]);
+  const handleClear = useCallback(() => setSavedState(null), [setSavedState]);
   const { color: animationColor, start, stop } = useRainbow(false, false);
 
   useEffect(() => {
@@ -129,7 +135,7 @@ export default function SudokuBoard({ mode }) {
     } else {
       stop();
     }
-  }, [cells, values, puzzle]);
+  }, [cells, values, puzzle, elapsedTime, start, stop]);
 
   return (
     <Card body>

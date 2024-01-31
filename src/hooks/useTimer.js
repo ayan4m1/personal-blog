@@ -8,21 +8,15 @@ export default function useTimer(run = true, interval = 1000) {
   const [currentTime, setCurrentTime] = useState(startTime);
   const startTimer = useCallback(() => setRunning(true), [setRunning]);
   const stopTimer = useCallback(() => setRunning(false), [setRunning]);
-  const toggleTimer = useCallback(
-    () => setRunning((prevVal) => !prevVal),
-    [setRunning]
-  );
-  const resetTimer = useCallback(
-    () => setCurrentTime(startTime),
-    [setCurrentTime, startTime]
-  );
+  const toggleTimer = useCallback(() => setRunning((prevVal) => !prevVal), []);
+  const resetTimer = useCallback(() => setCurrentTime(startTime), [startTime]);
   const incrementTimer = useCallback(
     (amount = interval) => setCurrentTime((prevVal) => prevVal + amount),
-    [setCurrentTime]
+    [interval]
   );
   const handleDocumentVisibilityChange = useCallback(
     () => (document.hidden ? stopTimer() : startTimer()),
-    []
+    [startTimer, stopTimer]
   );
 
   useEffect(() => {
@@ -33,7 +27,7 @@ export default function useTimer(run = true, interval = 1000) {
     } else if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-  }, [running]);
+  }, [running, incrementTimer, interval]);
 
   useEffect(() => {
     // if we remove visibilitychange on unmount we lose it, so only set it up once

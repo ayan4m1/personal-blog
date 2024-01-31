@@ -18,17 +18,20 @@ export default function useRainbow(
   const start = useCallback(() => setRunning(true), []);
   const stop = useCallback(() => setRunning(false), []);
 
-  const animate = (time) => {
-    setColor(
-      interpolator(
-        loop ? Math.abs(Math.sin(time / timeDilation)) : time / timeDilation
-      )
-    );
+  const animate = useCallback(
+    (time) => {
+      setColor(
+        interpolator(
+          loop ? Math.abs(Math.sin(time / timeDilation)) : time / timeDilation
+        )
+      );
 
-    if (running) {
-      requestId.current = requestAnimationFrame(animate);
-    }
-  };
+      if (running) {
+        requestId.current = requestAnimationFrame(animate);
+      }
+    },
+    [interpolator, loop, running, timeDilation]
+  );
 
   useEffect(() => {
     if (running) {
@@ -38,7 +41,7 @@ export default function useRainbow(
     }
 
     return () => cancelAnimationFrame(requestId.current);
-  }, [running]);
+  }, [running, animate]);
 
   return { color, start, stop };
 }

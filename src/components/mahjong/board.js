@@ -108,14 +108,14 @@ export default function MahjongBoard({ images }) {
       setSolved(true);
       stopTimer();
     }
-  }, [layout]);
+  }, [layout, stopTimer]);
 
   useEffect(() => {
     if (matches.length === 0) {
       setFailed(true);
       stopTimer();
     }
-  }, [matches]);
+  }, [matches, stopTimer]);
 
   return (
     <Fragment>
