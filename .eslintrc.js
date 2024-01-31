@@ -9,6 +9,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:prettier/recommended',
     'plugin:jsx-a11y/recommended',
+    'plugin:react-hooks/recommended',
     'plugin:import/recommended'
   ],
   parser: '@babel/eslint-parser',
