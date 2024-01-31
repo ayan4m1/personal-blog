@@ -67,7 +67,7 @@ export default function ColorBuilder({ colors, onSliceAdd, onSoloPlayClick }) {
           Play a game on your own with a randomly generated puzzle!
         </Alert>
         <div className="text-end">
-          <Button className="mt-2" variant="success" onClick={onSoloPlayClick}>
+          <Button variant="success" onClick={onSoloPlayClick}>
             <FontAwesomeIcon icon={faWandMagicSparkles} /> Start Game
           </Button>
         </div>
