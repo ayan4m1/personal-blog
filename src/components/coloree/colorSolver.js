@@ -95,11 +95,11 @@ export default function ColorSolver({
             )}
           </Row>
         )}
-        {solved && (
+        {(solved || failed) && (
           <Row>
             <Col xs={12} className="d-flex justify-content-end">
-              <Button variant="success">
-                <FontAwesomeIcon icon={faUndo} onClick={onGameReset} /> New Game
+              <Button variant="success" onClick={onGameReset}>
+                <FontAwesomeIcon icon={faUndo} /> New Game
               </Button>
             </Col>
           </Row>
