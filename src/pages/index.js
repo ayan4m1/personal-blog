@@ -85,7 +85,7 @@ export default function IndexPage({ data }) {
             </Row>
           </Container>
         </Card>
-        <h2>Recent Articles</h2>
+        <h2 className="mt-2">Recent Articles</h2>
         <Row className="justify-content-center">
           <Col md={10}>
             <Carousel
