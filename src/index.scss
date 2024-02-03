@@ -21,11 +21,6 @@
   }
 }
 
-// Remove border on last row in a table
-.table > tbody tr:last-child > td {
-  border-bottom: none;
-}
-
 // Dark mode
 .light-mode {
   background-color: $body-bg;
@@ -47,11 +42,18 @@
     td {
       color: $body-bg;
     }
+
     th {
       background-color: $gray-800;
     }
+
     td {
       background-color: $gray-700;
     }
   }
+}
+
+// Remove border on last row in a table
+.table > tbody tr:last-child > td {
+  border-bottom: none;
 }

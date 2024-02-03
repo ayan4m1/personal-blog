@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Snowfall from 'react-snowfall';
+import { Snowfall } from 'react-snowfall';
 import { getDate, getMonth } from 'date-fns';
 
 import Header from 'components/header';

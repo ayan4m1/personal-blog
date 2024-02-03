@@ -8,21 +8,21 @@ $choice-lg: $choice-xs * 1.75;
     display: flex;
     height: $choice-xs;
     width: $choice-xs;
-    border: 2px solid black;
+    border: 2px solid #000;
     border-radius: 4px;
     align-items: center;
     justify-content: center;
 
     &--unused {
-      box-shadow: 0px 0px 4px 4px rgb(74, 32, 32);
+      box-shadow: 0 0 4px 4px rgb(74, 32, 32);
     }
 
     &--wrongPlace {
-      box-shadow: 0px 0px 4px 4px rgb(220, 200, 45);
+      box-shadow: 0 0 4px 4px rgb(220, 200, 45);
     }
 
     &--correctPlace {
-      box-shadow: 0px 0px 4px 4px rgba(68, 212, 57, 1);
+      box-shadow: 0 0 4px 4px rgba(68, 212, 57, 1);
     }
 
     &--eliminated {
