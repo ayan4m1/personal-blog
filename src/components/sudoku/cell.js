@@ -15,6 +15,7 @@ export default function SudokuCell({
   onChange
 }) {
   const textRef = useRef(null);
+  const handleBlur = useCallback(() => onClick(-1, -1), [onClick]);
   const handleChange = useCallback(
     (event) => {
       const newVal = parseInt(event.target.value, 10);
@@ -41,7 +42,6 @@ export default function SudokuCell({
     },
     [active, onChange, column, row, handleBlur]
   );
-  const handleBlur = useCallback(() => onClick(-1, -1), [onClick]);
 
   useEffect(() => {
     if (active && textRef.current) {
