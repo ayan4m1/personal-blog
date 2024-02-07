@@ -30,7 +30,12 @@ export default function useTimer(run = true, interval = 1000) {
   }, [running, incrementTimer, interval]);
 
   useEffect(() => {
-    // if we remove visibilitychange on unmount we lose it, so only set it up once
+    // if we remove visibilitychange on unmount we lose it, so always remove it
+    // before adding it to ensure it only exists once
+    document.removeEventListener(
+      'visibilitychange',
+      handleDocumentVisibilityChange
+    );
     document.addEventListener(
       'visibilitychange',
       handleDocumentVisibilityChange
