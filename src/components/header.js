@@ -17,6 +17,8 @@ import { Container, Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
 
 import { useThemeContext } from 'hooks/useThemeContext';
 
+import icon from '../images/gatsby-icon.png';
+
 export default function Header() {
   const { darkMode, toggleDarkMode } = useThemeContext();
   const data = useStaticQuery(graphql`
@@ -40,7 +42,13 @@ export default function Header() {
   return (
     <Navbar variant="dark" bg="primary" expand="lg">
       <Container>
-        <Navbar.Brand className="pt-2 pb-2">
+        <Navbar.Brand className="py-2 d-flex align-items-center">
+          <img
+            src={icon}
+            alt="Sloth Face"
+            style={{ height: 32 }}
+            className="me-2"
+          />
           <Link to="/" className="text-light">
             {data.site.siteMetadata.title}
           </Link>
@@ -79,13 +87,13 @@ export default function Header() {
                 </Fragment>
               }
             >
-              <Nav.Link as={Link} to="/sudoku" className="text-dark">
+              <Nav.Link as={Link} to="/games/sudoku" className="text-dark">
                 <FontAwesomeIcon icon={faTable} /> Sudoku
               </Nav.Link>
-              <Nav.Link as={Link} to="/mahjong" className="text-dark">
+              <Nav.Link as={Link} to="/games/mahjong" className="text-dark">
                 <FontAwesomeIcon icon={faRectangleList} /> Mahjong
               </Nav.Link>
-              <Nav.Link as={Link} to="/coloree" className="text-dark">
+              <Nav.Link as={Link} to="/games/coloree" className="text-dark">
                 <FontAwesomeIcon icon={faPaintBrush} /> Coloree
               </Nav.Link>
             </NavDropdown>
