@@ -8,7 +8,8 @@ import {
   faPaintBrush,
   faRectangleList,
   faSun,
-  faTable
+  faTable,
+  faWrench
 } from '@fortawesome/free-solid-svg-icons';
 import { Fragment } from 'react';
 import { Link, useStaticQuery, graphql } from 'gatsby';
@@ -86,6 +87,21 @@ export default function Header() {
               </Nav.Link>
               <Nav.Link as={Link} to="/coloree" className="text-dark">
                 <FontAwesomeIcon icon={faPaintBrush} /> Coloree
+              </Nav.Link>
+            </NavDropdown>
+            <NavDropdown
+              title={
+                <Fragment>
+                  <FontAwesomeIcon icon={faWrench} /> Utilities
+                </Fragment>
+              }
+            >
+              <Nav.Link
+                as={Link}
+                to="/utilities/bom-sheet-maker"
+                className="text-dark"
+              >
+                <FontAwesomeIcon icon={faTable} /> BOM Sheet Maker
               </Nav.Link>
             </NavDropdown>
           </Nav>
