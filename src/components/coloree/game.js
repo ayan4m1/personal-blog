@@ -147,7 +147,7 @@ export default function ColoreeGame() {
       return;
     }
 
-    window.location.replace('/coloree');
+    window.location.replace('/games/coloree');
   }, []);
   const handleBuilderReset = useCallback(() => setColors([]), []);
   const handleSoloPlayClick = useCallback(() => {
