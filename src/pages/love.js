@@ -51,7 +51,7 @@ export default function LovePage() {
           <Col xs={12}>
             <h1>Things I Love</h1>
             <p>
-              My wife and my dogs. But you came here for some links, didn&apos;t
+              My wife and my dog. But you came here for some links, didn&apos;t
               you?
             </p>
             <p>
