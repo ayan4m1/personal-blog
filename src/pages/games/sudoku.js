@@ -1,18 +1,19 @@
 import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
 import { Container, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
 
 import Layout from 'components/layout';
-import SEO from 'components/seo';
 import SudokuBoard from 'components/sudoku/board';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
 
 export default function SudokuPage() {
   const [gameMode, setGameMode] = useState(null);
 
   return (
-    <Layout>
-      <SEO title="Sudoku" description="Play Sudoku for free!" />
+    <Layout
+      title="Sudoku"
+      description="Play Sudoku timed or freely, with varying difficulty!"
+    >
       <Container>
         <Row>
           <Col className="d-flex justify-content-center">

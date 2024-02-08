@@ -2,7 +2,6 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { faReact } from '@fortawesome/free-brands-svg-icons';
 
 import Layout from 'components/layout';
-import SEO from 'components/seo';
 import GridCard from 'components/gridCard';
 
 import gatsbyLogo from 'images/icons/gatsby.svg';
@@ -46,11 +45,7 @@ const data = [
 
 export default function LovePage() {
   return (
-    <Layout>
-      <SEO
-        title="Things I Love"
-        description="Software and tooling I support."
-      />
+    <Layout title="Things I Love" description="Software and tooling I support.">
       <Container>
         <Row>
           <Col xs={12}>

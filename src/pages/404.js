@@ -1,12 +1,10 @@
 import { Container, Row, Col } from 'react-bootstrap';
 
-import SEO from 'components/seo';
 import Layout from 'components/layout';
 
 export default function NotFoundPage() {
   return (
-    <Layout>
-      <SEO title="Page Not Found" />
+    <Layout title="Page Not Found" description="Sorry, this URL is not valid.">
       <Container>
         <Row>
           <Col md="12">

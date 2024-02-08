@@ -3,15 +3,13 @@ import { graphql } from 'gatsby';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import Layout from 'components/layout';
-import SEO from 'components/seo';
 import MahjongBoard from 'components/mahjong/board';
 
 export default function MahjongPage({ data }) {
   const { images } = data;
 
   return (
-    <Layout>
-      <SEO title="Mahjong" description="Play Mahjong solitaire for free." />
+    <Layout title="Mahjong" description="Play Mahjong solitaire!">
       <Container>
         <Row>
           <Col>

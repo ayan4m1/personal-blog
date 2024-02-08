@@ -5,7 +5,6 @@ import { format, parseISO } from 'date-fns';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import Layout from 'components/layout';
-import SEO from 'components/seo';
 
 export default function ArticleContainer({
   title,
@@ -19,8 +18,7 @@ export default function ArticleContainer({
   }, []);
 
   return (
-    <Layout>
-      <SEO title={title} description={description} />
+    <Layout title={title} description={description}>
       <Container>
         <Row>
           <Col md="12" className="mb-2">

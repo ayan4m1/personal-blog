@@ -1,14 +1,4 @@
 import {
-  faArrowCircleRight,
-  faArrowCircleLeft,
-  faHeart
-} from '@fortawesome/free-solid-svg-icons';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { graphql } from 'gatsby';
-import { GatsbyImage, getImage } from 'gatsby-plugin-image';
-import PropTypes from 'prop-types';
-import {
   Container,
   Row,
   Col,
@@ -18,8 +8,17 @@ import {
   Button,
   ButtonGroup
 } from 'react-bootstrap';
+import { graphql } from 'gatsby';
+import PropTypes from 'prop-types';
+import {
+  faArrowCircleRight,
+  faArrowCircleLeft,
+  faHeart
+} from '@fortawesome/free-solid-svg-icons';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import SEO from 'components/seo';
 import Layout from 'components/layout';
 import FeaturedPost from 'components/featuredPost';
 
@@ -40,8 +39,7 @@ export default function IndexPage({ data }) {
       : {};
 
   return (
-    <Layout>
-      <SEO title="Home" />
+    <Layout title="Home">
       <Container>
         <Card body bg="info" className="text-light">
           <Container fluid>

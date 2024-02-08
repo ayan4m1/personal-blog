@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { format, parseISO } from 'date-fns';
 import { Container, Row, Col, Table } from 'react-bootstrap';
 
-import SEO from 'components/seo';
 import NotFoundPage from 'pages/404';
 import Layout from 'components/layout';
 
@@ -26,8 +25,7 @@ export default function ArticleCategory({ data }) {
   const allNodes = [...nodes, ...mdxNodes];
 
   return (
-    <Layout>
-      <SEO title={title} description={description} />
+    <Layout title={title} description={description}>
       <Container>
         <Row>
           <Col xs={12}>

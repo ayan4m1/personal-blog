@@ -3,7 +3,6 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import { number, object } from 'yup';
 
-import SEO from 'components/seo';
 import Layout from 'components/layout';
 import Grid from 'components/bom-sheet-maker/grid';
 import Sidebar from 'components/bom-sheet-maker/sidebar';
@@ -27,8 +26,10 @@ export default function BOMSheetMakerPage() {
   });
 
   return (
-    <Layout>
-      <SEO title="BOM Sheet Maker" />
+    <Layout
+      title="BOM Sheet Maker"
+      description="Generate a printable parts placement sheet from a BOM."
+    >
       <Container fluid>
         <Row>
           <Col xs={3} className="d-print-none">

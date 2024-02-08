@@ -1,11 +1,10 @@
 import { Container, Row, Col } from 'react-bootstrap';
+import { faGlobe } from '@fortawesome/free-solid-svg-icons';
+import { faDocker, faJs, faUsb } from '@fortawesome/free-brands-svg-icons';
 
 import Layout from 'components/layout';
-import SEO from 'components/seo';
-import { faDocker, faJs, faUsb } from '@fortawesome/free-brands-svg-icons';
-import { faGlobe } from '@fortawesome/free-solid-svg-icons';
-
 import GridCard from 'components/gridCard';
+
 import minecraftLogo from 'images/icons/minecraft.svg';
 
 const categories = [
@@ -99,11 +98,10 @@ const data = [
 
 export default function ProjectsPage() {
   return (
-    <Layout>
-      <SEO title="My Projects" description="A list of my active projects." />
+    <Layout title="My Projects" description="A list of my active projects.">
       <Container>
         <Row>
-          <Col xs={12}>
+          <Col>
             <h1>My Projects</h1>
             <p>This is a curated list of my active projects.</p>
           </Col>
