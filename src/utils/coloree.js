@@ -13,7 +13,7 @@ export const createRandomColor = () =>
 export const createRandomPuzzle = (difficulty = 1) => {
   const colorCount = Math.ceil(Math.random() * difficulty) + 2;
   const colors = [];
-  const minPct = 0.05;
+  const minPct = 0.1;
   let remainingPct = 1;
 
   while (colors.length < colorCount) {
