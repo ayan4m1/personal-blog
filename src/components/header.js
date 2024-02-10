@@ -1,3 +1,7 @@
+import PropTypes from 'prop-types';
+import { Fragment } from 'react';
+import { Link, useStaticQuery, graphql } from 'gatsby';
+import { Container, Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFileArchive,
@@ -7,17 +11,33 @@ import {
   faNewspaper,
   faPaintBrush,
   faRectangleList,
+  faBalanceScale,
   faSun,
   faTable,
   faWrench
 } from '@fortawesome/free-solid-svg-icons';
-import { Fragment } from 'react';
-import { Link, useStaticQuery, graphql } from 'gatsby';
-import { Container, Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
 
 import { useThemeContext } from 'hooks/useThemeContext';
 
 import icon from '../images/gatsby-icon.png';
+
+const NavLink = ({ to, label, icon, topLevel = false, ...props }) => (
+  <Nav.Link
+    {...props}
+    as={Link}
+    className={topLevel ? null : 'text-dark'}
+    to={to}
+  >
+    <FontAwesomeIcon icon={icon} /> {label}
+  </Nav.Link>
+);
+
+NavLink.propTypes = {
+  to: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  topLevel: PropTypes.bool,
+  icon: PropTypes.object
+};
 
 export default function Header() {
   const { darkMode, toggleDarkMode } = useThemeContext();
@@ -64,22 +84,20 @@ export default function Header() {
               }
             >
               {data.allArticleCategoriesJson.nodes.map((category) => (
-                <Nav.Link
+                <NavLink
                   key={category.name}
-                  as={Link}
-                  className="text-dark"
                   to={`/${category.name}`}
-                >
-                  {category.title}
-                </Nav.Link>
+                  label={category.title}
+                />
               ))}
             </NavDropdown>
-            <Nav.Link as={Link} to="/projects">
-              <FontAwesomeIcon icon={faFileArchive} /> Projects
-            </Nav.Link>
-            <Nav.Link as={Link} to="/love">
-              <FontAwesomeIcon icon={faHeart} /> Things I Love
-            </Nav.Link>
+            <NavLink
+              to="/projects"
+              icon={faFileArchive}
+              label="Projects"
+              topLevel
+            />
+            <NavLink to="/love" icon={faHeart} label="Things I Love" topLevel />
             <NavDropdown
               title={
                 <Fragment>
@@ -87,15 +105,17 @@ export default function Header() {
                 </Fragment>
               }
             >
-              <Nav.Link as={Link} to="/games/sudoku" className="text-dark">
-                <FontAwesomeIcon icon={faTable} /> Sudoku
-              </Nav.Link>
-              <Nav.Link as={Link} to="/games/mahjong" className="text-dark">
-                <FontAwesomeIcon icon={faRectangleList} /> Mahjong
-              </Nav.Link>
-              <Nav.Link as={Link} to="/games/coloree" className="text-dark">
-                <FontAwesomeIcon icon={faPaintBrush} /> Coloree
-              </Nav.Link>
+              <NavLink to="/games/sudoku" icon={faTable} label="Sudoku" />
+              <NavLink
+                to="/games/mahjong"
+                icon={faRectangleList}
+                label="Mahjong"
+              />
+              <NavLink
+                to="/games/coloree"
+                icon={faPaintBrush}
+                label="Coloree"
+              />
             </NavDropdown>
             <NavDropdown
               title={
@@ -104,13 +124,16 @@ export default function Header() {
                 </Fragment>
               }
             >
-              <Nav.Link
-                as={Link}
+              <NavLink
                 to="/utilities/bom-sheet-maker"
-                className="text-dark"
-              >
-                <FontAwesomeIcon icon={faTable} /> BOM Sheet Maker
-              </Nav.Link>
+                icon={faTable}
+                label="BOM Sheet Maker"
+              />
+              <NavLink
+                to="/utilities/scale-converter"
+                icon={faBalanceScale}
+                label="Scale Converter"
+              />
             </NavDropdown>
           </Nav>
           <Nav
