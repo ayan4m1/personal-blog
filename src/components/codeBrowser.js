@@ -5,14 +5,14 @@ import { useState, useEffect, useMemo } from 'react';
 import { Row, Tab, Col, Card, Container } from 'react-bootstrap';
 
 import DirectoryTree from 'components/directoryTree';
-import useSnippets from 'hooks/useSnippets';
+import useSnippetsContext from 'hooks/useSnippetsContext';
 
 const getDirName = (path) => path.substring(0, path.lastIndexOf('/'));
 
 const getExtension = (path) => path.substring(path.lastIndexOf('.') + 1);
 
 export default function CodeBrowser({ id }) {
-  const { snippets } = useSnippets();
+  const { snippets } = useSnippetsContext();
   const [activeDocument, setActiveDocument] = useState(null);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { SnippetContext } from 'hooks/useSnippets';
+import { SnippetContext } from 'hooks/useSnippetsContext';
 
 export default function SnippetProvider({ snippets, children }) {
   return (

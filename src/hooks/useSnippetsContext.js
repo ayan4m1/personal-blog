@@ -4,6 +4,6 @@ export const SnippetContext = createContext({
   snippets: []
 });
 
-export default function useSnippets() {
+export default function useSnippetsContext() {
   return useContext(SnippetContext);
 }
