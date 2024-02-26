@@ -1,7 +1,7 @@
 import { faUndo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import {
   Container,
   Row,
@@ -36,92 +36,96 @@ export default function ColorSolver({
   );
 
   return (
-    <Card body>
-      <Container>
-        <Row className="mb-3">
-          <Col xs={8}>
-            <h5 className="mb-0">{remainingGuesses} Guesses Left</h5>
-          </Col>
-          <Col xs={4} className="d-flex align-items-center">
-            <ProgressBar
-              className="w-100"
-              variant={solved ? 'success' : failed ? 'danger' : 'info'}
-              min={0}
-              max={100}
-              now={guessPercentage > 0 ? guessPercentage : 100}
-              label={
-                solved
-                  ? 'You Win!'
-                  : failed
-                    ? 'You Lost!'
-                    : `${guessPercentage}%`
-              }
-            />
-          </Col>
-        </Row>
-        {guessHistory.map(
-          ({ finalColor, colorSimilarity, guess }, guessIndex) => (
-            <Row key={guessIndex}>
-              {guess.map(({ color, type }, colorIndex) => (
-                <SolverChoice key={colorIndex} color={color} type={type} />
-              ))}
-              <SolverChoice
-                color={finalColor}
-                style={{ width: 70, maxWidth: 70 }}
-              >
-                {colorSimilarity.toFixed(1)}%
-              </SolverChoice>
-            </Row>
-          )
-        )}
-        {remainingGuesses > 0 && (
-          <Row>
-            {colors.map((_, index) => (
-              <SolverChoice key={index} color={currentGuess[index]} />
-            ))}
-            {Boolean(currentGuess.length) && (
-              <Col
-                xs={2}
-                className="my-2 d-flex justify-content-center align-items-center"
-              >
-                <Button
-                  className="h-100"
-                  variant="danger"
-                  onClick={onGuessRemove}
-                >
-                  <FontAwesomeIcon icon={faUndo} />
-                </Button>
+    <Fragment>
+      <Col xs={12} md={6}>
+        <Card body>
+          <Container>
+            <Row className="mb-3">
+              <Col xs={8}>
+                <h5 className="mb-0">{remainingGuesses} Guesses Left</h5>
               </Col>
+              <Col xs={4} className="d-flex align-items-center">
+                <ProgressBar
+                  className="w-100"
+                  variant={solved ? 'success' : failed ? 'danger' : 'info'}
+                  min={0}
+                  max={100}
+                  now={guessPercentage > 0 ? guessPercentage : 100}
+                  label={
+                    solved
+                      ? 'You Win!'
+                      : failed
+                        ? 'You Lost!'
+                        : `${guessPercentage}%`
+                  }
+                />
+              </Col>
+            </Row>
+            {guessHistory.map(
+              ({ finalColor, colorSimilarity, guess }, guessIndex) => (
+                <Row key={guessIndex}>
+                  {guess.map(({ color, type }, colorIndex) => (
+                    <SolverChoice key={colorIndex} color={color} type={type} />
+                  ))}
+                  <SolverChoice
+                    color={finalColor}
+                    style={{ width: 70, maxWidth: 70 }}
+                  >
+                    {colorSimilarity.toFixed(1)}%
+                  </SolverChoice>
+                </Row>
+              )
             )}
-          </Row>
-        )}
-        {(solved || failed) && (
-          <Row>
-            <Col xs={12} className="d-flex justify-content-end">
-              <Button variant="success" onClick={onGameReset}>
-                <FontAwesomeIcon icon={faUndo} /> New Game
-              </Button>
-            </Col>
-          </Row>
-        )}
-        <hr />
-        <Row>
-          <Col xs={12}>
-            <h5 className="mb-3">Color Palette</h5>
-          </Col>
-          {colorPalette.map(({ color, eliminated }, index) => (
-            <SolverChoice
-              key={index}
-              color={color}
-              eliminated={eliminated}
-              disabled={remainingGuesses === 0 || eliminated}
-              onClick={() => onGuessAdd(color)}
-              button
-            />
-          ))}
-        </Row>
-      </Container>
-    </Card>
+            {remainingGuesses > 0 && (
+              <Row>
+                {colors.map((_, index) => (
+                  <SolverChoice key={index} color={currentGuess[index]} />
+                ))}
+                {Boolean(currentGuess.length) && (
+                  <Col
+                    xs={2}
+                    className="my-2 d-flex justify-content-center align-items-center"
+                  >
+                    <Button
+                      className="h-100"
+                      variant="danger"
+                      onClick={onGuessRemove}
+                    >
+                      <FontAwesomeIcon icon={faUndo} />
+                    </Button>
+                  </Col>
+                )}
+              </Row>
+            )}
+            {(solved || failed) && (
+              <Row>
+                <Col xs={12} className="d-flex justify-content-end">
+                  <Button variant="success" onClick={onGameReset}>
+                    <FontAwesomeIcon icon={faUndo} /> New Game
+                  </Button>
+                </Col>
+              </Row>
+            )}
+            <hr />
+            <Row>
+              <Col xs={12}>
+                <h5 className="mb-3">Color Palette</h5>
+              </Col>
+              {colorPalette.map(({ color, eliminated }, index) => (
+                <SolverChoice
+                  key={index}
+                  color={color}
+                  eliminated={eliminated}
+                  disabled={remainingGuesses === 0 || eliminated}
+                  onClick={() => onGuessAdd(color)}
+                  button
+                />
+              ))}
+            </Row>
+          </Container>
+        </Card>
+      </Col>
+    </Fragment>
   );
 }
 

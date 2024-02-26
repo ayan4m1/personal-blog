@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { Fragment, useRef, useEffect } from 'react';
+import { Col } from 'react-bootstrap';
+import { useRef, useEffect } from 'react';
 
 export default function ColorPicker({ diameter, finalColor, pieColors }) {
   const radius = diameter / 2;
@@ -57,7 +58,7 @@ export default function ColorPicker({ diameter, finalColor, pieColors }) {
   }, [pieColors, canvasRef, radius]);
 
   return (
-    <Fragment>
+    <Col xs={12} md={6} className="d-flex justify-content-center mb-2">
       <div
         className="color-picker-pie"
         style={{
@@ -78,7 +79,7 @@ export default function ColorPicker({ diameter, finalColor, pieColors }) {
           backgroundColor: finalColor
         }}
       />
-    </Fragment>
+    </Col>
   );
 }
 

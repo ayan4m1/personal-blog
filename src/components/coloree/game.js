@@ -1,5 +1,4 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
 import { useWindowSize } from 'react-use';
 import Confetti from 'react-confetti';
 
@@ -44,6 +43,15 @@ export default function ColoreeGame() {
           })),
     [solved, failed, solving, currentGuess, colors]
   );
+  const sideComponent = useMemo(() => {
+    let result = 'builder';
+
+    if (getRemainingPct(colors) <= 0) {
+      result = !solving ? 'viewer' : 'solver';
+    }
+
+    return result;
+  }, [colors, solving]);
 
   const handleColorAdd = useCallback(
     (color, pct) =>
@@ -185,45 +193,72 @@ export default function ColoreeGame() {
     setColorPalette(createColorPalette(colors));
   }, [colors]);
 
+  const getComponent = useCallback(() => {
+    switch (sideComponent) {
+      case 'builder':
+        return (
+          <ColorBuilder
+            colors={colors}
+            pieColors={pieColors}
+            finalColor={finalColor}
+            onSliceAdd={handleColorAdd}
+            onSoloPlayClick={handleSoloPlayClick}
+            width={width}
+          />
+        );
+      case 'viewer':
+        return (
+          <ColorViewer
+            colors={colors}
+            finalColor={finalColor}
+            onResetClick={handleBuilderReset}
+          />
+        );
+      case 'solver':
+        return (
+          <ColorSolver
+            colors={colors}
+            colorPalette={colorPalette}
+            currentGuess={currentGuess}
+            guessHistory={guessHistory}
+            solved={solved}
+            failed={failed}
+            onGuessAdd={handleGuessAdd}
+            onGuessRemove={handleGuessRemove}
+            onGameReset={handleGameReset}
+          />
+        );
+    }
+  }, [
+    colors,
+    pieColors,
+    finalColor,
+    colorPalette,
+    currentGuess,
+    guessHistory,
+    handleBuilderReset,
+    handleColorAdd,
+    handleGameReset,
+    handleGuessAdd,
+    handleGuessRemove,
+    handleSoloPlayClick,
+    sideComponent,
+    solved,
+    failed,
+    width
+  ]);
+
   return (
     <Fragment>
       {solved && <Confetti width={width} height={height} />}
-      <Row>
-        <Col xs={12} md={6} className="d-flex justify-content-center mb-2">
-          <ColorPicker
-            diameter={Math.min(400, width / 2 - 24)}
-            pieColors={pieColors}
-            finalColor={finalColor}
-          />
-        </Col>
-        <Col xs={12} md={6} className="mb-2">
-          {getRemainingPct(colors) > 0 ? (
-            <ColorBuilder
-              colors={colors}
-              onSliceAdd={handleColorAdd}
-              onSoloPlayClick={handleSoloPlayClick}
-            />
-          ) : !solving ? (
-            <ColorViewer
-              colors={colors}
-              finalColor={finalColor}
-              onResetClick={handleBuilderReset}
-            />
-          ) : (
-            <ColorSolver
-              colors={colors}
-              colorPalette={colorPalette}
-              currentGuess={currentGuess}
-              guessHistory={guessHistory}
-              solved={solved}
-              failed={failed}
-              onGuessAdd={handleGuessAdd}
-              onGuessRemove={handleGuessRemove}
-              onGameReset={handleGameReset}
-            />
-          )}
-        </Col>
-      </Row>
+      {Boolean(solving) && (
+        <ColorPicker
+          diameter={Math.min(300, width / 2 - 24)}
+          pieColors={pieColors}
+          finalColor={finalColor}
+        />
+      )}
+      {getComponent()}
     </Fragment>
   );
 }

@@ -22,53 +22,55 @@ export default function ColorViewer({ colors, finalColor, onResetClick }) {
   );
 
   return (
-    <Card body>
-      <Card.Title className="mb-3">Your puzzle is ready to share!</Card.Title>
-      <Container>
-        <Row>
-          <Col xs={12}>
-            <Table>
-              <thead>
-                <tr>
-                  <th>Color</th>
-                  <th>%</th>
-                </tr>
-              </thead>
-              <tbody>
-                {colors.map(({ color, pct }) => (
-                  <tr key={`${color}${pct}`}>
-                    <td>
-                      {ColorNamer(color).pantone[0].name} ({color})
-                    </td>
-                    <td>{Math.round(pct * 100)}%</td>
+    <Col xs={12} md={6}>
+      <Card body>
+        <Card.Title className="mb-3">Your puzzle is ready to share!</Card.Title>
+        <Container>
+          <Row>
+            <Col xs={12} md={6}>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Color</th>
+                    <th>%</th>
                   </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th>
-                    {ColorNamer(finalColor).pantone[0].name} ({finalColor})
-                  </th>
-                  <th>100%</th>
-                </tr>
-              </tfoot>
-            </Table>
-          </Col>
-        </Row>
-        <Row>
-          <Col className="text-center">
-            <ButtonGroup>
-              <Button variant="danger" onClick={onResetClick}>
-                <FontAwesomeIcon icon={faUndo} /> Start Over
-              </Button>
-              <Button variant="success" onClick={handleUrlCopyClick}>
-                <FontAwesomeIcon icon={faLink} /> Copy URL
-              </Button>
-            </ButtonGroup>
-          </Col>
-        </Row>
-      </Container>
-    </Card>
+                </thead>
+                <tbody>
+                  {colors.map(({ color, pct }) => (
+                    <tr key={`${color}${pct}`}>
+                      <td>
+                        {ColorNamer(color).pantone[0].name} ({color})
+                      </td>
+                      <td>{Math.round(pct * 100)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>
+                      {ColorNamer(finalColor).pantone[0].name} ({finalColor})
+                    </th>
+                    <th>100%</th>
+                  </tr>
+                </tfoot>
+              </Table>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12} md={6} className="text-center">
+              <ButtonGroup>
+                <Button variant="danger" onClick={onResetClick}>
+                  <FontAwesomeIcon icon={faUndo} /> Start Over
+                </Button>
+                <Button variant="success" onClick={handleUrlCopyClick}>
+                  <FontAwesomeIcon icon={faLink} /> Copy URL
+                </Button>
+              </ButtonGroup>
+            </Col>
+          </Row>
+        </Container>
+      </Card>
+    </Col>
   );
 }
 

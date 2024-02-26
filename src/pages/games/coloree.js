@@ -14,13 +14,13 @@ export default function ColoreePage() {
       <Container>
         <Row>
           <Col>
-            <h1>
+            <h1 className="mb-4">
               <FontAwesomeIcon icon={faPaintBrush} /> Coloree
             </h1>
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col className="d-flex">
             <ColoreeGame />
           </Col>
         </Row>

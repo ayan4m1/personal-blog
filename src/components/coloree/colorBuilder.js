@@ -1,12 +1,3 @@
-import PropTypes from 'prop-types';
-import { SketchPicker } from 'react-color';
-import { useState, useCallback, useMemo, useRef, Fragment } from 'react';
-import {
-  faDice,
-  faPlusCircle,
-  faWandMagicSparkles
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Card,
   Form,
@@ -17,7 +8,16 @@ import {
   Row,
   Col
 } from 'react-bootstrap';
+import {
+  faDice,
+  faPlusCircle,
+  faWandMagicSparkles
+} from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 import palette from 'get-rgba-palette';
+import { SketchPicker } from 'react-color';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState, useCallback, useMemo, useRef, Fragment } from 'react';
 
 import {
   createRandomPuzzle,
@@ -26,7 +26,16 @@ import {
 } from 'utils/coloree';
 import { rgb } from 'd3-color';
 
-export default function ColorBuilder({ colors, onSliceAdd, onSoloPlayClick }) {
+import ColorPicker from 'components/coloree/colorPicker';
+
+export default function ColorBuilder({
+  colors,
+  pieColors,
+  finalColor,
+  onSliceAdd,
+  onSoloPlayClick,
+  width
+}) {
   const canvasRef = useRef();
   const maxSlicePercentage = useMemo(() => getRemainingPct(colors), [colors]);
   const [difficulty, setDifficulty] = useState(1);
@@ -99,9 +108,10 @@ export default function ColorBuilder({ colors, onSliceAdd, onSoloPlayClick }) {
 
   return (
     <Fragment>
-      <Col xs={12} md={6}>
+      <Col xs={12} md={6} className="me-2">
+        <h2 className="mb-3">Singleplayer</h2>
         <Card body className="mb-3">
-          <Card.Title>Solo Play</Card.Title>
+          <Card.Title>Generate a Puzzle</Card.Title>
           <Alert variant="info" className="my-2">
             Play a game on your own with a randomly generated puzzle!
           </Alert>
@@ -113,6 +123,7 @@ export default function ColorBuilder({ colors, onSliceAdd, onSoloPlayClick }) {
         </Card>
       </Col>
       <Col xs={12} md={6}>
+        <h2 className="mb-3">Multiplayer</h2>
         <Card body className="mb-3">
           <Card.Title>Generate a Puzzle</Card.Title>
           <Alert variant="info" className="my-2">
@@ -143,6 +154,13 @@ export default function ColorBuilder({ colors, onSliceAdd, onSoloPlayClick }) {
         </Card>
         <Card body className="mb-3">
           <Card.Title>Create a Puzzle By Hand</Card.Title>
+          <div className="d-flex justify-content-center my-2">
+            <ColorPicker
+              diameter={Math.min(300, width / 2 - 24)}
+              pieColors={pieColors}
+              finalColor={finalColor}
+            />
+          </div>
           <Alert variant="info" className="my-2">
             Use the color picker and percentage inputs below to add colors up to
             100%. Then, share your puzzle with friends and see if you can stump
@@ -205,6 +223,9 @@ export default function ColorBuilder({ colors, onSliceAdd, onSoloPlayClick }) {
 
 ColorBuilder.propTypes = {
   colors: PropTypes.arrayOf(PropTypes.object).isRequired,
+  pieColors: PropTypes.arrayOf(PropTypes.object).isRequired,
+  finalColor: PropTypes.string.isRequired,
   onSliceAdd: PropTypes.func.isRequired,
-  onSoloPlayClick: PropTypes.func.isRequired
+  onSoloPlayClick: PropTypes.func.isRequired,
+  width: PropTypes.number
 };
