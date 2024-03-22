@@ -1,7 +1,5 @@
-import PropTypes from 'prop-types';
-import { Fragment } from 'react';
 import { Link, useStaticQuery, graphql } from 'gatsby';
-import { Container, Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
+import { Container, Navbar, Nav, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFileArchive,
@@ -17,27 +15,11 @@ import {
   faWrench
 } from '@fortawesome/free-solid-svg-icons';
 
+import NavLink from 'components/nav/link';
+import NavDropdown from 'components/nav/dropdown';
 import { useThemeContext } from 'hooks/useThemeContext';
 
 import icon from '../images/gatsby-icon.png';
-
-const NavLink = ({ to, label, icon, topLevel = false, ...props }) => (
-  <Nav.Link
-    {...props}
-    as={Link}
-    className={topLevel ? null : 'text-dark'}
-    to={to}
-  >
-    <FontAwesomeIcon icon={icon} /> {label}
-  </Nav.Link>
-);
-
-NavLink.propTypes = {
-  to: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  topLevel: PropTypes.bool,
-  icon: PropTypes.object
-};
 
 export default function Header() {
   const { darkMode, toggleDarkMode } = useThemeContext();
@@ -76,13 +58,7 @@ export default function Header() {
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav className="ms-2">
-            <NavDropdown
-              title={
-                <Fragment>
-                  <FontAwesomeIcon icon={faNewspaper} /> Articles
-                </Fragment>
-              }
-            >
+            <NavDropdown icon={faNewspaper} label="Articles">
               {data.allArticleCategoriesJson.nodes.map((category) => (
                 <NavLink
                   key={category.name}
@@ -91,20 +67,9 @@ export default function Header() {
                 />
               ))}
             </NavDropdown>
-            <NavLink
-              to="/projects"
-              icon={faFileArchive}
-              label="Projects"
-              topLevel
-            />
-            <NavLink to="/love" icon={faHeart} label="Things I Love" topLevel />
-            <NavDropdown
-              title={
-                <Fragment>
-                  <FontAwesomeIcon icon={faGamepad} /> Games
-                </Fragment>
-              }
-            >
+            <NavLink icon={faFileArchive} label="Projects" topLevel />
+            <NavLink icon={faHeart} label="Things I Love" topLevel />
+            <NavDropdown icon={faGamepad} label="Games">
               <NavLink to="/games/sudoku" icon={faTable} label="Sudoku" />
               <NavLink
                 to="/games/mahjong"
@@ -117,13 +82,7 @@ export default function Header() {
                 label="Coloree"
               />
             </NavDropdown>
-            <NavDropdown
-              title={
-                <Fragment>
-                  <FontAwesomeIcon icon={faWrench} /> Utilities
-                </Fragment>
-              }
-            >
+            <NavDropdown icon={faWrench} label="Utilities">
               <NavLink
                 to="/utilities/bom-sheet-maker"
                 icon={faTable}
