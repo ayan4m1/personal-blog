@@ -1,32 +1,24 @@
 import { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { NavDropdown as BsNavDropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import NavLink from 'components/nav/link';
-
-export default function NavDropdown({ links = [], icon, title }) {
+export default function NavDropdown({ children, icon, title }) {
   return (
-    <NavDropdown
+    <BsNavDropdown
       title={
         <Fragment>
           {Boolean(icon) && <FontAwesomeIcon icon={icon} />} {title}
         </Fragment>
       }
     >
-      {links.map(({ name, title }) => (
-        <NavLink key={name} to={`/${name}`} label={title} />
-      ))}
-    </NavDropdown>
+      {children}
+    </BsNavDropdown>
   );
 }
 
 NavDropdown.propTypes = {
-  links: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      title: PropTypes.string
-    })
-  ).isRequired,
+  children: PropTypes.node.isRequired,
   icon: PropTypes.object,
   title: PropTypes.string.isRequired
 };

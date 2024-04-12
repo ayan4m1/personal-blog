@@ -58,7 +58,7 @@ export default function Header() {
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Nav className="ms-2">
-            <NavDropdown icon={faNewspaper} label="Articles">
+            <NavDropdown icon={faNewspaper} title="Articles">
               {data.allArticleCategoriesJson.nodes.map((category) => (
                 <NavLink
                   key={category.name}
@@ -67,9 +67,14 @@ export default function Header() {
                 />
               ))}
             </NavDropdown>
-            <NavLink icon={faFileArchive} label="Projects" topLevel />
-            <NavLink icon={faHeart} label="Things I Love" topLevel />
-            <NavDropdown icon={faGamepad} label="Games">
+            <NavLink
+              icon={faFileArchive}
+              label="Projects"
+              topLevel
+              to="/projects"
+            />
+            <NavLink icon={faHeart} label="Things I Love" topLevel to="/love" />
+            <NavDropdown icon={faGamepad} title="Games">
               <NavLink to="/games/sudoku" icon={faTable} label="Sudoku" />
               <NavLink
                 to="/games/mahjong"
@@ -82,7 +87,7 @@ export default function Header() {
                 label="Coloree"
               />
             </NavDropdown>
-            <NavDropdown icon={faWrench} label="Utilities">
+            <NavDropdown icon={faWrench} title="Utilities">
               <NavLink
                 to="/utilities/bom-sheet-maker"
                 icon={faTable}
