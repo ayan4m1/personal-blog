@@ -1,6 +1,6 @@
 import Papa from 'papaparse';
 import { createReadStream } from 'fs';
-import { writeFile } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
 import { pick } from 'lodash-es';
 
 const inputStream = createReadStream('./questions.csv');
@@ -23,6 +23,9 @@ Papa.parse(inputStream, {
         );
     }
 
+    await mkdir('./trivia/shows', {
+      recursive: true
+    });
     for (const [showNumber, questions] of shows.entries()) {
       await writeFile(
         `./trivia/shows/${showNumber}.json`,
