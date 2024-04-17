@@ -12,7 +12,7 @@
     "url": "git@github.com:ayan4m1/personal-blog.git"
   },
   "scripts": {
-    "build": "node split.js && gatsby build",
+    "build": "node split.mjs && gatsby build",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "gatsby develop",
     "serve": "gatsby serve",
