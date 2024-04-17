@@ -25,7 +25,7 @@ Papa.parse(inputStream, {
 
     for (const [showNumber, questions] of shows.entries()) {
       await writeFile(
-        `./trivia/${showNumber}.json`,
+        `./trivia/shows/${showNumber}.json`,
         JSON.stringify({
           showNumber,
           questions
