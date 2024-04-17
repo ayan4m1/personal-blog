@@ -5,7 +5,7 @@ const createTriviaPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions;
   const result = await graphql(`
     {
-      shows: allTriviaJson {
+      shows: allShowsJson {
         nodes {
           showNumber
         }

@@ -1,0 +1,32 @@
+.trivia-category {
+  font-size: 12px;
+  padding: 8px 0;
+  text-align: center;
+  background-color: #060ce9;
+  border-bottom: 2px solid $black;
+}
+
+.trivia-card {
+  display: flex;
+  min-height: 128px;
+  align-items: center;
+  justify-content: center;
+  background-color: #060ce9;
+}
+
+.trivia-card:hover {
+  border: 2px solid #daa520;
+  cursor: pointer;
+}
+
+.trivia-question {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  background-color: #060ce9;
+
+  > .container-fluid {
+    text-align: center;
+  }
+}
