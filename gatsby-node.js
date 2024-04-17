@@ -1,12 +1,46 @@
 const { resolve } = require('path');
 
+const createTriviaPages = async ({ actions, graphql, reporter }) => {
+  const component = resolve('src/components/trivia/game.js');
+  const { createPage } = actions;
+  const result = await graphql(`
+    {
+      shows: allTriviaJson {
+        nodes {
+          showNumber
+        }
+      }
+    }
+  `);
+
+  if (result.errors) {
+    reporter.panicOnBuild('Error while running GraphQL trivia query.');
+    return;
+  }
+
+  let counter = 0;
+
+  for (const { showNumber } of result.data.shows.nodes) {
+    counter++;
+    createPage({
+      context: {
+        showNumber
+      },
+      component,
+      path: `/games/trivia/${showNumber}`
+    });
+  }
+
+  reporter.info(`Created ${counter} trivia pages!`);
+};
+
 const createArticlePages = async ({ actions, graphql, reporter }) => {
   const component = resolve('src/components/markdownArticle.js');
   const mdxComponent = resolve('src/components/mdxArticle.js');
   const { createPage } = actions;
   const result = await graphql(`
     {
-      allMarkdownRemark {
+      markdown: allMarkdownRemark {
         nodes {
           fileAbsolutePath
           frontmatter {
@@ -14,7 +48,7 @@ const createArticlePages = async ({ actions, graphql, reporter }) => {
           }
         }
       }
-      allMdx {
+      mdx: allMdx {
         nodes {
           internal {
             contentFilePath
@@ -34,7 +68,7 @@ const createArticlePages = async ({ actions, graphql, reporter }) => {
 
   let counter = 0;
 
-  result.data.allMarkdownRemark.nodes.forEach((node) => {
+  result.data.markdown.nodes.forEach((node) => {
     const {
       fileAbsolutePath,
       frontmatter: { path }
@@ -53,7 +87,7 @@ const createArticlePages = async ({ actions, graphql, reporter }) => {
       path
     });
   });
-  result.data.allMdx.nodes.forEach((node) => {
+  result.data.mdx.nodes.forEach((node) => {
     const {
       frontmatter: { path },
       internal: { contentFilePath }
@@ -83,7 +117,7 @@ const createArticleListings = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions;
   const result = await graphql(`
     {
-      allArticleCategoriesJson {
+      articleCategories: allArticleCategoriesJson {
         nodes {
           name
         }
@@ -98,7 +132,7 @@ const createArticleListings = async ({ actions, graphql, reporter }) => {
 
   let counter = 0;
 
-  result.data.allArticleCategoriesJson.nodes.forEach((node) => {
+  result.data.articleCategories.nodes.forEach((node) => {
     const { name } = node;
 
     counter++;
@@ -118,6 +152,7 @@ const createArticleListings = async ({ actions, graphql, reporter }) => {
 exports.createPages = async (options) => {
   await createArticleListings(options);
   await createArticlePages(options);
+  await createTriviaPages(options);
 };
 
 exports.onCreateWebpackConfig = ({ actions }) => {

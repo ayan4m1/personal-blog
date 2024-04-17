@@ -1,6 +1,7 @@
 {
   "name": "personal-blog",
   "private": true,
+  "type": "module",
   "description": "My personal blog.",
   "version": "0.1.0",
   "author": "ayan4m1 <andrew@bulletlogic.com>",
@@ -12,7 +13,7 @@
     "url": "git@github.com:ayan4m1/personal-blog.git"
   },
   "scripts": {
-    "build": "gatsby build",
+    "build": "node split.js && gatsby build",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "gatsby develop",
     "serve": "gatsby serve",

@@ -90,6 +90,13 @@ module.exports = {
       }
     },
     {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'trivia',
+        path: `${__dirname}/trivia`
+      }
+    },
+    {
       resolve: 'gatsby-plugin-manifest',
       options: manifestOptions
     },
