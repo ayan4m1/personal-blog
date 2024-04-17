@@ -72,7 +72,7 @@ export default function TriviaGame({ data }) {
                   <Fragment>
                     <Row>
                       <Col>
-                        <p>{selectedQuestion.answer}</p>
+                        <p>Answer: {selectedQuestion.answer}</p>
                       </Col>
                     </Row>
                     <Row>
@@ -81,7 +81,7 @@ export default function TriviaGame({ data }) {
                           variant="success"
                           onClick={() => {
                             setSelectedQuestion((prevVal) => {
-                              prevVal.value = '';
+                              prevVal.value = -1;
                               return null;
                             });
                             setRevealed(false);
@@ -120,9 +120,17 @@ export default function TriviaGame({ data }) {
                       xs={12}
                       key={index}
                       className={classNames('trivia-card')}
-                      onClick={() => setSelectedQuestion(question)}
+                      onClick={() =>
+                        setSelectedQuestion((prevVal) => {
+                          if (!prevVal?.value) {
+                            return question;
+                          } else {
+                            return null;
+                          }
+                        })
+                      }
                     >
-                      ${question.value}
+                      {question.value > 0 && `$${question.value}`}
                     </Col>
                   ))}
                 </Row>
