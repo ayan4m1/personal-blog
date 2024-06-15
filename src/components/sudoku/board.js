@@ -22,6 +22,7 @@ import {
   faFolderOpen,
   faTrash
 } from '@fortawesome/free-solid-svg-icons';
+import { faGrid } from '@fortawesome/pro-solid-svg-icons';
 
 import SudokuCell from 'components/sudoku/cell';
 import TimeViewer from 'components/timeViewer';
@@ -142,7 +143,9 @@ export default function SudokuBoard({ mode }) {
       <Container fluid>
         <Row>
           <Col xs={8}>
-            <h1>Sudoku</h1>
+            <h1>
+              <FontAwesomeIcon icon={faGrid} /> Sudoku
+            </h1>
           </Col>
           {mode === 'timed' && (
             <Col xs={4} className="d-flex align-items-center">

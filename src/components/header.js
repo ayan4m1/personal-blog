@@ -8,12 +8,12 @@ import {
   faMoon,
   faNewspaper,
   faSwatchbook,
-  faRectangleList,
   faMaximize,
   faSun,
   faTable,
   faWrench
 } from '@fortawesome/free-solid-svg-icons';
+import { faGameBoard, faGrid } from '@fortawesome/pro-solid-svg-icons';
 
 import NavLink from 'components/nav/link';
 import NavDropdown from 'components/nav/dropdown';
@@ -75,12 +75,8 @@ export default function Header() {
             />
             <NavLink icon={faHeart} label="Things I Love" topLevel to="/love" />
             <NavDropdown icon={faGamepad} title="Games">
-              <NavLink to="/games/sudoku" icon={faTable} label="Sudoku" />
-              <NavLink
-                to="/games/mahjong"
-                icon={faRectangleList}
-                label="Mahjong"
-              />
+              <NavLink to="/games/sudoku" icon={faGrid} label="Sudoku" />
+              <NavLink to="/games/mahjong" icon={faGameBoard} label="Mahjong" />
               <NavLink
                 to="/games/coloree"
                 icon={faSwatchbook}
