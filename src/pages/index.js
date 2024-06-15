@@ -61,7 +61,7 @@ export default function IndexPage({ data }) {
               <Col
                 xs={12}
                 md={4}
-                className="mt-4 my-md-0 d-flex flex-column h-100"
+                className="mt-4 my-md-0 d-flex flex-column justify-content-center"
               >
                 <ButtonGroup>
                   <Button
