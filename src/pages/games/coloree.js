@@ -1,5 +1,5 @@
 import { Col, Container, Row } from 'react-bootstrap';
-import { faPaintBrush } from '@fortawesome/free-solid-svg-icons';
+import { faSwatchbook } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Layout from 'components/layout';
@@ -15,7 +15,7 @@ export default function ColoreePage() {
         <Row>
           <Col>
             <h1 className="mb-4">
-              <FontAwesomeIcon icon={faPaintBrush} /> Coloree
+              <FontAwesomeIcon icon={faSwatchbook} /> Coloree
             </h1>
           </Col>
         </Row>

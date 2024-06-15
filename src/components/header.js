@@ -7,9 +7,9 @@ import {
   faHeart,
   faMoon,
   faNewspaper,
-  faPaintBrush,
+  faSwatchbook,
   faRectangleList,
-  faBalanceScale,
+  faMaximize,
   faSun,
   faTable,
   faWrench
@@ -83,7 +83,7 @@ export default function Header() {
               />
               <NavLink
                 to="/games/coloree"
-                icon={faPaintBrush}
+                icon={faSwatchbook}
                 label="Coloree"
               />
             </NavDropdown>
@@ -95,7 +95,7 @@ export default function Header() {
               />
               <NavLink
                 to="/utilities/scale-converter"
-                icon={faBalanceScale}
+                icon={faMaximize}
                 label="Scale Converter"
               />
             </NavDropdown>
