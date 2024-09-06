@@ -108,7 +108,7 @@ export default function ColorBuilder({
 
   return (
     <Fragment>
-      <Col xs={12} md={6} className="me-2">
+      <Col xs={12} md={6}>
         <h2 className="mb-3">Singleplayer</h2>
         <Card body className="mb-3">
           <Card.Title>Generate a Puzzle</Card.Title>

@@ -20,9 +20,7 @@ export default function ColoreePage() {
           </Col>
         </Row>
         <Row>
-          <Col className="d-flex">
-            <ColoreeGame />
-          </Col>
+          <ColoreeGame />
         </Row>
       </Container>
     </Layout>
