@@ -104,7 +104,13 @@ module.exports = {
       resolve: 'gatsby-plugin-gtag',
       options: gtagOptions
     },
-    'gatsby-plugin-eslint',
+    {
+      resolve: 'gatsby-plugin-eslint',
+      options: {
+        configType: 'flat',
+        eslintPath: 'eslint/use-at-your-own-risk'
+      }
+    },
     'gatsby-plugin-image',
     {
       resolve: 'gatsby-plugin-mdx',
