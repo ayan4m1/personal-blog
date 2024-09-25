@@ -125,6 +125,7 @@ module.exports = {
     'gatsby-plugin-sitemap',
     'gatsby-transformer-json',
     'gatsby-transformer-sharp',
+    '@ayan4m1/gatsby-plugin-root-import',
     {
       resolve: 'gatsby-transformer-source-code',
       options: {

@@ -154,11 +154,3 @@ exports.createPages = async (options) => {
   await createArticlePages(options);
   await createTriviaPages(options);
 };
-
-exports.onCreateWebpackConfig = ({ actions }) => {
-  actions.setWebpackConfig({
-    resolve: {
-      modules: [resolve(__dirname, 'src'), 'node_modules']
-    }
-  });
-};

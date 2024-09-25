@@ -23,6 +23,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@ayan4m1/gatsby-plugin-root-import": "^2.0.10",
     "@babel/core": "^7.25.2",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
