@@ -1,5 +1,5 @@
 import configureMeasurements from 'convert-units';
-// eslint-disable-next-line import/no-unresolved
+// eslint-disable-next-line import-x/no-unresolved
 import length from 'convert-units/definitions/length';
 
 const imperial = {
@@ -9,7 +9,6 @@ const imperial = {
       singular: 'Mil',
       plural: 'Mils'
     },
-    // eslint-disable-next-line camelcase
     to_anchor: 1 / 12000
   }
 };

@@ -44,7 +44,7 @@ export default function Sidebar({
 
         setGroups(newGroups);
         setFieldError('bomText', null);
-      } catch (error) {
+      } catch {
         setFieldError('bomText', 'Invalid file selected.');
       }
     },
