@@ -69,19 +69,18 @@ const data = [
   {
     name: 'filacalc',
     category: 'web-app',
-    url: 'https://filacalc.com',
+    url: 'https://filacalc.andrewdelisa.com',
     description: 'Calculators and filament database for 3D printing hobbyists'
   },
   {
     name: 'coilz',
     category: 'web-app',
-    url: 'https://coilz.cc',
+    url: 'https://coilz.andrewdelisa.com',
     description: 'Calculators for vape hobbyists'
   },
   {
     name: 'bom-sheet-maker',
     category: 'web-app',
-    url: 'https://bommer.cc',
     description: 'Tool for PCB designers to lay their components out on paper'
   },
   {
@@ -93,17 +92,50 @@ const data = [
     name: 'docker-maven-node',
     category: 'docker',
     description: 'Maven + Node in one small Docker image'
+  },
+  {
+    name: 'campigs',
+    category: 'web-app',
+    description: 'Live streaming guinea pigs!',
+    url: 'https://campigs.xyz'
+  },
+  {
+    name: 'leela-the-beagle',
+    category: 'web-app',
+    description: 'A memorial site for my pet beagle.',
+    url: 'https://leelathebeagle.com'
+  },
+  {
+    name: 'battery-safety',
+    category: 'web-app',
+    description: 'LiPo battery safety/reliability research data.',
+    url: 'https://batterysafety.andrewdelisa.com'
+  },
+  {
+    name: 'modemania',
+    category: 'web-app',
+    description: 'WIP phone/modem sound simulator using WebAudio',
+    url: 'https://modemania.andrewdelisa.com'
+  },
+  {
+    name: 'tonality',
+    category: 'web-app',
+    description: 'WIP modular synthesizer using WebAudio and WebMIDI',
+    url: 'https://tonality.andrewdelisa.com'
   }
 ];
 
 export default function ProjectsPage() {
   return (
-    <Layout title="My Projects" description="A list of my active projects.">
+    <Layout
+      title="My Projects"
+      description="A list of my past and present projects."
+    >
       <Container>
         <Row>
           <Col>
             <h1>My Projects</h1>
-            <p>This is a curated list of my active projects.</p>
+            <p>This is a list of my past and present projects.</p>
           </Col>
         </Row>
         <Row>
