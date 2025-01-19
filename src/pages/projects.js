@@ -1,3 +1,6 @@
+import { useMemo } from 'react';
+import { graphql } from 'gatsby';
+import PropTypes from 'prop-types';
 import { Container, Row, Col } from 'react-bootstrap';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { faDocker, faJs, faUsb } from '@fortawesome/free-brands-svg-icons';
@@ -40,99 +43,15 @@ const categories = [
   }
 ];
 
-const data = [
-  {
-    name: 'minestat-es',
-    category: 'js-lib',
-    description: 'A simple Minecraft server status library for Node.js'
-  },
-  {
-    name: 'paypal-fee',
-    category: 'js-lib',
-    description: 'A complete PayPal fee calculator for Node.js and the browser'
-  },
-  {
-    name: 'generator-reackt',
-    category: 'js-lib',
-    description: 'A Yeoman generator for a modern React application'
-  },
-  {
-    name: 'generator-noder',
-    category: 'js-lib',
-    description: 'A Yeoman generator for a modern Node.js application'
-  },
-  {
-    name: 'leaf-decay',
-    category: 'minecraft',
-    description: 'Minecraft Fabric mod to clear leaf litter quickly'
-  },
-  {
-    name: 'filacalc',
-    category: 'web-app',
-    url: 'https://filacalc.andrewdelisa.com',
-    description: 'Calculators and filament database for 3D printing hobbyists'
-  },
-  {
-    name: 'coilz',
-    category: 'web-app',
-    url: 'https://coilz.andrewdelisa.com',
-    description: 'Calculators for vape hobbyists'
-  },
-  {
-    name: 'bom-sheet-maker',
-    category: 'web-app',
-    description: 'Tool for PCB designers to lay their components out on paper'
-  },
-  {
-    name: 'cable-tester',
-    category: 'hardware',
-    description: 'USB/TRRS cable tester PCB'
-  },
-  {
-    name: 'docker-maven-node',
-    category: 'docker',
-    description: 'Maven + Node in one small Docker image'
-  },
-  {
-    name: 'campigs',
-    category: 'web-app',
-    description: 'Live streaming guinea pigs!',
-    url: 'https://campigs.xyz'
-  },
-  {
-    name: 'leela-the-beagle',
-    category: 'web-app',
-    description: 'A memorial site for my pet beagle.',
-    url: 'https://leelathebeagle.com'
-  },
-  {
-    name: 'battery-safety',
-    category: 'web-app',
-    description: 'LiPo battery safety/reliability research data.',
-    url: 'https://batterysafety.andrewdelisa.com'
-  },
-  {
-    name: 'modemania',
-    category: 'web-app',
-    description: 'WIP phone/modem sound simulator using WebAudio',
-    url: 'https://modemania.andrewdelisa.com'
-  },
-  {
-    name: 'tonality',
-    category: 'web-app',
-    description: 'WIP modular synthesizer using WebAudio and WebMIDI',
-    url: 'https://tonality.andrewdelisa.com'
-  },
-  {
-    name: 'react-geopattern',
-    category: 'js-lib',
-    description:
-      'React wrapper for the Geopattern procedural background library',
-    url: 'https://www.npmjs.com/package/react-geopattern'
-  }
-];
+export default function ProjectsPage({ data }) {
+  const sorted = useMemo(() => {
+    const newArr = [...data.projects.nodes];
 
-export default function ProjectsPage() {
+    newArr.sort((a, b) => a.name.localeCompare(b.name));
+
+    return newArr;
+  }, [data]);
+
   return (
     <Layout
       title="My Projects"
@@ -146,7 +65,7 @@ export default function ProjectsPage() {
           </Col>
         </Row>
         <Row>
-          {data.map((project) => {
+          {sorted.map((project) => {
             const category = categories.find(
               (cat) => cat.id === project.category
             );
@@ -171,3 +90,20 @@ export default function ProjectsPage() {
     </Layout>
   );
 }
+
+ProjectsPage.propTypes = {
+  data: PropTypes.object.isRequired
+};
+
+export const pageQuery = graphql`
+  query {
+    projects: allProjectsJson {
+      nodes {
+        category
+        description
+        name
+        url
+      }
+    }
+  }
+`;

@@ -1,0 +1,90 @@
+[
+  {
+    "category": "js-lib",
+    "description": "A simple Minecraft server status library for Node.js",
+    "name": "minestat-es"
+  },
+  {
+    "category": "js-lib",
+    "description": "A complete PayPal fee calculator for Node.js and the browser",
+    "name": "paypal-fee"
+  },
+  {
+    "category": "js-lib",
+    "description": "A Yeoman generator for a modern React application",
+    "name": "generator-reackt"
+  },
+  {
+    "category": "js-lib",
+    "description": "A Yeoman generator for a modern Node.js application",
+    "name": "generator-noder"
+  },
+  {
+    "category": "minecraft",
+    "description": "Minecraft Fabric mod to clear leaf litter quickly",
+    "name": "leaf-decay"
+  },
+  {
+    "category": "web-app",
+    "description": "Calculators and filament database for 3D printing hobbyists",
+    "name": "filacalc",
+    "url": "https://filacalc.andrewdelisa.com"
+  },
+  {
+    "category": "web-app",
+    "description": "Calculators for vape hobbyists",
+    "name": "coilz",
+    "url": "https://coilz.andrewdelisa.com"
+  },
+  {
+    "category": "web-app",
+    "description": "Tool for PCB designers to lay their components out on paper",
+    "name": "bom-sheet-maker"
+  },
+  {
+    "category": "hardware",
+    "description": "USB/TRRS cable tester PCB",
+    "name": "cable-tester"
+  },
+  {
+    "category": "docker",
+    "description": "Maven + Node in one small Docker image",
+    "name": "docker-maven-node"
+  },
+  {
+    "category": "web-app",
+    "description": "Live streaming guinea pigs!",
+    "name": "campigs",
+    "url": "https://campigs.xyz"
+  },
+  {
+    "category": "web-app",
+    "description": "A memorial site for my pet beagle.",
+    "name": "leela-the-beagle",
+    "url": "https://leelathebeagle.com"
+  },
+  {
+    "category": "web-app",
+    "description": "LiPo battery safety/reliability research data.",
+    "name": "battery-safety",
+    "url": "https://batterysafety.andrewdelisa.com"
+  },
+  {
+    "category": "web-app",
+    "description": "WIP phone/modem sound simulator using WebAudio",
+    "name": "modemania",
+    "url": "https://modemania.andrewdelisa.com"
+  },
+  {
+    "category": "web-app",
+    "description": "WIP modular synthesizer using WebAudio and WebMIDI",
+    "name": "tonality",
+    "url": "https://tonality.andrewdelisa.com"
+  },
+  {
+    "category": "js-lib",
+    "description": "React wrapper for the Geopattern procedural background library",
+    "name": "react-geopattern",
+    "url": "https://www.npmjs.com/package/react-geopattern"
+  }
+]
