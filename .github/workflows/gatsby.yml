@@ -75,8 +75,6 @@ jobs:
           key: ${{ runner.os }}-gatsby-build-${{ hashFiles('public') }}
           restore-keys: |
             ${{ runner.os }}-gatsby-build-
-      - name: Restore .npmrc
-        run: cp .npmrc.ci .npmrc
       - name: Install dependencies
         env:
           FONTAWESOME_PACKAGE_TOKEN: ${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}
