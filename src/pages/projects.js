@@ -122,6 +122,13 @@ const data = [
     category: 'web-app',
     description: 'WIP modular synthesizer using WebAudio and WebMIDI',
     url: 'https://tonality.andrewdelisa.com'
+  },
+  {
+    name: 'react-geopattern',
+    category: 'js-lib',
+    description:
+      'React wrapper for the Geopattern procedural background library',
+    url: 'https://www.npmjs.com/package/react-geopattern'
   }
 ];
 
