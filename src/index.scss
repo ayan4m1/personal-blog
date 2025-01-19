@@ -11,6 +11,9 @@
 @import 'components/mahjong/tile';
 @import 'components/trivia/game';
 
+// Page styles
+@import 'pages/index';
+
 // Fix for carousel button alignment
 .carousel {
   &-control-prev {

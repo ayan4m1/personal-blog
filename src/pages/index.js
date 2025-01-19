@@ -16,8 +16,8 @@ import {
   faHeart
 } from '@fortawesome/free-solid-svg-icons';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 import Layout from 'components/layout';
 import FeaturedPost from 'components/featuredPost';
@@ -41,7 +41,7 @@ export default function IndexPage({ data }) {
   return (
     <Layout title="Home">
       <Container>
-        <Card body bg="info" className="text-light">
+        <Card body className="text-light index-header">
           <Container fluid>
             <Row>
               <Col xs={6} md={2} className="d-flex justify-content-center">
@@ -52,11 +52,14 @@ export default function IndexPage({ data }) {
                   rounded
                 />
               </Col>
-              <Col xs={6} className="d-flex flex-column">
+              <Col
+                xs={6}
+                className="d-flex flex-column justify-content-center ps-2"
+              >
                 <Card.Title as="h1" className="m-0">
                   Andrew DeLisa
                 </Card.Title>
-                <h2 className="m-0 mt-auto">Hacker, Maker, Developer</h2>
+                <h2 className="m-0 mt-2">Hacker, Maker, Developer</h2>
               </Col>
               <Col
                 xs={12}
@@ -72,6 +75,13 @@ export default function IndexPage({ data }) {
                     <FontAwesomeIcon icon={faGithub} /> GitHub
                   </Button>
                   <Button
+                    variant="info"
+                    as="a"
+                    href="https://www.linkedin.com/in/ayan4m1"
+                  >
+                    <FontAwesomeIcon icon={faLinkedin} /> LinkedIn
+                  </Button>
+                  <Button
                     variant="primary"
                     as="a"
                     href="https://ko-fi.com/ayan4m1"
@@ -83,7 +93,7 @@ export default function IndexPage({ data }) {
             </Row>
           </Container>
         </Card>
-        <h2 className="mt-2">Recent Articles</h2>
+        <h1 className="mt-4">Recent Articles</h1>
         <Row className="justify-content-center">
           <Col md={10}>
             <Carousel
