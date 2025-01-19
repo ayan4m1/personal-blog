@@ -20,9 +20,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 import Layout from 'components/layout';
+import BodyCard from 'components/bodyCard';
 import FeaturedPost from 'components/featuredPost';
-
-import profilePic from 'images/profile.jpg';
 
 export default function IndexPage({ data }) {
   const {
@@ -41,19 +40,26 @@ export default function IndexPage({ data }) {
   return (
     <Layout title="Home">
       <Container>
-        <Card body className="text-light index-header">
+        <BodyCard className="index-header">
           <Container fluid>
             <Row>
-              <Col xs={6} md={2} className="d-flex justify-content-center">
+              <Col
+                xs={12}
+                sm={6}
+                md={3}
+                className="d-flex justify-content-start"
+              >
                 <Image
-                  src={profilePic}
+                  src="/profile.jpg"
                   alt="My face"
                   style={{ maxHeight: 128 }}
-                  rounded
+                  thumbnail
                 />
               </Col>
               <Col
-                xs={6}
+                xs={12}
+                sm={6}
+                md={4}
                 className="d-flex flex-column justify-content-center ps-2"
               >
                 <Card.Title as="h1" className="m-0">
@@ -63,10 +69,11 @@ export default function IndexPage({ data }) {
               </Col>
               <Col
                 xs={12}
-                md={4}
-                className="mt-4 my-md-0 d-flex flex-column justify-content-center"
+                sm={12}
+                md={5}
+                className="mt-4 my-md-0 d-flex flex-column justify-content-center align-items-end"
               >
-                <ButtonGroup>
+                <ButtonGroup className="d-flex flex-column">
                   <Button
                     variant="success"
                     as="a"
@@ -92,7 +99,7 @@ export default function IndexPage({ data }) {
               </Col>
             </Row>
           </Container>
-        </Card>
+        </BodyCard>
         <h1 className="mt-4">Recent Articles</h1>
         <Row className="justify-content-center">
           <Col md={10}>
