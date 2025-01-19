@@ -58,6 +58,8 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: ${{ steps.detect-package-manager.outputs.manager }}
+        env:
+          FONTAWESOME_PACKAGE_TOKEN: ${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
@@ -82,7 +84,6 @@ jobs:
       - name: Build with Gatsby
         env:
           PREFIX_PATHS: 'true'
-          FONTAWESOME_PACKAGE_TOKEN: ${{ secrets.FONTAWESOME_PACKAGE_TOKEN }}
         run: ${{ steps.detect-package-manager.outputs.manager }} run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
