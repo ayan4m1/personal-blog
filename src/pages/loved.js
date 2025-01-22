@@ -1,5 +1,6 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import { faReact } from '@fortawesome/free-brands-svg-icons';
+import { faAtomSimple } from '@fortawesome/pro-solid-svg-icons';
 
 import Layout from 'components/layout';
 import GridCard from 'components/gridCard';
@@ -26,13 +27,14 @@ const data = [
     name: 'react-three-fiber',
     url: 'https://docs.pmnd.rs/react-three-fiber',
     description:
-      'An incredibly powerful framework for rendering 3D in the browser.'
+      'An incredibly powerful framework for 3D rendering in the browser.'
   },
   {
-    name: 'gfx',
-    url: 'https://honeythecodewitch.com/gfx/',
+    name: 'Electron',
+    icon: faAtomSimple,
+    url: 'https://www.electronjs.org/',
     description:
-      'An embedded drawing library done the right way, with tons of supported hardware.'
+      'A desktop application framework powered by Chromium and Node.js.'
   },
   {
     name: 'PlatformIO',
@@ -45,18 +47,14 @@ const data = [
 
 export default function LovePage() {
   return (
-    <Layout title="Things I Love" description="Software and tooling I support.">
+    <Layout title="Code I Love" description="Software and tooling I support.">
       <Container>
         <Row>
           <Col xs={12}>
-            <h1>Things I Love</h1>
+            <h1>Code I Love</h1>
             <p>
-              My wife and my dog. But you came here for some links, didn&apos;t
-              you?
-            </p>
-            <p>
-              This is a list of projects, libraries, and other software-related
-              things I would encourage you to support.
+              This is a list of software I would encourage you to support or
+              take advantage of.
             </p>
           </Col>
         </Row>

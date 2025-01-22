@@ -73,7 +73,7 @@ export default function Header() {
               topLevel
               to="/projects"
             />
-            <NavLink icon={faHeart} label="Things I Love" topLevel to="/love" />
+            <NavLink icon={faHeart} label="Code I Love" topLevel to="/loved" />
             <NavDropdown icon={faGamepad} title="Games">
               <NavLink to="/games/sudoku" icon={faGrid} label="Sudoku" />
               <NavLink to="/games/mahjong" icon={faGameBoard} label="Mahjong" />
