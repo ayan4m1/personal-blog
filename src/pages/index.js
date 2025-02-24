@@ -65,7 +65,7 @@ export default function IndexPage({ data }) {
                 <Card.Title as="h1" className="m-0">
                   Andrew DeLisa
                 </Card.Title>
-                <h2 className="m-0 mt-2">Hacker, Maker, Developer</h2>
+                <h2 className="m-0 mt-2">Maker/Software Developer</h2>
               </Col>
               <Col
                 xs={12}
