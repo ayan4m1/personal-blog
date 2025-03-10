@@ -70,7 +70,7 @@
     "graphql": "^16.10.0",
     "lodash-es": "^4.17.21",
     "papaparse": "^5.5.2",
-    "prismjs": "^1.29.0",
+    "prismjs": "^1.30.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.9",
