@@ -1,5 +1,4 @@
 import configureMeasurements from 'convert-units';
-// eslint-disable-next-line import-x/no-unresolved
 import length from 'convert-units/definitions/length';
 
 const imperial = {

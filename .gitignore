@@ -13,3 +13,6 @@ public
 
 # generated files
 /trivia/
+
+# package manager files
+.yarn/
