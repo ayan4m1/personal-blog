@@ -8,5 +8,10 @@
     "name": "react",
     "title": "React",
     "description": "Writing about React composition, architecture, and patterns."
+  },
+  {
+    "name": "software",
+    "title": "Software",
+    "description": "Writing about software design patterns, libraries, and frameworks."
   }
 ]
