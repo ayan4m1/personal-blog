@@ -67,7 +67,7 @@ Two wiring methods are possible.
 
 ### 3.1 OmniJoin Adapters
 
-![](../../images/electronics/t962-reflow-oven/omnijoin.png)
+![Scotchlok OmniJoin Connector](../../images/electronics/t962-reflow-oven/omnijoin.png)
 
 Cut off the original fan cable with 2-pin JST connector. Attach each wire to a Scotchlok connector.
 
@@ -75,4 +75,4 @@ Cut off the original fan cable with 2-pin JST connector. Attach each wire to a S
 
 Cut off the end of the Noctua fan cable. Wire the 12V and GND wires to a male 2-pin JST-PH connector.
 
-![](../../images/electronics/t962-reflow-oven/jst-pigtail.jpg)
+![A JST pigtail](../../images/electronics/t962-reflow-oven/jst-pigtail.jpg)
