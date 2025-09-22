@@ -37,7 +37,7 @@ epsilon_decay = start_epsilon / (num_episodes / 2)
 final_epsilon = 0.1
 
 wandb.init(
-  entity = 'vapor-wilco',
+  entity = 'org-name',
   project = 'snake-training',
   config={
     "learning_rate": learning_rate,
