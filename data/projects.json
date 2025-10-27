@@ -86,5 +86,29 @@
     "description": "React wrapper for the Geopattern procedural background library",
     "name": "react-geopattern",
     "url": "https://www.npmjs.com/package/react-geopattern"
+  },
+  {
+    "category": "web-app",
+    "description": "Generate stand images for JoJo's Bizarre Adventure",
+    "name": "jojogen",
+    "url": "https://jojogen.andrewdelisa.com"
+  },
+  {
+    "category": "web-app",
+    "description": "Draw one or more hands for a given Magic: the Gathering deck",
+    "name": "mtg-drawer",
+    "url": "https://drawer.andrewdelisa.com"
+  },
+  {
+    "category": "web-app",
+    "description": "Generate 4chan-style greentext posts without posting anything!",
+    "name": "green-man",
+    "url": "https://greenman.andrewdelisa.com"
+  },
+  {
+    "category": "web-app",
+    "description": "Find the optimal Mario Kart 8 build for any weighting of stats",
+    "name": "mk8doptim",
+    "url": "https://mk8d.andrewdelisa.com"
   }
 ]
