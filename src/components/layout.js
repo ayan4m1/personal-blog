@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { Snowfall } from 'react-snowfall';
-import { getDate, getMonth } from 'date-fns';
 import { graphql, useStaticQuery } from 'gatsby';
 
 import Header from 'components/header';
@@ -23,7 +22,7 @@ export default function Layout({ title, description = '', children }) {
   const metaDescription = description || site.siteMetadata.description;
   const disableMotion = usePrefersReducedMotion();
   const isChristmas =
-    getMonth(Date.now()) === 11 && [24, 25, 26].includes(getDate(Date.now()));
+    new Date().getMonth() === 11 && [24, 25, 26].includes(new Date().getDate());
 
   return (
     <ThemeProvider>

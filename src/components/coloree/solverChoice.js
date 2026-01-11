@@ -10,25 +10,39 @@ export default function SolverChoice({
   children,
   ...props
 }) {
-  const Element = (props) =>
-    button ? <button {...props} /> : <div {...props} />;
-
   return (
     <Col xs={2} className="my-2 d-flex justify-content-center">
-      <Element
-        {...props}
-        className={classNames(
-          'color-solver-choice',
-          eliminated && 'color-solver-choice--eliminated',
-          Boolean(type) && `color-solver-choice--${type}`
-        )}
-        style={{
-          ...props.style,
-          backgroundColor: color
-        }}
-      >
-        {children}
-      </Element>
+      {button ? (
+        <button
+          {...props}
+          className={classNames(
+            'color-solver-choice',
+            eliminated && 'color-solver-choice--eliminated',
+            Boolean(type) && `color-solver-choice--${type}`
+          )}
+          style={{
+            ...props.style,
+            backgroundColor: color
+          }}
+        >
+          {children}
+        </button>
+      ) : (
+        <div
+          {...props}
+          className={classNames(
+            'color-solver-choice',
+            eliminated && 'color-solver-choice--eliminated',
+            Boolean(type) && `color-solver-choice--${type}`
+          )}
+          style={{
+            ...props.style,
+            backgroundColor: color
+          }}
+        >
+          {children}
+        </div>
+      )}
     </Col>
   );
 }

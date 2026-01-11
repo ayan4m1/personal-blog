@@ -1,12 +1,5 @@
 import PropTypes from 'prop-types';
-import {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  Fragment,
-  useMemo
-} from 'react';
+import { useRef, useState, useCallback, Fragment, useMemo } from 'react';
 import {
   Container,
   Row,
@@ -78,9 +71,14 @@ export default function MahjongBoard({ images }) {
         bTileIdx = newVal.findIndex((tile) => tile.index === b);
         newVal.splice(bTileIdx, 1);
 
+        if (!newVal.length) {
+          setSolved(true);
+          stopTimer();
+        }
+
         return newVal;
       }),
-    [setLayout]
+    [stopTimer]
   );
   const handleTileClick = useCallback(
     (tile) => {
@@ -88,6 +86,11 @@ export default function MahjongBoard({ images }) {
         if (prevVal === tile.index) {
           return null;
         } else if (prevVal && isOpen(tile, layout)) {
+          if (matches.length === 1) {
+            setFailed(true);
+            stopTimer();
+          }
+
           handleMatch(prevVal, tile.index);
           return null;
         } else if (isOpen(tile, layout)) {
@@ -96,26 +99,12 @@ export default function MahjongBoard({ images }) {
       });
       startTimer();
     },
-    [setActiveTile, handleMatch, layout, startTimer]
+    [handleMatch, layout, startTimer, stopTimer, matches]
   );
   const handleNew = useCallback(() => {
     setLayout(generateLayout('turtle'));
     resetTimer();
-  }, [setLayout, resetTimer]);
-
-  useEffect(() => {
-    if (!layout.length) {
-      setSolved(true);
-      stopTimer();
-    }
-  }, [layout, stopTimer]);
-
-  useEffect(() => {
-    if (matches.length === 0) {
-      setFailed(true);
-      stopTimer();
-    }
-  }, [matches, stopTimer]);
+  }, [resetTimer]);
 
   return (
     <Fragment>
@@ -194,35 +183,34 @@ export default function MahjongBoard({ images }) {
         </Row>
       </Container>
       <div ref={boardRef} style={{ height: '100vh' }}>
-        {boardRef.current &&
-          layout.map((tile) => (
-            <MahjongTile
-              key={tile.index}
-              tile={tile}
-              x={
-                tile.x * 48 -
-                tile.layer * -5 +
-                (boardRect?.left ?? 0) +
-                (boardRect?.width ?? 0) / 2
-              }
-              y={tile.y * 64 - tile.layer * -5 + (boardRect?.top ?? 0)}
-              active={activeTile === tile.index}
-              hint={
-                showHints &&
-                Boolean(
-                  matches.find(
-                    ([a, b]) => a.index === tile.index || b.index === tile.index
-                  )
+        {layout.map((tile) => (
+          <MahjongTile
+            key={tile.index}
+            tile={tile}
+            x={
+              tile.x * 48 -
+              tile.layer * -5 +
+              (boardRect?.left ?? 0) +
+              (boardRect?.width ?? 0) / 2
+            }
+            y={tile.y * 64 - tile.layer * -5 + (boardRect?.top ?? 0)}
+            active={activeTile === tile.index}
+            hint={
+              showHints &&
+              Boolean(
+                matches.find(
+                  ([a, b]) => a.index === tile.index || b.index === tile.index
                 )
-              }
-              imageUrl={
-                images.nodes.find((node) =>
-                  node.relativePath.endsWith(getTileImagePath(tile))
-                )?.publicURL
-              }
-              onClick={handleTileClick}
-            />
-          ))}
+              )
+            }
+            imageUrl={
+              images.nodes.find((node) =>
+                node.relativePath.endsWith(getTileImagePath(tile))
+              )?.publicURL
+            }
+            onClick={handleTileClick}
+          />
+        ))}
       </div>
     </Fragment>
   );

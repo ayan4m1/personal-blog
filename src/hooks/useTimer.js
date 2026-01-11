@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
 
 export default function useTimer(run = true, interval = 1000) {
   const intervalRef = useRef(null);
-  const startTime = useMemo(() => Date.now(), []);
+  const startTime = useMemo(() => new Date().getTime(), []);
   const [running, setRunning] = useState(run);
   const [currentTime, setCurrentTime] = useState(startTime);
   const startTimer = useCallback(() => setRunning(true), [setRunning]);
