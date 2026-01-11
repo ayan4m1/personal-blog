@@ -4,17 +4,18 @@ import reactPlugin from 'eslint-plugin-react';
 import babelParser from '@babel/eslint-parser';
 import prettierPlugin from 'eslint-plugin-prettier/recommended';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import importPlugin from 'eslint-plugin-import-x';
+import { flatConfigs as importConfig } from 'eslint-plugin-import-x';
+
+const { configs: reactConfig } = reactPlugin;
+const { configs: hooksConfig } = reactHooksPlugin;
 
 export default [
   js.configs.recommended,
-  importPlugin.flatConfigs.recommended,
-  importPlugin.flatConfigs.react,
+  importConfig.recommended,
+  importConfig.react,
+  reactConfig.flat['recommended'],
+  hooksConfig.flat['recommended-latest'],
   {
-    plugins: {
-      react: reactPlugin,
-      'react-hooks': reactHooksPlugin
-    },
     languageOptions: {
       globals: globals.browser,
       parser: babelParser,
@@ -33,8 +34,6 @@ export default [
       }
     },
     rules: {
-      ...reactPlugin.configs.recommended.rules,
-      ...reactHooksPlugin.configs.recommended.rules,
       'react/jsx-uses-react': 0,
       'react/react-in-jsx-scope': 0
     },
