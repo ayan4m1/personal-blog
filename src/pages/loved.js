@@ -1,12 +1,12 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import { faReact } from '@fortawesome/free-brands-svg-icons';
-import { faAtomSimple } from '@fortawesome/pro-solid-svg-icons';
 
 import Layout from 'components/layout';
 import GridCard from 'components/gridCard';
 
 import gatsbyLogo from 'images/icons/gatsby.svg';
 import pioLogo from 'images/icons/platformio.svg';
+import electronLogo from 'images/icons/electron.svg';
 
 const data = [
   {
@@ -31,7 +31,7 @@ const data = [
   },
   {
     name: 'Electron',
-    icon: faAtomSimple,
+    svgIcon: electronLogo,
     url: 'https://www.electronjs.org/',
     description:
       'A desktop application framework powered by Chromium and Node.js.'

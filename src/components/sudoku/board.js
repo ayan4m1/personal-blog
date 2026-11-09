@@ -14,15 +14,15 @@ import {
   Dropdown,
   DropdownButton
 } from 'react-bootstrap';
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faRecycle,
   faFloppyDisk,
   faFolderOpen,
-  faTrash
+  faTrash,
+  faGridHorizontal
 } from '@fortawesome/free-solid-svg-icons';
-import { faGrid } from '@fortawesome/pro-solid-svg-icons';
 
 import SudokuCell from 'components/sudoku/cell';
 import TimeViewer from 'components/timeViewer';
@@ -35,29 +35,27 @@ import {
   difficulties
 } from 'utils/sudoku';
 
+const parseCells = (puzzle) =>
+  chunk(puzzle.split(''), 9).map((row) =>
+    row.map((value) => (value === '-' ? null : parseInt(value, 10)))
+  );
+
 export default function SudokuBoard({ mode }) {
   const {
     elapsedTime,
     running,
     startTimer,
+    stopTimer,
     resetTimer,
     incrementTimer,
     toggleTimer
   } = useTimer();
-  const [solved, setSolved] = useState(false);
-  const [solveRate, setSolveRate] = useState(null);
   const [activeCell, setActiveCell] = useState([-1, -1]);
   const [puzzle, setPuzzle] = useState(getSudoku('easy'));
   const [savedState, setSavedState] = useLocalStorageState('savedState', {
     defaultValue: null
   });
-  const cells = useMemo(
-    () =>
-      chunk(puzzle.puzzle.split(''), 9).map((row) =>
-        row.map((value) => (value === '-' ? null : parseInt(value, 10)))
-      ),
-    [puzzle]
-  );
+  const cells = useMemo(() => parseCells(puzzle.puzzle), [puzzle]);
   const [values, setValues] = useState(getInvalidArray());
   const invalids = useMemo(() => getInvalids(values, cells), [values, cells]);
   const handleClick = useCallback(
@@ -71,20 +69,31 @@ export default function SudokuBoard({ mode }) {
       }),
     []
   );
+  const solved = useMemo(
+    () => checkSolution(cells, values, puzzle.solution),
+    [cells, values, puzzle]
+  );
+  const blankCount = useMemo(
+    () => cells.flat().filter((cell) => cell === null).length,
+    [cells]
+  );
+  const solveRate = elapsedTime / blankCount;
   const handleChange = useCallback(
     (row, column, value) => {
-      setValues((prevVal) => {
-        const newVal = [...prevVal];
-        const newRow = [...newVal[row]];
+      const newValues = [...values];
+      const newRow = [...newValues[row]];
 
-        newRow[column] = value;
-        newVal.splice(row, 1, newRow);
+      newRow[column] = value;
+      newValues.splice(row, 1, newRow);
+      setValues(newValues);
 
-        return newVal;
-      });
-      startTimer();
+      if (checkSolution(cells, newValues, puzzle.solution)) {
+        stopTimer();
+      } else {
+        startTimer();
+      }
     },
-    [startTimer]
+    [values, cells, puzzle, startTimer, stopTimer]
   );
   const handleNew = useCallback(
     (difficulty) => {
@@ -111,32 +120,19 @@ export default function SudokuBoard({ mode }) {
     setPuzzle(savedState.puzzle);
     setValues(savedState.values);
     incrementTimer(savedState.elapsedTime * 1000);
-  }, [savedState, incrementTimer]);
-  const handleClear = useCallback(() => setSavedState(null), [setSavedState]);
-  const { color: animationColor, start, stop } = useRainbow(false, false);
 
-  useEffect(() => {
-    const solved = checkSolution(cells, values, puzzle.solution);
-
-    if (solved) {
-      setSolved(solved);
-      setSolveRate(
-        elapsedTime /
-          cells.reduce(
-            (result, row) =>
-              result +
-              row.reduce(
-                (rowResult, cell) => rowResult + (cell === null ? 1 : 0),
-                0
-              ),
-            0
-          )
-      );
-      start();
-    } else {
-      stop();
+    if (
+      checkSolution(
+        parseCells(savedState.puzzle.puzzle),
+        savedState.values,
+        savedState.puzzle.solution
+      )
+    ) {
+      stopTimer();
     }
-  }, [cells, values, puzzle, elapsedTime, start, stop]);
+  }, [savedState, incrementTimer, stopTimer]);
+  const handleClear = useCallback(() => setSavedState(null), [setSavedState]);
+  const { color: animationColor } = useRainbow(solved, false);
 
   return (
     <Card body>
@@ -144,7 +140,7 @@ export default function SudokuBoard({ mode }) {
         <Row>
           <Col xs={8}>
             <h1>
-              <FontAwesomeIcon icon={faGrid} /> Sudoku
+              <FontAwesomeIcon icon={faGridHorizontal} /> Sudoku
             </h1>
           </Col>
           {mode === 'timed' && (

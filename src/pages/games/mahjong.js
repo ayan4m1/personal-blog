@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import { Container, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGameBoard } from '@fortawesome/pro-solid-svg-icons';
 
 import Layout from 'components/layout';
 import MahjongBoard from 'components/mahjong/board';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 export default function MahjongPage({ data }) {
   const { images } = data;
@@ -16,7 +16,7 @@ export default function MahjongPage({ data }) {
         <Row>
           <Col>
             <h1>
-              <FontAwesomeIcon icon={faGameBoard} /> Mahjong
+              <FontAwesomeIcon icon={faStar} /> Mahjong
             </h1>
           </Col>
         </Row>

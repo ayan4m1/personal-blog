@@ -4,16 +4,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFileArchive,
   faGamepad,
+  faGridHorizontal,
   faHeart,
+  faMaximize,
   faMoon,
   faNewspaper,
-  faSwatchbook,
-  faMaximize,
+  faStar,
   faSun,
+  faSwatchbook,
   faTable,
   faWrench
 } from '@fortawesome/free-solid-svg-icons';
-import { faGameBoard, faGrid } from '@fortawesome/pro-solid-svg-icons';
 
 import NavLink from 'components/nav/link';
 import NavDropdown from 'components/nav/dropdown';
@@ -75,8 +76,12 @@ export default function Header() {
             />
             <NavLink icon={faHeart} label="Code I Love" topLevel to="/loved" />
             <NavDropdown icon={faGamepad} title="Games">
-              <NavLink to="/games/sudoku" icon={faGrid} label="Sudoku" />
-              <NavLink to="/games/mahjong" icon={faGameBoard} label="Mahjong" />
+              <NavLink
+                to="/games/sudoku"
+                icon={faGridHorizontal}
+                label="Sudoku"
+              />
+              <NavLink to="/games/mahjong" icon={faStar} label="Mahjong" />
               <NavLink
                 to="/games/coloree"
                 icon={faSwatchbook}
