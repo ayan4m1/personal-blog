@@ -149,6 +149,16 @@ const createArticleListings = async ({ actions, graphql, reporter }) => {
   reporter.info(`Created ${counter} article index pages!`);
 };
 
+exports.onCreateWebpackConfig = ({ actions }) => {
+  actions.setWebpackConfig({
+    resolve: {
+      alias: {
+        'es5-ext': resolve(__dirname, 'node_modules/es5-ext')
+      }
+    }
+  });
+};
+
 exports.createPages = async (options) => {
   await createArticleListings(options);
   await createArticlePages(options);
